@@ -12,7 +12,7 @@ kukaVoitti = "es"
 
 function voittoRuutu:init()
 	
-	--TEsound.playLooping("media/aanet/musiikki/voittoRuutu.ogg", "musiikki")
+	--TEsound.playLooping("media/aanet/musiikki/voittoRuutu.ogg", "musiikki") TODO etsi joku kiva musiikki
 	print("Loopataan voittomusiikki")
 
 end
@@ -20,6 +20,7 @@ end
 function voittoRuutu:enter(wanhaState , numero)
 	
 	self.kukaVoitti = "Pelaaja "..numero
+	print(self.kukaVoitti.." voitti")
 end
 
 function voittoRuutu:update( dt )

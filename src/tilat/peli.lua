@@ -239,12 +239,8 @@ end
 function peli:luoPelaajat()
 	
 	-- print( nykyinenTaso.layers["Syntykohdat"].objects[1].x )
-	onkoBotti=false --testi
 	for i = 1, pelaajienMaara do
-		if i==2 then
-			onkoBotti=true
-			botti:luo(2)		
-		end 
+
 		pelaajat[ i ] = pelaaja:luo( "kekkonen", pelaajienKontrollit[ i ], "Pelaaja " .. i,i,
 		nykyinenTaso.layers["Syntykohdat"].objects[i].x,
 		nykyinenTaso.layers["Syntykohdat"].objects[i].y, "vasen" ,onkoBotti, maxElamat)

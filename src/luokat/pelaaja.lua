@@ -27,7 +27,7 @@ function pelaaja:luo( pelaajanHahmo, pelaajanKontrollit, pelaajanNimi, pelaajanN
 		animVoiVaihtua=true,
 		
 		hahmo = pelaajanHahmo,
-		print (hahmo),
+		
 		kontrollit = pelaajanKontrollit,
 
 		tila = "",
@@ -247,9 +247,7 @@ function pelaaja:kontakti(suunta,hyokkays, xEro)
 	
 	local vastustajaOn --vastustajaOn = vastustajan sijainti(oikea/vasen)
 	if xEro > 0 then  vastustajaOn="oikea" else vastustajaOn="vasen" end
-	
-	print("kontakti "..suunta.." "..hyokkays.." "..vastustajaOn.." "..self.numero)
-	
+
 	if  hyokkays=="lyonti" and vastustajaOn==suunta and not (self.tila=="torjunta" and suunta~=self.suunta) then
 
 	   if self.vahinkoAjastin <= 0 then
@@ -271,8 +269,6 @@ function pelaaja:kontakti(suunta,hyokkays, xEro)
 			self.xNopeus=400
 	
 		end
-	
-		print ("pelaaja" ..self.numero.. " otti vahinkoa")
 
 		self.nykAnim=vahinko_anim
 		self.animVoiVaihtua=false
