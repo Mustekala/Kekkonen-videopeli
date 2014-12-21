@@ -5,10 +5,71 @@ function lopputekstit:enter( taso )
     rotation=0	
 	TEsound.pause("musiikki")
 	TEsound.play("media/aanet/musiikki/StockSounds.ogg","lopputekstit")
-
-	teksti="Videopeli \n\n\n\n\n\n\n\n Ohjelmointi: \n\n\n Petrus Peltola \n\n Eero Lumijarvi \n\n\n\n\n\n\n Animointi: \n\n\n Eero Lumijarvi \n\n Petrus Peltola \n\n\n\n\n\n\n"..   --Joo, ei ehka siistein tapa
-	"musiikki: \n\n\n tahan musiikkilahteet\n\n\n\n\n\n\n aanitehosteet: \n\n\n Eero Lumijarvi\n\n\n\n\n\n\n Fontti: \n\n\n Boxy Bold \n by Clint Bellanger\n\n\n\n\n\n\n valmiit kirjastot: \n\n\n Simple Menu Library \n by nkorth"..
-	"\n\n AdvTiledLoader \n by Kadoba \n\n AnimationsAndLove by bartbes \n\n HUMP-utilities by Matthias Richter \n\n TEsound \n by Ensayia & Taehl \n\n "
+	
+	
+	teksti=[[
+	Videopeli  
+	
+	
+	
+	Ohjelmointi: 
+	
+	Petrus Peltola 
+	
+	Eero Lumijarvi 
+	
+	
+	
+	Animointi: 
+	
+	Eero Lumijarvi
+	
+	Petrus Peltola   
+	
+	
+	
+	musiikki:
+	
+	tahan musiikkilahteet
+	
+	
+	
+	aanitehosteet: 
+	
+	Eero Lumijarvi
+	
+	
+	
+	Taustat:
+	
+	Eduskunta: sky1.png 
+	by opengameart.org/users/bart 
+	
+	
+	
+	Fontti: 
+	
+	Boxy Bold by Clint Bellanger
+	
+	
+	
+	valmiit kirjastot: 
+	
+	Simple Menu Library 
+	by nkorth
+	
+	AdvTiledLoader
+	by Kadoba
+	
+	AnimationsAndLove 
+	by bartbes 
+	
+	HUMP-utilities 
+	by Matthias Richter 
+	
+	TEsound 
+	by Ensayia & Taehl
+	]]
 
 	tekstinY=650
 	x=0
@@ -40,7 +101,7 @@ function lopputekstit:update( dt )
 
 	end
     
-	if tekstinY < -4000 then Gamestate.pop() end
+	if tekstinY < -3500 then Gamestate.pop() end --Lopetetaan tekstit
 	
 end
 

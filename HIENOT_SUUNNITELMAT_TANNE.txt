@@ -15,6 +15,9 @@ GAMESTATET:
 		* Tama osa viela vaiheessa
 
 	- Itse peli
+		*Kartat
+		*taustat kartoille(hyva koko n. 700* 700px)
+		*Collisionit, hitboxit yms.
 
 	- Voitto- / paattoruutu, sis. pisteet tai jtn
 

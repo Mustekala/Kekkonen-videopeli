@@ -191,10 +191,10 @@ function peli:draw()
     --local taso = _G[tasoNimi].attribute
 	--Dynaaminen tausta
 	if liikkuvaTausta then
-		local taustaX = camera._x *-1 /5  -100
+		local taustaX = camera._x *-1 /5  -100 --Taustat liikkuvat kameran mukana, mutta maltillisemmin
 		local taustaY = camera._y *-1 /10 -100
 		local taustaZoom = camera.scaleX/10 --Ei jarkeva kayttaa
-		love.graphics.draw(kuvat[tasoNimi.."_tausta.png"], taustaX, taustaY, 0, 2, 1.5) --Tason tausta piirtyy erikseen
+		love.graphics.draw(kuvat[tasoNimi.."_tausta.png"], taustaX, taustaY, 0, 2, 2) --Tason tausta piirtyy erikseen
 	end
 	camera:set() --Liikkuva kamera	
 	nykyinenTaso:draw()
