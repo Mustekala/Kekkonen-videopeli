@@ -1,0 +1,21 @@
+GAMESTATET:
+
+	- Avausruutu
+
+	- Asetukset
+		* Fullscreen
+		* Musiikki
+		* Aanet 
+
+	- Alkumenut:
+
+		* Montako pelaajaa
+		* Kenttavalinta
+		* Varivalintajuttu? / varmistusmenujuttu? / apuaentiedamuttajotain?
+		* Tama osa viela vaiheessa
+
+	- Itse peli
+
+	- Voitto- / paattoruutu, sis. pisteet tai jtn
+
+	- Takaisin kenttavalintaan
