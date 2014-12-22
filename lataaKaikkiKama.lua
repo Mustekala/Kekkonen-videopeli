@@ -46,30 +46,15 @@ lume = require ( KIRJASTO_POLKU .. "/lume/lume")
 helpFunctions = require ( KIRJASTO_POLKU .. "helpFunctions")
 
 print("Ladataan omat tilat, yms.")
-
-require( TILA_POLKU .. "avausRuutu" )
-require( TILA_POLKU .. "asetukset" )
-hudTila = "sydan" --Hudin ulkonako
-require( TILA_POLKU .. "valikko" )
-require( TILA_POLKU .. "tasovalikko" )
-require( TILA_POLKU .. "peli" )
-
+--luokat
 require( LUOKKA_POLKU .. "botti" )
-
 require( LUOKKA_POLKU .. "pelaaja" )
 require( HAHMO_POLKU .. "kekkonen" )
-
-
-require ( TILA_POLKU .. "avausRuutu" )
-require	( TILA_POLKU .. "voittoRuutu" )
-require ( TILA_POLKU .. "asetukset" )
-require ( TILA_POLKU .. "valikko" )
-require ( TILA_POLKU .. "tasovalikko" )
-require ( TILA_POLKU .. "hahmovalikko" )
-require ( TILA_POLKU .. "paussivalikko" )
-require ( TILA_POLKU .. "peli" )
-require ( TILA_POLKU .. "lopputekstit" )
-
+--Tilat
+for _, tila in ipairs( love.filesystem.getDirectoryItems( TILA_POLKU ) ) do --Hakee kaikki tilat tilapolusta
+	require(TILA_POLKU..string.gsub(tila,".lua","")) --Leikkaa tiedostonimista .lua-paatteen, require ei halua sita
+end	
+hudTila = "sydan" --Hudin ulkonako
 
 print("Ladataan fontit")
 
