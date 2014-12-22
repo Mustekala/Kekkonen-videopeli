@@ -49,6 +49,7 @@ print("Ladataan omat tilat, yms.")
 
 require( TILA_POLKU .. "avausRuutu" )
 require( TILA_POLKU .. "asetukset" )
+hudTila = "sydan" --Hudin ulkonako
 require( TILA_POLKU .. "valikko" )
 require( TILA_POLKU .. "tasovalikko" )
 require( TILA_POLKU .. "peli" )
@@ -261,7 +262,8 @@ print("Ladataan animaatiot")
 print("Ladataan aanet")
 
 vahinkoAanet = {TEHOSTE_POLKU.."Hurt2.ogg", TEHOSTE_POLKU.."Hurt3.ogg", TEHOSTE_POLKU.."Hurt4.ogg"}
-
+kavelyAanet = {TEHOSTE_POLKU.."footstep.ogg", TEHOSTE_POLKU.."footstep2.ogg"}
+kavelyAanetAjastin = 0
 hyppyAanet = {TEHOSTE_POLKU.."Jump1.ogg", TEHOSTE_POLKU.."Jump2.ogg", TEHOSTE_POLKU.."Jump3.ogg", TEHOSTE_POLKU.."Jump4.ogg"}
 	
 onkoAani=true

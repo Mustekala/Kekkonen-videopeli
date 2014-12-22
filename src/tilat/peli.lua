@@ -206,7 +206,7 @@ function peli:draw()
 	end
 	
 	camera:unset() --Ei enaa liikkuva kamera	
-	debugMode=true --TODo talle valinta
+	
 	if debugMode==true then
 
 		love.graphics.print(pelaajat[1].tila, 0,0,0,0.5,0.5)

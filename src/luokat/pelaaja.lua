@@ -140,48 +140,56 @@ function pelaaja:update( dt, painovoima )
 	--Paivita animaatiot
 if self.animVoiVaihtua then	
 	if self.yNopeus>0 then
+		--Laskeutuminen
 	    if self:tarkistaTormays(map, self.x, self.y+60) then
 		 self.nykAnim=paikallaan_anim	
 	     self.nykAnim = laskeutuminen_anim
 		 self.animVoiVaihtua=false
 		 self.animAjastin = 0.3
+		 TEsound.play(kavelyAanet)
+		 --Putoaminen
 	    else	
 		 self.tila="putoaminen"	
 	 	 self.nykAnim=putoaminen_anim
 		end
+	--Hyppy
 	elseif self.yNopeus<0 then
 	
 		self.tila="hyppy"
 	
 		self.nykAnim=hyppy_anim
-
+	--Lyonti
 	elseif self.tila=="lyonti" then
 	
 		self.nykAnim=lyonti_anim
-	
+	--Torjunta
 	elseif self.tila=="torjunta" then
 	
 		self.nykAnim=torjunta_anim
-		
+	--Heitto	
 	elseif self.tila=="heitto" then
 	
 		self.nykAnim=heitto_anim
 		self.animVoiVaihtua=false
 		self.animAjastin = 0.6
-		
+	--Kavely	
 	elseif self.tila=="liikuOikealle" or self.tila=="liikuVasemmalle" then
-		
+		if kavelyAanetAjastin % 19 == 0 then --Toista aani jokunen kerta sekunnissa
+			TEsound.play(kavelyAanet)
+		end 
 		self.nykAnim=kavely_anim
-
+    --Paikallaan
 	else
 	
 		self.nykAnim=paikallaan_anim	
 		voiLiikkua=true
 		
 	end
-
+	
 end
-
+	--Ajastimet
+	kavelyAanetAjastin = kavelyAanetAjastin + 1 --TODO pitaisi tehda paremmin
+	
 	if self.animAjastin < 0 then --Ajastin animaation vaihtumiselle
 	    self.animVoiVaihtua=true	
 	    if self.numero==1 then
@@ -216,9 +224,17 @@ function pelaaja:draw()
  local x
  --Kameran liikkuminen ei vaikuta hudiin
  camera:unset()
-  
- if self.numero==2 then x=700 else x=10 end --Pelaajien 1 ja 2 hudit eri paikassa
-	love.graphics.print(self.elamat,x,500)
+ --HUD 
+ if self.numero==2 then x=650 else x=10 end --Pelaajien 1 ja 2 hudit eri paikassa
+	local elamat = 0
+	if hudTila == "sydan" then
+		while elamat < self.elamat do
+			love.graphics.draw(kuvat["heart.png"], x + elamat * 30, 510 , 0, 0.5, 0.5)
+			elamat = elamat + 1
+		end
+	else
+		love.graphics.print(self.elamat,x,510)
+	end
 	love.graphics.print(self.terveys..'%',x,550)
     camera:set()
 end
@@ -343,7 +359,7 @@ end
 function pelaaja:liikuVasemmalle(  )
 	
 	if voiLiikkua == true then
-	
+
 		self.tila="liikuVasemmalle"
 		self.xNopeus = kekkonen.juoksuNopeus * -1
 		self.suunta = "vasen"
@@ -377,9 +393,14 @@ function pelaaja:pysahdy( heti )
 	heti = heti or false --Pysahdytaanko seinaan
 	if heti then 
 		self.xNopeus = 0
-	else	
+	else --Pysahtyy hitaammin	
+		--Jos maassa nopeasti
 		if self.yNopeus == 0 then
-			self.xNopeus=self.xNopeus*0.8
+			self.xNopeus=self.xNopeus*0.9
+		end
+		--Jos ilmassa hitaasti
+		if self.yNopeus > 0 then
+			self.xNopeus=self.xNopeus*0.95
 		end
 		if self.xNopeus == 0 then
 			self.xNopeus=0
@@ -415,7 +436,7 @@ end
 function pelaaja:kuolema() --Kuolee pelissä mutta ei valttamatta havia viela
 	
 	self.elamat = self.elamat-1
-	
+	self:pysahdy(true)
 	if self.elamat == 0 then
 		self:havio()
 	else

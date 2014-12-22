@@ -6,6 +6,7 @@ asetukset = {}
 
 function asetukset:init()
 	onkoMusiikki=true
+	debugMode=false 
 	volyymi=1
 	asetusvalikko= Menu.new()
 
@@ -52,6 +53,29 @@ function asetukset:init()
 		end
 	}
 
+	asetusvalikko:addItem{
+		nimi = "Hud-tila",
+		toiminto = function()
+			
+			if hudTila== "sydan" then
+				hudTila = "numero"
+			else
+				hudTila = "sydan"
+			end	
+			print("hudTila:"..hudTila)
+	
+		end
+	}
+	
+	asetusvalikko:addItem{
+		nimi = "Debug",
+		toiminto = function()
+			
+			debugMode=not debugMode
+			print("Debug:"..tostring(debugMode))
+	
+		end
+	}
 end
 
 
@@ -73,22 +97,28 @@ function asetukset:draw()
 
 	love.graphics.draw( kuvat[ "testi_tausta.png" ], 0, 0 )
 
-	asetusvalikko:draw( 100, 200 )
+	asetusvalikko:draw( 100, 100 )
 
 	if kokoruutu then
-		love.graphics.print("Paalla", 550, 200)
+		love.graphics.print("Paalla", 550, 100)
 	else
-		love.graphics.print("Pois", 550, 200)
+		love.graphics.print("Pois", 550, 100)
 	end
-
 	
-	love.graphics.print((volyymi*100).."%", 550, 300)
+	love.graphics.print((volyymi*100).."%", 550, 200)
 	
-
 	if onkoMusiikki then
-		love.graphics.print("Paalla", 550, 400)
+		love.graphics.print("Paalla", 550, 300)
 	else
-		love.graphics.print("Pois", 550, 400)
+		love.graphics.print("Pois", 550, 300)
+	end
+	
+	love.graphics.print(hudTila, 550, 400)
+	
+	if debugMode then
+		love.graphics.print("Paalla", 550, 500)
+	else
+		love.graphics.print("Pois", 550, 500)
 	end
 end
 
