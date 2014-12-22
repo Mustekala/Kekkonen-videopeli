@@ -307,22 +307,15 @@ function pelaaja:kontakti(suunta,hyokkays, xEro)
 			self.yNopeus=-600
 		end
 	
-	--tormays(jos pelaajat lähekkäin) tai torjunta
-	
-	elseif math.abs(xEro)<35 and hyokkays~="lyonti" or (self.tila=="torjunta" and suunta~=self.suunta) then	
-		--Paattelee liikkumissunnan vastustajan suunnasta, seka tarkistaa liikutaanko jo ennestaan 
-		if vastustajaOn=="vasen" then
-			if self.xNopeus>100 then
-				self.xNopeus=self.xNopeus-200
-			else
-				self.xNopeus=self.xNopeus-100
-			end
-		elseif vastustajaOn=="oikea" then
-			if self.xNopeus<100 then
-				self.xNopeus=self.xNopeus+200
-			else
-				self.xNopeus=self.xNopeus+100
-			end
+	end
+	--tormays(jos pelaajat lähekkäin) 
+	if math.abs(xEro)<35 then	
+		--Pysahtyy seka liikkuu jompaankumpaan suntaan. Paattelee liikkumissunnan vastustajan suunnasta
+		self:pysahdy(true)
+		if vastustajaOn=="vasen" then 
+			self.xNopeus=self.xNopeus-150
+		elseif vastustajaOn=="oikea" then 
+			self.xNopeus=self.xNopeus+150
 		end
 	
 end

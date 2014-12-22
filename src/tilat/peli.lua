@@ -74,18 +74,6 @@ function peli:update( dt )
 			pelaaja:kontakti(pelaajat[toinen].suunta, pelaajat[toinen].tila, xEro)
 		end
 	end
-    
-	--Törmaystunnistus
-	if math.realDist(pelaajat[1].x, pelaajat[1].y, pelaajat[2].x, pelaajat[2].y)<30 then
-	   	for _, pelaaja in pairs( pelaajat ) do		   
-		    local toinen = pelaaja.numero%2+1
-			if pelaaja.xNopeus < 0 then
-
-			else
-		
-			end
-		end
-	end
 		
 	for _, pelaaja in pairs( pelaajat ) do
 
