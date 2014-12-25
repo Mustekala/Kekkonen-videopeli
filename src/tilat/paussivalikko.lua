@@ -14,6 +14,7 @@ function paussivalikko:init()
 	pValikko:addItem{
 		nimi = "Jatka pelia",
 		toiminto = function()
+			TEsound.resume("tausta")
 			Gamestate.pop()
 			print("Takaisin peliin")
 		end
@@ -47,7 +48,8 @@ end
 
 
 function paussivalikko:enter( mista )
-
+	--Musiikki & taustaaanet pysahtyvat
+	TEsound.pause("tausta")
 	self.mista = mista
 
 end
@@ -71,8 +73,8 @@ end
 
 function paussivalikko:keypressed( nappain )
 	if nappain == "escape" then
-		
-		Gamestate.push(peli)
+		TEsound.resume("tausta")
+		Gamestate.pop()
 		print("Takaisin peliin")
 	end
 	pValikko:keypressed( nappain )

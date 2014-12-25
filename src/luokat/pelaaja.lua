@@ -67,9 +67,9 @@ function pelaaja:update( dt, painovoima )
 	self.animAjastin = self.animAjastin - dt
 	
 	self.xNopeus = math.clamp(self.xNopeus, -self.xNopeusMax, self.xNopeusMax)
-    self.yNopeus = math.clamp(self.yNopeus, -self.yNopeusMax, self.yNopeusMax)
+        self.yNopeus = math.clamp(self.yNopeus, -self.yNopeusMax, self.yNopeusMax)
 
-	if self.y> 700 then
+	if self.y> 700 then --Kuolema pudotessa
 		self:kuolema()
 	end	
 	local map = nykyinenTaso
@@ -224,14 +224,20 @@ function pelaaja:draw()
  local x
  --Kameran liikkuminen ei vaikuta hudiin
  camera:unset()
+ 
  --HUD 
  if self.numero==2 then x=650 else x=10 end --Pelaajien 1 ja 2 hudit eri paikassa
 	local elamat = 0
 	if hudTila == "sydan" then
-		while elamat < self.elamat do
-			love.graphics.draw(kuvat["heart.png"], x + elamat * 30, 510 , 0, 0.5, 0.5)
-			elamat = elamat + 1
-		end
+		if self.elamat > 5 then   --Sydanhudiin mahtuu vain 5
+			love.graphics.print(self.elamat,x,510)
+			love.graphics.draw(kuvat["heart.png"], x + 30, 510 , 0, 0.5, 0.5)
+		else
+			while elamat < self.elamat do
+				love.graphics.draw(kuvat["heart.png"], x + elamat * 30, 510 , 0, 0.5, 0.5)
+				elamat = elamat + 1
+			end
+		end	
 	else
 		love.graphics.print(self.elamat,x,510)
 	end
@@ -426,7 +432,7 @@ function pelaaja:tarkistaTormays(map, x, y)
 end
 
 
-function pelaaja:kuolema() --Kuolee pelissä mutta ei valttamatta havia viela
+function pelaaja:kuolema() --Kuolee pelissa mutta ei valttamatta havia viela
 	
 	self.elamat = self.elamat-1
 	self:pysahdy(true)

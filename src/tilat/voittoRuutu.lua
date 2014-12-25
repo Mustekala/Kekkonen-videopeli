@@ -18,6 +18,9 @@ function voittoRuutu:init()
 end
 
 function voittoRuutu:enter(wanhaState , numero)
+	--Pysaytetaan kaikki aanet 
+	TEsound.stop("musiikki")
+	TEsound.stop("tausta")
 	
 	self.kukaVoitti = "Pelaaja "..numero
 	print(self.kukaVoitti.." voitti")
@@ -34,7 +37,7 @@ function voittoRuutu:draw()
 	love.graphics.draw( kuvat[ "ukk_tausta.png" ], 0, 0 )
 
 	-- Piirretaan suuri nimi/title
-	love.graphics.print(self.kukaVoitti.. " voitti", 20, 200, 0, 1.5, 1.5 )
+	love.graphics.print(self.kukaVoitti.. " voitti", 10, 200, 0, 1.1, 1.1 )
 
 	love.graphics.print( "Paina Enter jatkaaksesi \ntai Esc lopettaaksesi", 60, 300, 0, 0.6, 0.6 )
 	

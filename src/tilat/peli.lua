@@ -21,7 +21,11 @@ function peli:init()
 end
 
 function peli:enter( self, tasonNimi, pelaajaMaara, elamienMaara)
-	
+	--Sade. Alle voi lisata ifin kaikille sadetta kayttaville kartoille
+	sataako = false
+	if tasonNimi == "Pilvenpiirtaja" then sataako=true end
+
+	peliAlkanut = false
 	TEsound.stop("musiikki")
 	tasoNimi = tasonNimi
      
@@ -32,6 +36,11 @@ function peli:enter( self, tasonNimi, pelaajaMaara, elamienMaara)
 	
 	nykyinenTaso = loader.load(tasonNimi..".tmx")
 	nykyinenTaso:setDrawRange(0, 0, 2000, 960)
+	
+	if sataako then
+		sade:uusi(nykyinenTaso, -500, -500, 1500, 5)
+		TEsound.playLooping(AANI_POLKU.."/ymparisto/sade.ogg", "tausta")
+	end	
 	
 	pelaajienMaara = pelaajaMaara
 		
@@ -53,21 +62,33 @@ function peli:enter( self, tasonNimi, pelaajaMaara, elamienMaara)
 		
    end
 	testiajastin=0
+	  
+	--Taustaaanet, musiikki
+	
 end
 
 
 function peli:update( dt )
     
   if peliAlkanut then
+  
+	if sataako then
+		sade:update(dt)
+	end
 	
 	self:liikutaPelaajat()
+	
+	--Tunarit-ruutu jos molemmat ovat kuolemassa pudotukseen
+	if pelaajat[1].y > 500 and pelaajat[2].y > 500 and pelaajat[1].elamat == 1 and pelaajat[2].elamat == 1 then 
+		Gamestate.switch(tunarit, tasoNimi, maxElamat)
+	end	
 	
 	if not love.window.hasFocus( ) then
 	 Gamestate.push(paussivalikko)
 	end 
 	
 	--Huono vahikotunnistus
-	if math.isAbout(pelaajat[1].x,pelaajat[2].x, 45) and pelaajat[2].y == pelaajat[1].y then 
+	if math.isAbout(pelaajat[1].x,pelaajat[2].x, 45) and math.isAbout(pelaajat[2].y, pelaajat[1].y, 32) then 
 		for _, pelaaja in pairs( pelaajat ) do		    
 			local toinen = pelaaja.numero%2+1
 			local xEro = pelaaja.x - pelaajat[toinen].x		
@@ -176,6 +197,7 @@ function peli:liikutaPelaajat()
 end
 
 function peli:draw()
+
     --local taso = _G[tasoNimi].attribute
 	--Dynaaminen tausta
 	if liikkuvaTausta then
@@ -185,25 +207,29 @@ function peli:draw()
 		love.graphics.draw(kuvat[tasoNimi.."_tausta.png"], taustaX, taustaY, 0, 2, 2) --Tason tausta piirtyy erikseen
 	end
 	camera:set() --Liikkuva kamera	
+	
+	if sataako then
+		sade:draw()
+	end
+	
 	nykyinenTaso:draw()
 
 	for _, pelaaja in pairs( pelaajat ) do
-	
-		pelaaja:draw()
-		
+		pelaaja:draw()	
 	end
-	
+		
 	camera:unset() --Ei enaa liikkuva kamera	
-	
+		
 	if debugMode==true then
 
 		love.graphics.print(pelaajat[1].tila, 0,0,0,0.5,0.5)
 		love.graphics.print(pelaajat[2].tila,500,0,0,0.5,0.5)
 		love.graphics.print(tostring(pelaajat[1].nykAnim), 0,100,0,0.5,0.5)
 		love.graphics.print(tostring(pelaajat[2].nykAnim),500,100,0,0.5,0.5)
-
+		love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 300, 10)
+		
 	end
-	
+
 end
 
 
