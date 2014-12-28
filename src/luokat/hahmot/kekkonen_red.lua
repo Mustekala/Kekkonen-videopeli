@@ -42,6 +42,10 @@ function kekkonen_red:lataaAnimaatiot()
 
 	self.vahinko_anim = newAnimation(kuvat["kekkonen_taintunut_red.png"],32,62,0.1,7)
 	self.vahinko_anim:setMode("bounce")
+	
+	self.kaantyminen_anim = newAnimation(kuvat["kekkonen_kaantyy_red.png"],34,61,0.05,3)
+	self.kaantyminen_anim:setMode("once")
+	
 	print("Animaatiot ladattu: kekkonen")
 end
 

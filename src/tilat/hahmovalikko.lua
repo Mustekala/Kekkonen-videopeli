@@ -12,7 +12,7 @@ function hahmovalikko:enter(taso)
 	elamaValikko = Menu.new()
 	maxElamat=1
 
-	for _, hahmo in ipairs( hahmot ) do --Tämä on vähän turha, lisaa juttuja myohemmin
+	--for _, hahmo in ipairs( hahmot ) do --Tämä on vähän turha, lisaa juttuja myohemmin
 
         elamaValikko:addItem{
 			nimi = "Lisaa elama",
@@ -26,11 +26,11 @@ function hahmovalikko:enter(taso)
 			nimi="Aloita",		
 			toiminto = function() 
 				Gamestate.switch( tasovalikko, 2, maxElamat, {"kekkonen_blu", "kekkonen_red"})
-				print( "Peli, hahmoina " .. hahmo)
+				print( "Peli, hahmoina kekkonen_blu, kekkonen_red ")
 			end
 		}
 		
-	end
+	--end
 
 end
 

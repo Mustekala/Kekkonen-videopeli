@@ -27,6 +27,7 @@ function pelaaja:luo( pelaajanHahmo, pelaajanKontrollit, pelaajanNimi, pelaajanN
 		nykAnim = _G[pelaajanHahmo].paikallaan_anim,
 		
 		animVoiVaihtua=true,
+		animSuunta = 1,
 		
 		hahmo = pelaajanHahmo,
 		
@@ -35,7 +36,7 @@ function pelaaja:luo( pelaajanHahmo, pelaajanKontrollit, pelaajanNimi, pelaajanN
 		tila = "",
 
 		suunta = katsomisSuunta,
-
+		
 		x = xLuomispiste,
 		y = yLuomispiste,
 
@@ -55,7 +56,7 @@ function pelaaja:luo( pelaajanHahmo, pelaajanKontrollit, pelaajanNimi, pelaajanN
 
 	}
 	setmetatable( olio, { __index = pelaaja } )
-
+		
 	return olio
 
 end
@@ -67,7 +68,7 @@ function pelaaja:update( dt, painovoima )
 	self.animAjastin = self.animAjastin - dt
 
 	self.xNopeus = math.clamp(self.xNopeus, -self.xNopeusMax, self.xNopeusMax)
-        self.yNopeus = math.clamp(self.yNopeus, -self.yNopeusMax, self.yNopeusMax)
+    self.yNopeus = math.clamp(self.yNopeus, -self.yNopeusMax, self.yNopeusMax)
 
 	if self.y> 700 then --Kuolema pudotessa
 		self:kuolema()
@@ -129,13 +130,6 @@ function pelaaja:update( dt, painovoima )
             self.x = seuraavaX + map.tileWidth - ((seuraavaX - halfX) % map.tileWidth)
         end
     end
-	
-    --Pelaajan katsomissuunta
-	if self.suunta=="vasen" then
-		self.animSuunta=-1
-	else
-		self.animSuunta=1
-    end
 		
 	--Paivita animaatiot
 if self.animVoiVaihtua then	
@@ -172,21 +166,38 @@ if self.animVoiVaihtua then
 		self.nykAnim = _G[self.hahmo].heitto_anim
 		self.animVoiVaihtua=false
 		self.animAjastin = 0.4
+				
+	elseif self.xNopeus > 0 and self.tila=="liikuVasemmalle" or self.xNopeus < 0 and self.tila=="liikuOikealle" then
+		print("kaantyminen")
+		self.nykAnim = _G[self.hahmo].kaantyminen_anim
+		self.animVoiVaihtua=false
+		self.animAjastin = 0.2
+		
 	--Kavely	
 	elseif self.tila=="liikuOikealle" or self.tila=="liikuVasemmalle" then
 		if kavelyAanetAjastin % 19 == 0 then --Toista aani jokunen kerta sekunnissa
 			TEsound.play(kavelyAanet)
 		end 
 		self.nykAnim = _G[self.hahmo].kavely_anim
+		_G[self.hahmo].kaantyminen_anim:reset()
+		
     --Paikallaan
 	else
 	
 		self.nykAnim = _G[self.hahmo].paikallaan_anim	
-		voiLiikkua=true
+		self.voiLiikkua=true
 		
 	end
 
 end
+			
+    --Pelaajan katsomissuunta
+	if self.suunta == "oikea" and self.animVoiVaihtua then
+		self.animSuunta = 1 
+	elseif self.suunta == "vasen" and self.animVoiVaihtua then
+		self.animSuunta = -1 
+	end
+	
 	--Ajastimet
 	kavelyAanetAjastin = kavelyAanetAjastin + 1 --TODO pitaisi tehda paremmin
 	
@@ -302,11 +313,12 @@ function pelaaja:kontakti(suunta,hyokkays, xEro)
 	   end
 	
 	elseif hyokkays=="heitto" and vastustajaOn==suunta then
+		self.voiLiikkua = false
 		if suunta=="vasen" then	
-			self.xNopeus= 600
+			self.xNopeus= -400
 			self.yNopeus=-600
 		elseif suunta=="oikea" then
-			self.xNopeus=-600
+			self.xNopeus= 400
 			self.yNopeus=-600
 		end
 	
@@ -339,13 +351,15 @@ end
 
 function pelaaja:liikuOikealle(  )
 
-	if voiLiikkua==true then
+	if self.voiLiikkua then
 	
-	 self.xNopeus = _G[self.hahmo].juoksuNopeus
+		if self.xNopeus < _G[self.hahmo].juoksuNopeus  then
+			self.xNopeus = self.xNopeus + 15
+		end	
+	
+		self.suunta = "oikea"
 
-	 self.suunta = "oikea"
-
-	 self.tila="liikuOikealle"
+		self.tila="liikuOikealle"
 	
 	end
 	
@@ -354,10 +368,12 @@ end
 
 function pelaaja:liikuVasemmalle(  )
 	
-	if voiLiikkua == true then
+	if self.voiLiikkua then
 
 		self.tila="liikuVasemmalle"
-		self.xNopeus = _G[self.hahmo].juoksuNopeus * -1
+		if self.xNopeus > _G[self.hahmo].juoksuNopeus * -1 then
+			self.xNopeus = self.xNopeus - 15
+		end	
 		self.suunta = "vasen"
 	
 	end
