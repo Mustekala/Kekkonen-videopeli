@@ -6,7 +6,7 @@
 tasovalikko = {}
 
 
-function tasovalikko:enter(aiempi , pelaajaMaara, elamienMaara)
+function tasovalikko:enter(aiempi , pelaajaMaara, elamienMaara, hahmot)
 	self.nimi = "tasovalikko"
 	
 	tasojenValikko = Menu.new()
@@ -18,8 +18,7 @@ function tasovalikko:enter(aiempi , pelaajaMaara, elamienMaara)
 			toiminto = function()
 
 			print( "Peli, tasona " .. tasonNimi )
-				Gamestate.switch( peli, tasonNimi, pelaajaMaara ,elamienMaara)
-
+				Gamestate.switch( peli, tasonNimi, pelaajaMaara ,elamienMaara, hahmot)
 
 			end
 		}

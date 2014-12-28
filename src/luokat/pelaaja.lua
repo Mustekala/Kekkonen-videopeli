@@ -19,11 +19,13 @@ function pelaaja:luo( pelaajanHahmo, pelaajanKontrollit, pelaajanNimi, pelaajanN
 		--Pari ajastinta
 		vahinkoAjastin=0,
 		animAjastin=0,
+		terveys = _G[pelaajanHahmo].kestavyys,
+		elamat = elamienMaara,
 		
-		terveys=kekkonen.kestavyys,
-		elamat =  elamienMaara,
+		osumaLaatikot = _G[pelaajanHahmo]:haeOsumaLaatikot( x, y ),
 		
-		nykAnim=paikallaan_anim,
+		nykAnim = _G[pelaajanHahmo].paikallaan_anim,
+		
 		animVoiVaihtua=true,
 		
 		hahmo = pelaajanHahmo,
@@ -48,8 +50,6 @@ function pelaaja:luo( pelaajanHahmo, pelaajanKontrollit, pelaajanNimi, pelaajanN
 		xNopeusMax=800,
 		yNopeusMax=1000,
 				
-		osumaLaatikot = kekkonen:haeOsumaLaatikot( x, y )
-
 		--pelaaja.xLuomispiste = xLuomispiste
 		--pelaaja.yLuomispiste = yLuomispiste
 
@@ -65,7 +65,7 @@ function pelaaja:update( dt, painovoima )
 	
 	self.vahinkoAjastin = self.vahinkoAjastin-dt	
 	self.animAjastin = self.animAjastin - dt
-	
+
 	self.xNopeus = math.clamp(self.xNopeus, -self.xNopeusMax, self.xNopeusMax)
         self.yNopeus = math.clamp(self.yNopeus, -self.yNopeusMax, self.yNopeusMax)
 
@@ -142,83 +142,80 @@ if self.animVoiVaihtua then
 	if self.yNopeus>0 then
 		--Laskeutuminen
 	    if self:tarkistaTormays(map, self.x, self.y+60) then
-		 self.nykAnim=paikallaan_anim	
-	     self.nykAnim = laskeutuminen_anim
+		 self.nykAnim=_G[self.hahmo].paikallaan_anim	
+	     self.nykAnim = _G[self.hahmo].laskeutuminen_anim
 		 self.animVoiVaihtua=false
-		 self.animAjastin = 0.3
+		 self.animAjastin = 0.5
 		 TEsound.play(kavelyAanet)
 		 --Putoaminen
 	    else	
 		 self.tila="putoaminen"	
-	 	 self.nykAnim=putoaminen_anim
+	 	 self.nykAnim = _G[self.hahmo].putoaminen_anim
 		end
 	--Hyppy
 	elseif self.yNopeus<0 then
 	
 		self.tila="hyppy"
 	
-		self.nykAnim=hyppy_anim
+		self.nykAnim = _G[self.hahmo].hyppy_anim
 	--Lyonti
 	elseif self.tila=="lyonti" then
 	
-		self.nykAnim=lyonti_anim
+		self.nykAnim = _G[self.hahmo].lyonti_anim
 	--Torjunta
 	elseif self.tila=="torjunta" then
 	
-		self.nykAnim=torjunta_anim
+		self.nykAnim = _G[self.hahmo].torjunta_anim
 	--Heitto	
 	elseif self.tila=="heitto" then
 	
-		self.nykAnim=heitto_anim
+		self.nykAnim = _G[self.hahmo].heitto_anim
 		self.animVoiVaihtua=false
-		self.animAjastin = 0.6
+		self.animAjastin = 0.4
 	--Kavely	
 	elseif self.tila=="liikuOikealle" or self.tila=="liikuVasemmalle" then
 		if kavelyAanetAjastin % 19 == 0 then --Toista aani jokunen kerta sekunnissa
 			TEsound.play(kavelyAanet)
 		end 
-		self.nykAnim=kavely_anim
+		self.nykAnim = _G[self.hahmo].kavely_anim
     --Paikallaan
 	else
 	
-		self.nykAnim=paikallaan_anim	
+		self.nykAnim = _G[self.hahmo].paikallaan_anim	
 		voiLiikkua=true
 		
 	end
-	
+
 end
 	--Ajastimet
 	kavelyAanetAjastin = kavelyAanetAjastin + 1 --TODO pitaisi tehda paremmin
 	
 	if self.animAjastin < 0 then --Ajastin animaation vaihtumiselle
 	    self.animVoiVaihtua=true	
-	    if self.numero==1 then
-			laskeutuminen_anim.red:reset()
-			heitto_anim.red:reset()
-		else	
-			laskeutuminen_anim.blu:reset()
-			heitto_anim.blu:reset()
-		end	
-			
 	end
-		
+	
+	--RESETOIDAAN ANIMAATIOT
+	--Jos pelaaja ei heita, resetoi heittoanimaatio
+	if not self.tila=="heitto" then
+		_G[self.hahmo].heitto_anim:reset()
+	end	
+	--Jos pelaaja ei torju, resetoi torjuntaanimaatio
+	if not self.tila=="torjunta" then 	
+		_G[self.hahmo].torjunta_anim:reset() 		
+	end	
+	--Jos pelaaja putoaa, resetoi laskeutumisanimaatio
+	if self.tila=="putoaminen" then 	
+		_G[self.hahmo].laskeutuminen_anim:reset() 		
+	end	
 end
 
 
 function pelaaja:draw()
  --Piirretaan oikeat animaatiot molemmille pelaajille (blu/red)
  if self.tila=="paikallaan" then 
-	if self.numero==1 then
-		self.nykAnim.red:draw(self.x, self.y-13,0,self.animSuunta*1.5,1.5,16,30)
-	else
-		self.nykAnim.blu:draw(self.x, self.y-13,0,self.animSuunta*1.5,1.5,16,30)
-	end	
+	self.nykAnim:draw(self.x, self.y-13,0,self.animSuunta*1.5,1.5,16,30)	
  else
-	if self.numero==1 then
-		self.nykAnim.red:draw(self.x, self.y-10,0,self.animSuunta*1.5,1.5,16,30)
-	else
-		self.nykAnim.blu:draw(self.x, self.y-10,0,self.animSuunta*1.5,1.5,16,30)
-	end
+	self.nykAnim:draw(self.x, self.y-10,0,self.animSuunta*1.5,1.5,16,30)
  end
  
  local x
@@ -292,7 +289,7 @@ function pelaaja:kontakti(suunta,hyokkays, xEro)
 	
 		end
 
-		self.nykAnim=vahinko_anim
+		self.nykAnim = _G[self.hahmo].vahinko_anim
 		self.animVoiVaihtua=false
 		self.vahinkoAjastin = 0.2 --Pieni hetki vahingoittumattomana
 	    self.animAjastin = 0.5
@@ -334,7 +331,7 @@ function pelaaja:hyppaa(  )
 		
 		TEsound.play(hyppyAanet)
 		
-		self.yNopeus = kekkonen.hyppyNopeus
+		self.yNopeus = _G[self.hahmo].hyppyNopeus
 		
 	end
 
@@ -344,7 +341,7 @@ function pelaaja:liikuOikealle(  )
 
 	if voiLiikkua==true then
 	
-	 self.xNopeus = kekkonen.juoksuNopeus
+	 self.xNopeus = _G[self.hahmo].juoksuNopeus
 
 	 self.suunta = "oikea"
 
@@ -360,7 +357,7 @@ function pelaaja:liikuVasemmalle(  )
 	if voiLiikkua == true then
 
 		self.tila="liikuVasemmalle"
-		self.xNopeus = kekkonen.juoksuNopeus * -1
+		self.xNopeus = _G[self.hahmo].juoksuNopeus * -1
 		self.suunta = "vasen"
 	
 	end
@@ -444,7 +441,7 @@ function pelaaja:kuolema() --Kuolee pelissa mutta ei valttamatta havia viela
 	
 		nykKamera="kuolema"
 	
-		self.terveys=kekkonen.kestavyys
+		self.terveys = _G[self.hahmo].kestavyys
 	
 		print("Kamera:"..nykKamera)
 	

@@ -20,7 +20,7 @@ function peli:init()
 	
 end
 
-function peli:enter( aiempi, tasonNimi, pelaajaMaara, elamienMaara)
+function peli:enter( aiempi, tasonNimi, pelaajaMaara, elamienMaara, hahmot)
 	print("Aiempi:"..aiempi.nimi)
 	--Sade. Alle voi lisata ifin kaikille sadetta kayttaville kartoille
 	sataako = false					 --Kekkonen on vihainen: pakota sade
@@ -51,7 +51,7 @@ function peli:enter( aiempi, tasonNimi, pelaajaMaara, elamienMaara)
 	end
 	--]]
 
-	peli:luoPelaajat()
+	peli:luoPelaajat(hahmot)
 	
 	peliAlkanut=true
 		
@@ -79,7 +79,7 @@ function peli:update( dt )
 	
 	--Tunarit-ruutu jos molemmat ovat kuolemassa pudotukseen
 	if pelaajat[1].y > 500 and pelaajat[2].y > 500 and pelaajat[1].elamat == 1 and pelaajat[2].elamat == 1 then 
-		Gamestate.switch(tunarit, tasoNimi, maxElamat)
+		Gamestate.switch(tunarit, tasoNimi, maxElamat, {pelaajat[1].hahmo, pelaajat[2].hahmo})
 	end	
 	
 	if not love.window.hasFocus( ) then
@@ -123,37 +123,9 @@ function peli:update( dt )
 	--Paivitetaan animaatiot
 		
 	for i, pelaaja in pairs ( pelaajat ) do	
-	  if pelaaja.numero==1 then
-		pelaaja.nykAnim.red:update(dt)
-	  else 
-		pelaaja.nykAnim.blu:update(dt)
-	  end
-	end
-
-	if pelaajat[1].yNopeus < 0 or pelaajat[2].yNopeus < 0 then
-	
-		hyppy_anim.blu:update(dt)
-		hyppy_anim.red:update(dt)
-	
-	else
-	
-		hyppy_anim.blu:reset()
-		hyppy_anim.red:reset()
-	
+		pelaaja.nykAnim:update(dt)
 	end
 	
-	
-	if pelaajat[1].tila=="torjunta" or pelaajat[2].tila=="torjunta" then
-	
-		torjunta_anim.blu:update(dt)
-		torjunta_anim.red:update(dt)
-	 
-	else
-	
-		torjunta_anim.blu:reset()
-		torjunta_anim.red:reset()
-		
-	end
    end
 end
 
@@ -255,12 +227,12 @@ function peli:asetaPaussille()
 end
 
 
-function peli:luoPelaajat()
+function peli:luoPelaajat(hahmot)
 	
 	-- print( nykyinenTaso.layers["Syntykohdat"].objects[1].x )
 	for i = 1, pelaajienMaara do
 
-		pelaajat[ i ] = pelaaja:luo( "kekkonen", pelaajienKontrollit[ i ], "Pelaaja " .. i,i,
+		pelaajat[ i ] = pelaaja:luo( hahmot[i], pelaajienKontrollit[ i ], "Pelaaja " .. i,i,
 		nykyinenTaso.layers["Syntykohdat"].objects[i].x,
 		nykyinenTaso.layers["Syntykohdat"].objects[i].y, "vasen" ,onkoBotti, maxElamat)
 		

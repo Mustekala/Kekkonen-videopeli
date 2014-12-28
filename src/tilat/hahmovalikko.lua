@@ -25,7 +25,7 @@ function hahmovalikko:enter(taso)
 		elamaValikko:addItem{	
 			nimi="Aloita",		
 			toiminto = function() 
-				Gamestate.switch( tasovalikko, 2, maxElamat)
+				Gamestate.switch( tasovalikko, 2, maxElamat, {"kekkonen_blu", "kekkonen_red"})
 				print( "Peli, hahmoina " .. hahmo)
 			end
 		}

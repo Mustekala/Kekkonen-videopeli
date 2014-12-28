@@ -51,7 +51,7 @@ print("Ladataan omat tilat, yms.")
 --luokat
 require( LUOKKA_POLKU .. "botti" )
 require( LUOKKA_POLKU .. "pelaaja" )
-require( HAHMO_POLKU .. "kekkonen" )
+
 --Tilat
 for _, tila in ipairs( love.filesystem.getDirectoryItems( TILA_POLKU ) ) do --Hakee kaikki tilat tilapolusta
 	require(TILA_POLKU..string.gsub(tila,".lua","")) --Leikkaa tiedostonimista .lua-paatteen, require ei halua sita
@@ -78,18 +78,15 @@ for _, kuva in ipairs( love.filesystem.getDirectoryItems( KUVA_POLKU ) ) do
 	print( "Ladataan " .. kuva )
 end
 
-hahmoVarasto = {
-	
-	"Kekkonen"
-	
-}
 
 hahmot = {}
 
-
-for _, hahmo in ipairs( hahmoVarasto ) do
-	table.insert(hahmot, hahmo)
-	print( "Ladataan " ..hahmo )
+for _, hahmo in ipairs( love.filesystem.getDirectoryItems( HAHMO_POLKU )) do
+	local nykyinenHahmo = string.gsub(hahmo,".lua","") --Leikkaa tiedostonimista .lua-paatteen, require ei halua sita
+	require (HAHMO_POLKU .. nykyinenHahmo) 
+	table.insert(hahmot, nykyinenHahmo)
+	print( "Ladataan animaatiot: " ..nykyinenHahmo )
+	_G[nykyinenHahmo]:lataaAnimaatiot()
 end
 
 tasoVarasto = {
@@ -149,103 +146,6 @@ for _, taso in ipairs( tasoVarasto ) do
 end
 --]]
 
---Animaatiot
-print("Ladataan animaatiot")
-		
-	kavely_kuva={
-		blu = kuvat["kekkonen_kavely_blu.png"],
-		red = kuvat["kekkonen_kavely.png"]
-	}
-	kavely_anim={
-		blu=newAnimation(kavely_kuva.blu,32,61,0.07,7),
-		red=newAnimation(kavely_kuva.red,32,61,0.07,7)
-	}
-
-	lyonti_kuva={
-		blu = kuvat["kekkonen_lyonti_blu.png"],
-		red = kuvat["kekkonen_lyonti.png"]
-	}
-	lyonti_anim={
-		blu = newAnimation(lyonti_kuva.blu,42,64,0.045,10),
-		red = newAnimation(lyonti_kuva.red,42,64,0.045,10)
-	}
-	
-	heitto_kuva={
-		blu = kuvat["kekkonen_heitto_blu.png"],
-		red = kuvat["kekkonen_heitto.png"]
-	}
-	heitto_anim={
-		blu = newAnimation(heitto_kuva.blu,40,65,0.04,7),
-		red = newAnimation(heitto_kuva.red,40,65,0.04,7)
-	}
-	heitto_anim.blu:setMode("bounce")
-	heitto_anim.red:setMode("bounce")
-	
-	paikallaan_kuva={
-		blu	= kuvat["kekkonen_paikallaan_blu.png"],
-		red	= kuvat["kekkonen_paikallaan.png"]
-	}
-	paikallaan_anim={
-		blu=newAnimation(paikallaan_kuva.blu,42,64,0.5,2),
-		red=newAnimation(paikallaan_kuva.red,42,64,0.5,2),
-		korjaus=5
-	}
-		
-	torjunta_kuva={
-		blu = kuvat["kekkonen_torjunta_blu.png"],
-		red = kuvat["kekkonen_torjunta.png"]
-	}
-	torjunta_anim={
-		blu = newAnimation(torjunta_kuva.blu,32,61,0.04,6),
-		red = newAnimation(torjunta_kuva.red,32,61,0.04,6),	
-	}
-	torjunta_anim.blu:setMode("once")
-	torjunta_anim.red:setMode("once")
-	
-	putoaminen_kuva={
-		blu = kuvat["kekkonen_putoaminen_blu.png"],
-		red = kuvat["kekkonen_putoaminen.png"]
-	}
-	putoaminen_anim={
-		blu = newAnimation(putoaminen_kuva.blu,35,62,0.2,2),
-		red = newAnimation(putoaminen_kuva.red,35,62,0.2,2)
-	}	
-	
-	laskeutuminen_kuva={
-	    blu = kuvat["kekkonen_laskeutuminen_blu.png"],
-		red = kuvat["kekkonen_laskeutuminen.png"]
-	}
-	laskeutuminen_anim={
-		blu = newAnimation(laskeutuminen_kuva.blu,42,65,0.05,6),
-		red = newAnimation(laskeutuminen_kuva.red,42,65,0.05,6)	
-	}
-    laskeutuminen_anim.blu:setMode("once")
-	laskeutuminen_anim.red:setMode("once")
-	
-	hyppy_kuva={
-		blu=kuvat["kekkonen_hyppy_blu.png"],
-		red=kuvat["kekkonen_hyppy.png"]
-	}
-	hyppy_anim={
-		blu = newAnimation(hyppy_kuva.blu,42,65,0.05,6),
-		red = newAnimation(hyppy_kuva.red,42,65,0.05,6),		
-	}	
-	hyppy_anim.blu:setMode("once")
-	hyppy_anim.red:setMode("once")
-	
-	vahinko_kuva={
-		blu = kuvat["kekkonen_taintunut_blu.png"],
-		red = kuvat["kekkonen_taintunut.png"]
-	}
-	vahinko_anim={
-		blu=newAnimation(vahinko_kuva.blu,32,62,0.1,7),
-		
-		red=newAnimation(vahinko_kuva.red,32,62,0.1,7),
-		
-	}
-	vahinko_anim.blu:setMode("bounce")
-	vahinko_anim.red:setMode("bounce")
-		
 print("Ladataan aanet")
 
 vahinkoAanet = {TEHOSTE_POLKU.."Hurt2.ogg", TEHOSTE_POLKU.."Hurt3.ogg", TEHOSTE_POLKU.."Hurt4.ogg"}

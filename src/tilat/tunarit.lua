@@ -16,7 +16,7 @@ function tunarit:init()
 	
 end
 
-function tunarit:enter(wanhaState, wanhaTaso, wanhatElamat)
+function tunarit:enter(wanhaState, wanhaTaso, wanhatElamat, wanhatHahmot)
 	peliAlkanut = false
 	--Pysaytetaan kaikki aanet 
 	TEsound.stop("musiikki")
@@ -25,6 +25,7 @@ function tunarit:enter(wanhaState, wanhaTaso, wanhatElamat)
 	print("WanhatElamat:"..wanhatElamat)
 	tunarit.taso = wanhaTaso
 	tunarit.elamat = wanhatElamat
+	tunarit.hahmot = wanhatHahmot
 	print("Kumpikaan pelaajista ei voittanut\nKekkonen on vihainen, nyt alkaa sataa")
 end
 
@@ -57,7 +58,7 @@ function tunarit:keypressed( nappain )
 	elseif nappain == "return" then
 		TEsound.play("media/aanet/tehosteet/menuclick.ogg")
 		print( "Uusi peli,"..self.taso)
-		Gamestate.switch( peli, self.taso, 2, self.elamat)
+		Gamestate.switch( peli, self.taso, 2, self.elamat, self.hahmot)
 	end
 
 end
