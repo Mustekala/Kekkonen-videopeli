@@ -12,10 +12,12 @@ function tunarit:init()
 	
 	--TEsound.playLooping("media/aanet/musiikki/voittoRuutu.ogg", "musiikki") TODO etsi joku kiva musiikki
 	print("Loopataan haviomusiikki")
-
+	self.nimi = "tunarit"
+	
 end
 
 function tunarit:enter(wanhaState, wanhaTaso, wanhatElamat)
+	peliAlkanut = false
 	--Pysaytetaan kaikki aanet 
 	TEsound.stop("musiikki")
 	TEsound.stop("tausta")
@@ -23,7 +25,7 @@ function tunarit:enter(wanhaState, wanhaTaso, wanhatElamat)
 	print("WanhatElamat:"..wanhatElamat)
 	tunarit.taso = wanhaTaso
 	tunarit.elamat = wanhatElamat
-	print("Kumpikaan pelaajista ei voittanut")
+	print("Kumpikaan pelaajista ei voittanut\nKekkonen on vihainen, nyt alkaa sataa")
 end
 
 function tunarit:update( dt )

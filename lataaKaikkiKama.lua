@@ -44,7 +44,9 @@ bump = require ( KIRJASTO_POLKU .. 'bump')
 cron = require ( KIRJASTO_POLKU .. 'cron')
 lume = require ( KIRJASTO_POLKU .. "/lume/lume")
 helpFunctions = require ( KIRJASTO_POLKU .. "helpFunctions")
+
 require ( KIRJASTO_POLKU .. "sade")
+
 print("Ladataan omat tilat, yms.")
 --luokat
 require( LUOKKA_POLKU .. "botti" )

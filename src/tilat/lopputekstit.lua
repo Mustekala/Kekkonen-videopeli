@@ -8,7 +8,11 @@ function lopputekstit:enter( taso )
 	
 	
 	teksti=[[
-	Videopeli  
+	Kekkonen 
+	 Videopeli  
+	
+	Powered by:
+	LOVE2D
 	
 	
 	
@@ -69,6 +73,7 @@ function lopputekstit:enter( taso )
 	
 	TEsound 
 	by Ensayia & Taehl
+	
 	]]
 
 	tekstinY=650
@@ -80,15 +85,18 @@ end
 
 
 function lopputekstit:update( dt )
+	
 	ajastin = ajastin+1
 	if ajastin % 10 == 0 then
-	  print("Lisattiin kekkonen")
+	 
 	  table.insert(kekkoset, {anim=putoaminen_anim.blu, x=math.random(1, 800), y=-100, nopeus=1+math.random()})
 	end
     
 	for _, nykyinen in pairs(kekkoset) do
-	 nykyinen.y = nykyinen.y+nykyinen.nopeus
-	end
+		if nykyinen.y < 500 then
+			nykyinen.y = nykyinen.y+nykyinen.nopeus
+		end
+	end	
 	putoaminen_anim.blu:update(dt)
 	
 	if love.keyboard.isDown("return") then

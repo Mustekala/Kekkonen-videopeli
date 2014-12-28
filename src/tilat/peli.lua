@@ -17,15 +17,15 @@ function peli:init()
 	onkoPaussi = false
 
 	pelaajat = {}
-
+	
 end
 
-function peli:enter( self, tasonNimi, pelaajaMaara, elamienMaara)
+function peli:enter( aiempi, tasonNimi, pelaajaMaara, elamienMaara)
+	print("Aiempi:"..aiempi.nimi)
 	--Sade. Alle voi lisata ifin kaikille sadetta kayttaville kartoille
-	sataako = false
-	if tasonNimi == "Pilvenpiirtaja" then sataako=true end
+	sataako = false					 --Kekkonen on vihainen: pakota sade
+	if tasonNimi == "Pilvenpiirtaja" or aiempi.nimi == "tunarit" then sataako=true end
 
-	peliAlkanut = false
 	TEsound.stop("musiikki")
 	tasoNimi = tasonNimi
      
@@ -36,12 +36,7 @@ function peli:enter( self, tasonNimi, pelaajaMaara, elamienMaara)
 	
 	nykyinenTaso = loader.load(tasonNimi..".tmx")
 	nykyinenTaso:setDrawRange(0, 0, 2000, 960)
-	
-	if sataako then
-		sade:uusi(nykyinenTaso, -500, -500, 1500, 5)
-		TEsound.playLooping(AANI_POLKU.."/ymparisto/sade.ogg", "tausta")
-	end	
-	
+		
 	pelaajienMaara = pelaajaMaara
 		
 	maxElamat = elamienMaara
@@ -64,7 +59,11 @@ function peli:enter( self, tasonNimi, pelaajaMaara, elamienMaara)
 	testiajastin=0
 	  
 	--Taustaaanet, musiikki
-	
+		
+	if sataako then
+		sade:uusi(nykyinenTaso, -500, -500, 1500, 5)
+		TEsound.playLooping(AANI_POLKU.."/ymparisto/sade.ogg", "tausta")
+	end	
 end
 
 
@@ -242,7 +241,13 @@ function peli:keypressed( nappain )
 		print("Paussivalikko")
 		
 	end
-
+	--Debug:numlock pakottaa sateen  
+  if nappain == "numlock" and debugMode then
+	sataako = not sataako
+    if sataako then  sade:uusi(nykyinenTaso, -500, -500, 1500, 5) end
+	print("pakotetaan sade:"..tostring(sataako))
+  end
+  
 end
 
 function peli:asetaPaussille()

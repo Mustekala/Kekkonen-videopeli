@@ -7,7 +7,8 @@ tasovalikko = {}
 
 
 function tasovalikko:enter(aiempi , pelaajaMaara, elamienMaara)
-
+	self.nimi = "tasovalikko"
+	
 	tasojenValikko = Menu.new()
 
 	for _, tasonNimi in pairs( tasoVarasto ) do
