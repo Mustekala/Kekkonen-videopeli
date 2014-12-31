@@ -73,16 +73,22 @@ love.graphics.setFont( laatikkoFontti )
 
 -- Ladataan kaikki kuvat kayttaen asken luotua taulukkoa
 kuvat = {}
-for _, kuva in ipairs( love.filesystem.getDirectoryItems( KUVA_POLKU ) ) do
-	kuvat[kuva] = love.graphics.newImage( KUVA_POLKU .. kuva )
+for _, kuva in ipairs( love.filesystem.getDirectoryItems( KUVA_POLKU.."/muut/" ) ) do
+	kuvat[kuva] = love.graphics.newImage( KUVA_POLKU .."/muut/".. kuva )
 	print( "Ladataan " .. kuva )
 end
 
 
 hahmot = {}
-
+--Ladataan kaikki hahmot
 for _, hahmo in ipairs( love.filesystem.getDirectoryItems( HAHMO_POLKU )) do
 	local nykyinenHahmo = string.gsub(hahmo,".lua","") --Leikkaa tiedostonimista .lua-paatteen, require ei halua sita
+	--Haetaan hahmon kuvat	
+	for _, kuva in ipairs( love.filesystem.getDirectoryItems( KUVA_POLKU..nykyinenHahmo.."/" ) ) do
+		kuvat[kuva] = love.graphics.newImage( KUVA_POLKU ..nykyinenHahmo.."/".. kuva )
+		print( "Ladataan " .. kuva )
+	end
+	--Ladataan hahmon luokka
 	require (HAHMO_POLKU .. nykyinenHahmo) 
 	table.insert(hahmot, nykyinenHahmo)
 	print( "Ladataan animaatiot: " ..nykyinenHahmo )

@@ -11,11 +11,10 @@ function pelaaja:luo( pelaajanHahmo, pelaajanKontrollit, pelaajanNimi, pelaajanN
 	
 	local olio = {
 		
-		onkoBotti=onkoBotti,
+		onBotti = onkoBotti,
 		
 		numero=pelaajanNumero,
 
-		animSuunta=nil,
 		--Pari ajastinta
 		vahinkoAjastin=0,
 		animAjastin=0,
@@ -56,9 +55,15 @@ function pelaaja:luo( pelaajanHahmo, pelaajanKontrollit, pelaajanNimi, pelaajanN
 
 	}
 	setmetatable( olio, { __index = pelaaja } )
-		
+	
+	--Jos pelaaja on botti, luodaan uusi botti
+	if onkoBotti then
+		print("Uusi botti")
+		botti:luo(pelaajanNumero)
+	end
+	
 	return olio
-
+	
 end
 
 
@@ -79,7 +84,8 @@ function pelaaja:update( dt, painovoima )
     
     -- painovoima
     self.yNopeus = self.yNopeus + (painovoima * 0.1)
-    --Suomennus vähän kesken *köh*
+    
+	--Suomennus vähän kesken *köh*
     -- calculate vertical position and adjust if needed
     local seuraavaY = math.floor(self.y + (self.yNopeus * dt))
     if self.yNopeus < 0 then -- check upward
@@ -139,7 +145,7 @@ if self.animVoiVaihtua then
 		 self.nykAnim=_G[self.hahmo].paikallaan_anim	
 	     self.nykAnim = _G[self.hahmo].laskeutuminen_anim
 		 self.animVoiVaihtua=false
-		 self.animAjastin = 0.5
+		 self.animAjastin = 0.35
 		 TEsound.play(kavelyAanet)
 		 --Putoaminen
 	    else	
@@ -166,9 +172,8 @@ if self.animVoiVaihtua then
 		self.nykAnim = _G[self.hahmo].heitto_anim
 		self.animVoiVaihtua=false
 		self.animAjastin = 0.4
-				
+	--Kaantyminen			
 	elseif self.xNopeus > 0 and self.tila=="liikuVasemmalle" or self.xNopeus < 0 and self.tila=="liikuOikealle" then
-		print("kaantyminen")
 		self.nykAnim = _G[self.hahmo].kaantyminen_anim
 		self.animVoiVaihtua=false
 		self.animAjastin = 0.2
@@ -222,18 +227,19 @@ end
 
 
 function pelaaja:draw()
- --Piirretaan oikeat animaatiot molemmille pelaajille (blu/red)
+
+ --Paikallaan-animaatio hieman eri y-kohdassa
  if self.tila=="paikallaan" then 
 	self.nykAnim:draw(self.x, self.y-13,0,self.animSuunta*1.5,1.5,16,30)	
  else
 	self.nykAnim:draw(self.x, self.y-10,0,self.animSuunta*1.5,1.5,16,30)
  end
  
- local x
  --Kameran liikkuminen ei vaikuta hudiin
  camera:unset()
  
  --HUD 
+ local x
  if self.numero==2 then x=650 else x=10 end --Pelaajien 1 ja 2 hudit eri paikassa
 	local elamat = 0
 	if hudTila == "sydan" then
@@ -324,13 +330,13 @@ function pelaaja:kontakti(suunta,hyokkays, xEro)
 	
 	end
 	--tormays(jos pelaajat lähekkäin) 
-	if math.abs(xEro)<35 then	
+	if math.abs(xEro)<30 then	
 		--Pysahtyy seka liikkuu jompaankumpaan suntaan. Paattelee liikkumissunnan vastustajan suunnasta
 		self:pysahdy(true)
 		if vastustajaOn=="vasen" then 
-			self.xNopeus=self.xNopeus-150
+			self.xNopeus=self.xNopeus-100
 		elseif vastustajaOn=="oikea" then 
-			self.xNopeus=self.xNopeus+150
+			self.xNopeus=self.xNopeus+100
 		end
 	
 end
@@ -354,7 +360,7 @@ function pelaaja:liikuOikealle(  )
 	if self.voiLiikkua then
 	
 		if self.xNopeus < _G[self.hahmo].juoksuNopeus  then
-			self.xNopeus = self.xNopeus + 15
+			self.xNopeus = self.xNopeus + 20
 		end	
 	
 		self.suunta = "oikea"
@@ -372,7 +378,7 @@ function pelaaja:liikuVasemmalle(  )
 
 		self.tila="liikuVasemmalle"
 		if self.xNopeus > _G[self.hahmo].juoksuNopeus * -1 then
-			self.xNopeus = self.xNopeus - 15
+			self.xNopeus = self.xNopeus - 20
 		end	
 		self.suunta = "vasen"
 	

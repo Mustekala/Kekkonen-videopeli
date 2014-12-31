@@ -1,66 +1,88 @@
 botti = {}
+botit = {}
 --Botti ottaa komentoonsa pelaajan, jonka numeron se saa parametrina
 --Aika pahasti viela kesken
 function botti:luo(numero)
- botti.numero = numero --Botin ohjattava pelaaja
- botti.numero2 = self.numero % 2 + 1 --toinen pelaaja
- botti.tila = "puolustava"
- botti.laskuri = 0 
+	table.insert(botit, {
+		numero = numero, --Botin ohjattava pelaaja
+		numero2 = numero % 2 + 1, --toinen pelaaja
+		tila = "puolustava",
+		laskuri = 0 
+		})
 end
 
 function botti:update(dt)
+for i, bot in ipairs(botit) do
 
  local liikkumisSuunta = 1
- if pelaajat[self.numero].terveys < 50 then 
-	self.tila = "puolustava" 
+ --Jos oma terveys on alle toisen pelaajan terveyden, puolustava
+ if pelaajat[bot.numero].terveys < pelaajat[bot.numero2].terveys then 
+	bot.tila = "puolustava" --Puolustava pitaa etaisyytta
  else	
-	self.tila = "hyokkaava" 
+	bot.tila = "hyokkaava"  --Hyokkaava pyrkii lahelle
  end
  local haluttuEtaisyys
- if self.tila == "hyokkaava" then 
-	haluttuEtaisyys = 50
+ if bot.tila == "hyokkaava" then 
+	haluttuEtaisyys = 40
  else
 	haluttuEtaisyys = 250
  end
 
 	 --Jos toinen pelaaja ei ole lähellä tai putoamassa, seuraa sitä
-	if pelaajat[self.numero].x < pelaajat[self.numero2].x -haluttuEtaisyys and pelaajat[self.numero2].yNopeus < 400 then
-		pelaajat[self.numero]:liikuOikealle()
+	if pelaajat[bot.numero].x < pelaajat[bot.numero2].x -haluttuEtaisyys and pelaajat[bot.numero2].yNopeus < 400 then
+		pelaajat[bot.numero]:liikuOikealle()
 		liikkumisSuunta = 1	
-	elseif	pelaajat[self.numero].x > pelaajat[self.numero2].x +haluttuEtaisyys and pelaajat[self.numero2].yNopeus < 400 then
-		pelaajat[self.numero]:liikuVasemmalle()
+	elseif	pelaajat[bot.numero].x > pelaajat[bot.numero2].x +haluttuEtaisyys and pelaajat[bot.numero2].yNopeus < 400 then
+		pelaajat[bot.numero]:liikuVasemmalle()
 		liikkumisSuunta = -1
-	else pelaajat[self.numero]:pysahdy()	
+	else pelaajat[bot.numero]:pysahdy()	
 	end
 			
 	--Hyppää kuilujen yli
-	if not pelaajat[self.numero]:tarkistaTormays(nykyinenTaso, pelaajat[self.numero].x+20*liikkumisSuunta, pelaajat[self.numero].y+60) then
+	if not pelaajat[bot.numero]:tarkistaTormays(nykyinenTaso, pelaajat[bot.numero].x+20*liikkumisSuunta, pelaajat[bot.numero].y+60) then
 		--Mutta vain jos toisella puolella on taso
-		if pelaajat[self.numero]:tarkistaTormays(nykyinenTaso, pelaajat[self.numero].x+150*liikkumisSuunta, pelaajat[self.numero].y+60) then 
-			pelaajat[self.numero].xSpeed = 100 * liikkumisSuunta
-			pelaajat[self.numero]:hyppaa()			
-		else 
-			pelaajat[self.numero]:pysahdy()
+		if pelaajat[bot.numero]:tarkistaTormays(nykyinenTaso, pelaajat[bot.numero].x+150*liikkumisSuunta, pelaajat[bot.numero].y+60) then 
+			pelaajat[bot.numero]:hyppaa()			
+		elseif not pelaajat[bot.numero].tila == "hyppy" then
+			pelaajat[bot.numero]:pysahdy()
 		end	
 	end
 	
-	if math.dist(pelaajat[self.numero].x,pelaajat[self.numero2].x )< 60 then
-		
-		self.laskuri = self.laskuri + 1
-		print(self.laskuri)
-		if self.laskuri > 150 then self.laskuri = 0 end	
+	--Jos edessa seina, hyppaa
+	if pelaajat[bot.numero]:tarkistaTormays(nykyinenTaso, pelaajat[bot.numero].x+33*liikkumisSuunta, pelaajat[bot.numero].y) then
+		if pelaajat[bot.numero].tila == "liikuOikealle" or pelaajat[bot.numero].tila == "liikuVasemmalle" then
+			pelaajat[bot.numero]:hyppaa()	
+		end	
+	end
+	
+	bot.laskuri = bot.laskuri + math.random(1,2)
+	
+	--Botti kaantyy toisen pelaajan suuntaan, mutta ei heti (liian op)
+	if bot.laskuri > 149 then 
+		if pelaajat[bot.numero].x - pelaajat[bot.numero2].x < 0 then 
+			pelaajat[bot.numero].suunta = "oikea"
+		else	
+			pelaajat[bot.numero].suunta = "vasen"
+		end	
+	end
+	
+	if bot.laskuri > 150 then bot.laskuri = 0 end	
+	
+	if math.dist(pelaajat[bot.numero].x,pelaajat[bot.numero2].x ) < 40 then
 
-		if self.laskuri<60 then
-			pelaajat[self.numero]:lyonti() 
-		else if self.laskuri<120 then
-			pelaajat[self.numero]:torjunta() 
-		else if self.laskuri==120 then	
-			pelaajat[self.numero]:heitto()
+		if bot.laskuri<60 then
+			pelaajat[bot.numero]:lyonti() 
+		else if bot.laskuri<120 then
+			pelaajat[bot.numero]:torjunta() 
+		else if bot.laskuri==120 then	
+			pelaajat[bot.numero]:heitto()
 		else 
-			pelaajat[self.numero]:pysahdy()
+			pelaajat[bot.numero]:pysahdy()
 		end
 		
 	end
+
  end	
+end
 end
 end

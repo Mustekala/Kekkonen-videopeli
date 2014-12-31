@@ -20,7 +20,7 @@ function peli:init()
 	
 end
 
-function peli:enter( aiempi, tasonNimi, pelaajaMaara, elamienMaara, hahmot)
+function peli:enter( aiempi, tasonNimi, pelaajaMaara, elamienMaara, hahmot, bottienMaara)
 	print("Aiempi:"..aiempi.nimi)
 	--Sade. Alle voi lisata ifin kaikille sadetta kayttaville kartoille
 	sataako = false					 --Kekkonen on vihainen: pakota sade
@@ -51,7 +51,7 @@ function peli:enter( aiempi, tasonNimi, pelaajaMaara, elamienMaara, hahmot)
 	end
 	--]]
 
-	peli:luoPelaajat(hahmot)
+	peli:luoPelaajat(hahmot, bottienMaara)
 	
 	peliAlkanut=true
 		
@@ -130,39 +130,40 @@ function peli:update( dt )
 end
 
 
-		--Liikkuminen, pitaisi siirtaa varmaankin pelaaja-luokkaan
+	--Liikkuminen, pitaisi siirtaa varmaankin pelaaja-luokkaan
 function peli:liikutaPelaajat()		
   for i, pelaaja in pairs ( pelaajat ) do	
-   if not pelaaja.onkoBotti then
+   if not pelaaja.onBotti then
 	if love.keyboard.isDown(pelaajienKontrollit[i].OIKEALLE) and not love.keyboard.isDown(pelaajienKontrollit[i].VASEMMALLE) then
 	
-        pelaajat[i]:liikuOikealle()
+        pelaaja:liikuOikealle()
 	
     elseif love.keyboard.isDown(pelaajienKontrollit[i].VASEMMALLE) and not love.keyboard.isDown(pelaajienKontrollit[i].OIKEALLE)  then
 	
-        pelaajat[i]:liikuVasemmalle()
+        pelaaja:liikuVasemmalle()
 	
 	 elseif love.keyboard.isDown(pelaajienKontrollit[i].LYONTI) then
 	    
-        pelaajat[i]:lyonti()
+        pelaaja:lyonti()
 	
 	 elseif love.keyboard.isDown(pelaajienKontrollit[i].TORJUNTA) then
 	 
-        pelaajat[i]:torjunta()
+        pelaaja:torjunta()
 		
 	elseif love.keyboard.isDown(pelaajienKontrollit[i].HEITTOASE) then
 	 
-        pelaajat[i]:heitto()
+        pelaaja:heitto()
 			
 	 else
-		pelaajat[i]:pysahdy()
+		pelaaja:pysahdy()
 		
 	 end
 	 	
 	if love.keyboard.isDown(pelaajienKontrollit[i].YLOS) then
-        pelaajat[i]:hyppaa()
+        pelaaja:hyppaa()
 	end	
-  else botti:update()
+  else 
+	botti:update()
   end
  end 
 end
@@ -227,17 +228,28 @@ function peli:asetaPaussille()
 end
 
 
-function peli:luoPelaajat(hahmot)
+function peli:luoPelaajat(hahmot, bottienMaara)
 	
 	-- print( nykyinenTaso.layers["Syntykohdat"].objects[1].x )
+	
+	botit = {} --Tyhjennetaan mahdolliset botit aiemmasta pelista
+	
 	for i = 1, pelaajienMaara do
-
+		--Botit
+		if bottienMaara == 1 and i == 2 then 
+			onkoBotti = true
+		elseif bottienMaara == 2 then
+			onkoBotti = true
+		else 
+			onkoBotti = false	
+		end		
+		
 		pelaajat[ i ] = pelaaja:luo( hahmot[i], pelaajienKontrollit[ i ], "Pelaaja " .. i,i,
 		nykyinenTaso.layers["Syntykohdat"].objects[i].x,
-		nykyinenTaso.layers["Syntykohdat"].objects[i].y, "vasen" ,onkoBotti, maxElamat)
+		nykyinenTaso.layers["Syntykohdat"].objects[i].y, "vasen", onkoBotti, maxElamat)
 		
 		print("Luotiin pelaaja "..i)
 		
 	end
-	
+
 end

@@ -68,6 +68,13 @@ function asetukset:init()
 	}
 	
 	asetusvalikko:addItem{
+		nimi = "Kontrollit",
+		toiminto = function()
+			Gamestate.push(kontrollit)
+		end
+	}
+	
+	asetusvalikko:addItem{
 		nimi = "Debug",
 		toiminto = function()
 			
@@ -97,28 +104,28 @@ function asetukset:draw()
 
 	love.graphics.draw( kuvat[ "testi_tausta.png" ], 0, 0 )
 
-	asetusvalikko:draw( 100, 100 )
+	asetusvalikko:draw( 100, 50)
 
 	if kokoruutu then
-		love.graphics.print("Paalla", 550, 100)
+		love.graphics.print("Paalla", 550, 50)
 	else
-		love.graphics.print("Pois", 550, 100)
+		love.graphics.print("Pois", 550, 50)
 	end
 	
-	love.graphics.print((volyymi*100).."%", 550, 200)
+	love.graphics.print((volyymi*100).."%", 550, 150)
 	
 	if onkoMusiikki then
-		love.graphics.print("Paalla", 550, 300)
+		love.graphics.print("Paalla", 550, 250)
 	else
-		love.graphics.print("Pois", 550, 300)
+		love.graphics.print("Pois", 550, 250)
 	end
 	
-	love.graphics.print(hudTila, 550, 400)
+	love.graphics.print(hudTila, 550, 350)
 	
 	if debugMode then
-		love.graphics.print("Paalla", 550, 500)
+		love.graphics.print("Paalla", 550, 550)
 	else
-		love.graphics.print("Pois", 550, 500)
+		love.graphics.print("Pois", 550, 550)
 	end
 end
 
