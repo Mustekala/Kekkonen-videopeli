@@ -171,12 +171,11 @@ end
 	 camera:setY(camera:getY()+2)
 	
 	end
-		
-if camera:getX() < cameraKohdeX+2 and camera:getX() >  cameraKohdeX -2 and camera:getY()==cameraKohdeY then
- 	
-	return true	
 	
-end
+	--Jos kamera on liikkunut about oikeaan kohtaan, palauta true (joka vaihtaa takaisin tavalliseen kameraan)
+	if math.isAbout(camera:getX(), cameraKohdeX, 3) and math.isAbout(camera:getY(), cameraKohdeY, 3) then
+		return true	
+	end
 		
 end
 

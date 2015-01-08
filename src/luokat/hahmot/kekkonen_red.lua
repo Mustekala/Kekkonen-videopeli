@@ -1,5 +1,5 @@
 --[[
-
+	Punainen: hidas, lyo kovaa, heittaa kovaa
 --]]
 
 
@@ -8,11 +8,14 @@ kekkonen_red = {
 	xNopeusMaksimi = 400,
 	yNopeusMaksimi = 1000,
 
-	kestavyys = 100,
-
-	juoksuNopeus = 200,
+	kestavyys = 150,
+	--Hyokkausten voima 
+	lyontiVahinko = 15, --Vahingon maara
+	heittoVoima = 1.3, --Heittovoiman kerroin
 	
-	hyppyNopeus = -625,
+	juoksuNopeus = 125,
+	
+	hyppyNopeus = -620,
 
 	-- isku, torjunta, heitto, potku, heittoase
 	

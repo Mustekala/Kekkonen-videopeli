@@ -1,5 +1,5 @@
 --[[
-
+	Vihrea: nopea, ei lyo niin kovaa
 --]]
 
 
@@ -7,12 +7,16 @@ kekkonen_green = {
 
 	xNopeusMaksimi = 400,
 	yNopeusMaksimi = 1000,
-
+	
+	--Hyokkausten voima 
+	lyontiVahinko = 7, --Vahingon maara
+	heittoVoima = 0.8, --Heiton voiman kerroin
+	
 	kestavyys = 100,
 
-	juoksuNopeus = 200,
+	juoksuNopeus = 300,
 	
-	hyppyNopeus = -625,
+	hyppyNopeus = -650,
 
 	-- isku, torjunta, heitto, potku, heittoase
 	

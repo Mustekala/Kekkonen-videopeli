@@ -14,9 +14,8 @@ end
 function botti:update(dt)
 for i, bot in ipairs(botit) do
 
- local liikkumisSuunta = 1
- --Jos oma terveys on alle toisen pelaajan terveyden, puolustava
- if pelaajat[bot.numero].terveys < pelaajat[bot.numero2].terveys then 
+ --Jos oma terveys on alle toisen pelaajan terveys/1.5, puolustava
+ if pelaajat[bot.numero].terveys < pelaajat[bot.numero2].terveys / 1.5 then 
 	bot.tila = "puolustava" --Puolustava pitaa etaisyytta
  else	
 	bot.tila = "hyokkaava"  --Hyokkaava pyrkii lahelle
@@ -25,10 +24,10 @@ for i, bot in ipairs(botit) do
  if bot.tila == "hyokkaava" then 
 	haluttuEtaisyys = 40
  else
-	haluttuEtaisyys = 250
+	haluttuEtaisyys = 200
  end
 
-	 --Jos toinen pelaaja ei ole lähellä tai putoamassa, seuraa sitä
+	 --Jos toinen pelaaja ei ole halutulla etaisyydella tai putoamassa, seuraa sitä
 	if pelaajat[bot.numero].x < pelaajat[bot.numero2].x -haluttuEtaisyys and pelaajat[bot.numero2].yNopeus < 400 then
 		pelaajat[bot.numero]:liikuOikealle()
 		liikkumisSuunta = 1	
@@ -39,11 +38,12 @@ for i, bot in ipairs(botit) do
 	end
 			
 	--Hyppää kuilujen yli
-	if not pelaajat[bot.numero]:tarkistaTormays(nykyinenTaso, pelaajat[bot.numero].x+20*liikkumisSuunta, pelaajat[bot.numero].y+60) then
+	if not pelaajat[bot.numero]:tarkistaTormays(nykyinenTaso, pelaajat[bot.numero].x + 32 *liikkumisSuunta, pelaajat[bot.numero].y+60) then
 		--Mutta vain jos toisella puolella on taso
-		if pelaajat[bot.numero]:tarkistaTormays(nykyinenTaso, pelaajat[bot.numero].x+150*liikkumisSuunta, pelaajat[bot.numero].y+60) then 
+		if pelaajat[bot.numero]:tarkistaTormays(nykyinenTaso, pelaajat[bot.numero].x+250*liikkumisSuunta, pelaajat[bot.numero].y+60) then 
 			pelaajat[bot.numero]:hyppaa()			
-		elseif not pelaajat[bot.numero].tila == "hyppy" then
+		--Muuten pysahdy, paitsi jos ilmassa	
+		elseif not pelaajat[bot.numero].tila == "hyppy" or not pelaajat[bot.numero].tila == "putoaminen" then
 			pelaajat[bot.numero]:pysahdy()
 		end	
 	end

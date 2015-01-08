@@ -21,7 +21,9 @@ function peli:init()
 end
 
 function peli:enter( aiempi, tasonNimi, pelaajaMaara, elamienMaara, hahmot, bottienMaara)
-	print("Aiempi:"..aiempi.nimi)
+
+	print("Aiempi state:"..aiempi.nimi) 
+	
 	--Sade. Alle voi lisata ifin kaikille sadetta kayttaville kartoille
 	sataako = false					 --Kekkonen on vihainen: pakota sade
 	if tasonNimi == "Pilvenpiirtaja" or aiempi.nimi == "tunarit" then sataako=true end
@@ -75,13 +77,21 @@ function peli:update( dt )
 		sade:update(dt)
 	end
 	
-	self:liikutaPelaajat()
+	--Jos kameran tila on kuolema, pelaajat eivat voi liikkua
+	if nykKamera=="kuolema" then
+		for _, pelaaja in pairs( pelaajat ) do
+			pelaaja:pysahdy( true )
+		end
+	else
+		self:liikutaPelaajat()
+	end
 	
 	--Tunarit-ruutu jos molemmat ovat kuolemassa pudotukseen
 	if pelaajat[1].y > 500 and pelaajat[2].y > 500 and pelaajat[1].elamat == 1 and pelaajat[2].elamat == 1 then 
 		Gamestate.switch(tunarit, tasoNimi, maxElamat, {pelaajat[1].hahmo, pelaajat[2].hahmo})
 	end	
 	
+	--Paussi jos ikkuna taustalla
 	if not love.window.hasFocus( ) then
 	 Gamestate.push(paussivalikko)
 	end 
@@ -89,9 +99,8 @@ function peli:update( dt )
 	--Huono vahikotunnistus
 	if math.isAbout(pelaajat[1].x,pelaajat[2].x, 45) and math.isAbout(pelaajat[2].y, pelaajat[1].y, 32) then 
 		for _, pelaaja in pairs( pelaajat ) do		    
-			local toinen = pelaaja.numero%2+1
-			local xEro = pelaaja.x - pelaajat[toinen].x		
-			pelaaja:kontakti(pelaajat[toinen].suunta, pelaajat[toinen].tila, xEro)
+			local toinen = pelaaja.numero%2+1	
+			pelaaja:kontakti(pelaajat[toinen])
 		end
 	end
 		

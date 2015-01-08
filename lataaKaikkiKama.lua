@@ -92,7 +92,7 @@ for _, hahmo in ipairs( love.filesystem.getDirectoryItems( HAHMO_POLKU )) do
 	require (HAHMO_POLKU .. nykyinenHahmo) 
 	table.insert(hahmot, nykyinenHahmo)
 	print( "Ladataan animaatiot: " ..nykyinenHahmo )
-	_G[nykyinenHahmo]:lataaAnimaatiot()
+	_G[nykyinenHahmo]:lataaAnimaatiot() --Kutsutaan luokkaa lataamaan animaatiot
 end
 
 tasoVarasto = {
@@ -171,5 +171,6 @@ peliAlkanut=false
 	
 	world:add(pelaaja1, 0,0, 64, 128)
 	world:add(pelaaja2, 0,0, 64, 128)
+	
 print( "\nKaikki kama ladattu\n" )
 	

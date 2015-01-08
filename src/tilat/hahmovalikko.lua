@@ -7,8 +7,7 @@ hahmovalikko = {}
 
 function hahmovalikko:enter(taso)
 
---Molemmille pelaajille oma valikko
-	
+	--Molemmille pelaajille oma valikko
 	hahmoValinta1 = Menu.new()
 	hahmoValinta2 = Menu.new()
 	valitutHahmot = {}
@@ -18,7 +17,7 @@ function hahmovalikko:enter(taso)
 	
 	bottienMaara = 0
 	
-	local pelaajaMaara = 2 --TODO valinta talle
+	local pelaajaMaara = 2 --TODO valinta talle (vaatii muokkauksia muualla)
 	
 	valittuHahmo1 = hahmot[1]
 	local hahmoLaskuri1 = 1
@@ -143,10 +142,22 @@ function hahmovalikko:draw()
 	hahmoValinta2:draw( 500, 100, 60, 0.6 )
 	love.graphics.draw( kuvat[valittuHahmo2..".png" ], 625, 130 ,0,3,3)
 	
+	--Jos molemmat hahmot valittu, nayta lisavalinnat. Muuten nayta tietoja hahmoista
 	if valinta1Valmis and valinta2Valmis then
 		love.graphics.print( "Elamat: "..maxElamat, 460, 350, 0 , 0.7)
 		love.graphics.print( "Botit: "..bottienMaara, 460, 470, 0 , 0.7)
 		muutValinnat:draw( 200, 350, 60, 0.7 )
+	else
+		--hahmo 1
+		love.graphics.print("Kestavyys: ".._G[valittuHahmo1].kestavyys, 50, 320, 0, 0.5, 0.5) 
+		love.graphics.print("Nopeus:    ".._G[valittuHahmo1].juoksuNopeus, 50, 345, 0, 0.5, 0.5)
+		love.graphics.print("Lyontivoima: ".._G[valittuHahmo1].lyontiVahinko, 50, 370, 0, 0.5, 0.5)
+		love.graphics.print("Heittovoima: ".._G[valittuHahmo1].heittoVoima, 50, 395, 0, 0.5, 0.5)
+		--hahmo 2
+		love.graphics.print("Kestavyys: ".._G[valittuHahmo2].kestavyys, 500, 320, 0, 0.5, 0.5) 
+		love.graphics.print("Nopeus:    ".._G[valittuHahmo2].juoksuNopeus, 500, 345, 0, 0.5, 0.5)
+		love.graphics.print("Lyontivoima: ".._G[valittuHahmo2].lyontiVahinko, 500, 370, 0, 0.5, 0.5)
+		love.graphics.print("Heittovoima: ".._G[valittuHahmo2].heittoVoima, 500, 395, 0, 0.5, 0.5)
 	end
 end
 

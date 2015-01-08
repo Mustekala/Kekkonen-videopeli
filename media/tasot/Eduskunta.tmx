@@ -1821,7 +1821,7 @@
   </data>
  </layer>
  <objectgroup name="Syntykohdat" width="30" height="30" visible="0">
-  <object x="864" y="160"/>
-  <object x="96" y="160"/>
+  <object x="838" y="137"/>
+  <object x="123" y="149"/>
  </objectgroup>
 </map>

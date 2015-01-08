@@ -1,5 +1,5 @@
 --[[
-
+	Sininen:default
 --]]
 
 
@@ -8,6 +8,10 @@ kekkonen_blu = {
 	xNopeusMaksimi = 400,
 	yNopeusMaksimi = 1000,
 
+	--Hyokkausten voima 
+	lyontiVahinko = 10, --Vahingon maara
+	heittoVoima = 1, --Heittovoiman kerroin
+	
 	kestavyys = 100,
 
 	juoksuNopeus = 200,
@@ -20,7 +24,7 @@ kekkonen_blu = {
 
 function kekkonen_blu:lataaAnimaatiot()
 
-	self.kavely_anim = newAnimation(kuvat["kekkonen_kavely_blu.png"],32,61,0.07,7)
+	self.kavely_anim = newAnimation(kuvat["kekkonen_kavely_blu.png"],33,61,0.07,7)
 
 	self.lyonti_anim = newAnimation(kuvat["kekkonen_lyonti_blu.png"],42,64,0.045,10)
 

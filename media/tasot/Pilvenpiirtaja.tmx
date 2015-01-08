@@ -1934,8 +1934,8 @@
    <tile gid="0"/>
   </data>
  </layer>
- <objectgroup name="Syntykohdat" width="32" height="30">
-  <object x="128" y="320"/>
-  <object x="864" y="160"/>
+ <objectgroup name="Syntykohdat" width="32" height="30" visible="0">
+  <object x="127" y="286"/>
+  <object x="859" y="114"/>
  </objectgroup>
 </map>

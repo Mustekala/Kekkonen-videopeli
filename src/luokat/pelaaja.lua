@@ -78,13 +78,14 @@ function pelaaja:update( dt, painovoima )
 	if self.y> 700 then --Kuolema pudotessa
 		self:kuolema()
 	end	
+	
 	local map = nykyinenTaso
 	local halfX = 32
     local halfY = 32
     
     -- painovoima
     self.yNopeus = self.yNopeus + (painovoima * 0.1)
-    
+
 	--Suomennus vähän kesken *köh*
     -- calculate vertical position and adjust if needed
     local seuraavaY = math.floor(self.y + (self.yNopeus * dt))
@@ -149,6 +150,7 @@ if self.animVoiVaihtua then
 		 TEsound.play(kavelyAanet)
 		 --Putoaminen
 	    else	
+		 self.voiLiikkua = true --Pelaaja voi alkaa liikkumaan pudotessaan
 		 self.tila="putoaminen"	
 	 	 self.nykAnim = _G[self.hahmo].putoaminen_anim
 		end
@@ -228,7 +230,7 @@ end
 
 function pelaaja:draw()
 
- --Paikallaan-animaatio hieman eri y-kohdassa
+ --Paikallaan-animaatio hieman eri y-kohdassa TODO korjaa animaatio
  if self.tila=="paikallaan" then 
 	self.nykAnim:draw(self.x, self.y-13,0,self.animSuunta*1.5,1.5,16,30)	
  else
@@ -278,12 +280,20 @@ function pelaaja:tormays(kohde)
 
 end 
 
-function pelaaja:kontakti(suunta,hyokkays, xEro)
-	--Suunta = mista hyokkays tulee, hyokkays = vastustajan state, xEro = ero pelaajien x-sijaintien valilla  
+function pelaaja:kontakti( hyokkaaja )
+	vastustaja = hyokkaaja 
+	--vHahmo = vastustajan hahmo
+	local vHahmo = _G[vastustaja.hahmo]
+	--hyokkays = vastustajan state
+	local hyokkays = vastustaja.tila
+	--xEro = ero pelaajien x-sijaintien valilla  
+	local xEro = self.x - vastustaja.x	
+	--suunta = vastustajan katsomissuunta
+	local suunta = vastustaja.suunta
 	
 	local vastustajaOn --vastustajaOn = vastustajan sijainti(oikea/vasen)
 	if xEro > 0 then  vastustajaOn="oikea" else vastustajaOn="vasen" end
-
+	
 	if  hyokkays=="lyonti" and vastustajaOn==suunta and not (self.tila=="torjunta" and suunta~=self.suunta) then
 
 	   if self.vahinkoAjastin <= 0 then
@@ -292,7 +302,7 @@ function pelaaja:kontakti(suunta,hyokkays, xEro)
 		
 		TEsound.play(vahinkoAanet)
 	
-		self.terveys=self.terveys-math.random(10,20) --Terveys laskee random-maaran, taman voisi muuttaa paremmaksi
+		self.terveys = self.terveys - vHahmo.lyontiVahinko --Terveys laskee vastustajan hahmon mukaan
 		
 		nykKamera="Shake" --Kamera heiluu hetken
 	
@@ -319,13 +329,15 @@ function pelaaja:kontakti(suunta,hyokkays, xEro)
 	   end
 	
 	elseif hyokkays=="heitto" and vastustajaOn==suunta then
-		self.voiLiikkua = false
+	
+		self.voiLiikkua = false --Pelaajaa ei voi kontrolloida hetkeen(pudotessa taas voi)
+		
 		if suunta=="vasen" then	
-			self.xNopeus= -400
-			self.yNopeus=-600
+			self.xNopeus= -300 * vHahmo.heittoVoima
+			self.yNopeus=-500 * vHahmo.heittoVoima
 		elseif suunta=="oikea" then
-			self.xNopeus= 400
-			self.yNopeus=-600
+			self.xNopeus= 300 * vHahmo.heittoVoima
+			self.yNopeus=-500 * vHahmo.heittoVoima
 		end
 	
 	end
@@ -417,7 +429,7 @@ function pelaaja:pysahdy( heti )
 			self.xNopeus=self.xNopeus*0.9
 		end
 		--Jos ilmassa hitaasti
-		if self.yNopeus > 0 then
+		if math.abs(self.yNopeus) > 0 then
 			self.xNopeus=self.xNopeus*0.95
 		end
 		if self.xNopeus == 0 then
@@ -455,6 +467,8 @@ function pelaaja:kuolema() --Kuolee pelissa mutta ei valttamatta havia viela
 	
 	self.elamat = self.elamat-1
 	self:pysahdy(true)
+	self.yNopeus = 0
+	
 	if self.elamat == 0 then
 		self:havio()
 	else
@@ -464,7 +478,7 @@ function pelaaja:kuolema() --Kuolee pelissa mutta ei valttamatta havia viela
 		nykKamera="kuolema"
 	
 		self.terveys = _G[self.hahmo].kestavyys
-	
+		
 		print("Kamera:"..nykKamera)
 	
 		self.y=self.yLuomispiste
