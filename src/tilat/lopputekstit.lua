@@ -88,16 +88,16 @@ function lopputekstit:update( dt )
 	
 	ajastin = ajastin+1
 	if ajastin % 10 == 0 then
-	 
-	  table.insert(kekkoset, {anim=putoaminen_anim.blu, x=math.random(1, 800), y=-100, nopeus=1+math.random()})
+		
+	  table.insert(kekkoset, {anim = kekkonen_blu.putoaminen_anim, x=math.random(1, 800), y=-100, nopeus=1+math.random()})
 	end
     
 	for _, nykyinen in pairs(kekkoset) do
-		if nykyinen.y < 500 then
-			nykyinen.y = nykyinen.y+nykyinen.nopeus
+		if nykyinen.y < 600 then
+			nykyinen.y = nykyinen.y + nykyinen.nopeus
 		end
 	end	
-	putoaminen_anim.blu:update(dt)
+	kekkonen_blu.putoaminen_anim:update(dt)
 	
 	if love.keyboard.isDown("return") then
 
@@ -116,8 +116,8 @@ end
 
 function lopputekstit:draw()
     love.graphics.draw( kuvat[ "ukk_tausta.png" ], 600, 300 , rotation, 2,2, 400, 300)
-	for _, nykyinen in pairs(kekkoset) do	
-	 nykyinen.anim:draw(nykyinen.x, nykyinen.y)
+	for _, nykyinen in pairs(kekkoset) do	      
+	 nykyinen.anim:draw(nykyinen.x, nykyinen.y, 0 , 0.5*nykyinen.nopeus, 0.5*nykyinen.nopeus) --Nopeus on myos skaalaus: mita nopeampi, sita suurempi kuva
 	end
 	love.graphics.printf(teksti,150,tekstinY,500, "center")
 

@@ -25,7 +25,7 @@ function pelaaja:luo( pelaajanHahmo, pelaajanKontrollit, pelaajanNimi, pelaajanN
 		
 		nykAnim = _G[pelaajanHahmo].paikallaan_anim,
 		
-		animVoiVaihtua=true,
+		animVoiVaihtua=true, --Voiko animaatio vaihtua
 		animSuunta = 1,
 		
 		hahmo = pelaajanHahmo,
@@ -66,6 +66,11 @@ function pelaaja:luo( pelaajanHahmo, pelaajanKontrollit, pelaajanNimi, pelaajanN
 	
 end
 
+--Lukitsee nykyisen animaation parametrin ajaksi
+function pelaaja:lukitseAnimaatio(aika)
+	self.animVoiVaihtua = false
+	self.animAjastin = aika
+end
 
 function pelaaja:update( dt, painovoima )
 	
@@ -145,8 +150,8 @@ if self.animVoiVaihtua then
 	    if self:tarkistaTormays(map, self.x, self.y+60) then
 		 self.nykAnim=_G[self.hahmo].paikallaan_anim	
 	     self.nykAnim = _G[self.hahmo].laskeutuminen_anim
-		 self.animVoiVaihtua=false
-		 self.animAjastin = 0.35
+		 
+		 self:lukitseAnimaatio( 0.35 )
 		 TEsound.play(kavelyAanet)
 		 --Putoaminen
 	    else	
@@ -166,19 +171,18 @@ if self.animVoiVaihtua then
 		self.nykAnim = _G[self.hahmo].lyonti_anim
 	--Torjunta
 	elseif self.tila=="torjunta" then
-	
 		self.nykAnim = _G[self.hahmo].torjunta_anim
+		self:lukitseAnimaatio(0.4)
 	--Heitto	
 	elseif self.tila=="heitto" then
 	
 		self.nykAnim = _G[self.hahmo].heitto_anim
-		self.animVoiVaihtua=false
-		self.animAjastin = 0.4
+		self:lukitseAnimaatio(0.4)
+		
 	--Kaantyminen			
 	elseif self.xNopeus > 0 and self.tila=="liikuVasemmalle" or self.xNopeus < 0 and self.tila=="liikuOikealle" then
 		self.nykAnim = _G[self.hahmo].kaantyminen_anim
-		self.animVoiVaihtua=false
-		self.animAjastin = 0.2
+		self:lukitseAnimaatio(0.2)
 		
 	--Kavely	
 	elseif self.tila=="liikuOikealle" or self.tila=="liikuVasemmalle" then
@@ -208,22 +212,24 @@ end
 	--Ajastimet
 	kavelyAanetAjastin = kavelyAanetAjastin + 1 --TODO pitaisi tehda paremmin
 	
-	if self.animAjastin < 0 then --Ajastin animaation vaihtumiselle
+	if self.animAjastin < 0 then --Poista lukitus animaatiosta
 	    self.animVoiVaihtua=true	
 	end
 	
+	if self.animVoiVaihtua then
 	--RESETOIDAAN ANIMAATIOT
-	--Jos pelaaja ei heita, resetoi heittoanimaatio
-	if not self.tila=="heitto" then
-		_G[self.hahmo].heitto_anim:reset()
-	end	
-	--Jos pelaaja ei torju, resetoi torjuntaanimaatio
-	if not self.tila=="torjunta" then 	
-		_G[self.hahmo].torjunta_anim:reset() 		
-	end	
-	--Jos pelaaja putoaa, resetoi laskeutumisanimaatio
-	if self.tila=="putoaminen" then 	
-		_G[self.hahmo].laskeutuminen_anim:reset() 		
+		--Jos pelaaja ei heita, resetoi heittoanimaatio
+		if self.tila ~= "heitto" then
+			_G[self.hahmo].heitto_anim:reset()
+		end	
+		--Jos pelaaja ei torju, resetoi torjuntaanimaatio
+		if self.tila ~= "torjunta" then 	
+			_G[self.hahmo].torjunta_anim:reset() 	
+		end	
+		--Jos pelaaja putoaa, resetoi laskeutumisanimaatio
+		if self.tila=="putoaminen" then 	
+			_G[self.hahmo].laskeutuminen_anim:reset() 		
+		end	
 	end	
 end
 

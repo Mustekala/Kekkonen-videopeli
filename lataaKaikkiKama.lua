@@ -25,27 +25,28 @@ HAHMO_POLKU = LUOKKA_POLKU .. "hahmot/"
 print("Ladataan valmiit kirjastot")
 
 -- Ladataan valmiit kirjastot
-require( KIRJASTO_POLKU .. "TEsound" )
+require( KIRJASTO_POLKU .. "TEsound" ) --Aanikirjasto
 
-require( KIRJASTO_POLKU .. "camera" )
+require( KIRJASTO_POLKU .. "camera" )  --Kamerakirjasto (muokattu) + pari siihen liittyvaa muuttujaa
 Scale=0
 kameranKayttokerrat=0
 nykKamera="tavallinen"
 print("Kamera:"..nykKamera)
 
-require( KIRJASTO_POLKU .. "animations" )
-Menu = require( KIRJASTO_POLKU .. "menu" )
-Gamestate = require( KIRJASTO_POLKU .. "gamestate" )
-loader = require(KIRJASTO_POLKU.."AdvTiledLoader.Loader")
+require( KIRJASTO_POLKU .. "animations" ) --AnimationsAndLove
+Menu = require( KIRJASTO_POLKU .. "menu" )--SimpleMenuLibrary
+Gamestate = require( KIRJASTO_POLKU .. "gamestate" ) --Hump-gamestate
+loader = require(KIRJASTO_POLKU.."AdvTiledLoader.Loader") --ATL
 loader.path = TASO_POLKU
-HC = require( KIRJASTO_POLKU .. "HC" )
-Timer = require ( KIRJASTO_POLKU .. "timer" )
-bump = require ( KIRJASTO_POLKU .. 'bump')
+--Kumpikaan ei viela kaytossa, collision perustuu etaisyyksiin
+HC = require( KIRJASTO_POLKU .. "HC" ) --Hardon collider (monimutkaisempi collision)
+bump = require ( KIRJASTO_POLKU .. 'bump') --Yksinkertaisempi collision
+Timer = require ( KIRJASTO_POLKU .. "timer" ) --Hump timer
 cron = require ( KIRJASTO_POLKU .. 'cron')
-lume = require ( KIRJASTO_POLKU .. "/lume/lume")
-helpFunctions = require ( KIRJASTO_POLKU .. "helpFunctions")
+lume = require ( KIRJASTO_POLKU .. "/lume/lume") --Hyodyllisia funktioita
+helpFunctions = require ( KIRJASTO_POLKU .. "helpFunctions") --Hyodyllisia funktioita
 
-require ( KIRJASTO_POLKU .. "sade")
+require ( KIRJASTO_POLKU .. "sade") --Yksinkertainen sade-kirjasto
 
 print("Ladataan omat tilat, yms.")
 --luokat

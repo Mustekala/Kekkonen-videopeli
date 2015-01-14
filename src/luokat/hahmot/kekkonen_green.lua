@@ -29,7 +29,7 @@ function kekkonen_green:lataaAnimaatiot()
 	self.lyonti_anim = newAnimation(kuvat["kekkonen_lyonti_green.png"],42,64,0.045,10)
 
 	self.heitto_anim = newAnimation(kuvat["kekkonen_heitto_green.png"],40,65,0.04,7)
-	self.heitto_anim:setMode("bounce")
+	self.heitto_anim:setMode("once")
 
 	self.paikallaan_anim = newAnimation(kuvat["kekkonen_paikallaan_green.png"],42,64,0.5,2)
 
