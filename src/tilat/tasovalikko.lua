@@ -10,14 +10,14 @@ function tasovalikko:enter(aiempi , pelaajaMaara, elamienMaara, hahmot, bottiVal
 	self.nimi = "tasovalikko"
 	
 	tasojenValikko = Menu.new()
-
+		
 	for _, tasonNimi in pairs( tasoVarasto ) do
 
 		tasojenValikko:addItem{
 			nimi = tasonNimi,
 			toiminto = function()
 
-			print( "Peli, tasona " .. tasonNimi )
+				print( "Peli, tasona " .. tasonNimi )
 				Gamestate.switch( peli, tasonNimi, pelaajaMaara ,elamienMaara, hahmot, bottienMaara)
 			end
 		}

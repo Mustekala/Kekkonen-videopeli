@@ -23,7 +23,7 @@ end
 function peli:enter( aiempi, tasonNimi, pelaajaMaara, elamienMaara, hahmot, bottienMaara)
 
 	print("Aiempi state:"..aiempi.nimi) 
-	
+
 	--Sade. Alle voi lisata ifin kaikille sadetta kayttaville kartoille
 	sataako = false					 --Kekkonen on vihainen: pakota sade
 	if tasonNimi == "Pilvenpiirtaja" or aiempi.nimi == "tunarit" then sataako=true end
@@ -76,7 +76,7 @@ function peli:update( dt )
 	--Paivitetaan powerupit
 	powerup:update(dt)
 	--Lisataan random powerup random aikoihin TODO lisaa valinta yleisyydelle
-	if math.random(0,100) == 0 then powerup:lisaaRandom() end
+	if math.random(0, 2000 / powerupYleisyys) == 0 then powerup:lisaaRandom() end
 	
 	if sataako then
 		sade:update(dt)

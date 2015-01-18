@@ -82,6 +82,7 @@ for _, kuva in ipairs( love.filesystem.getDirectoryItems( KUVA_POLKU.."/muut/" )
 end
 
 powerup:lataa() --Ladataan kaikki powerupit
+powerupYleisyys = 1
 
 hahmot = {}
 --Ladataan kaikki hahmot

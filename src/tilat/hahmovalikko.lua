@@ -102,6 +102,17 @@ function hahmovalikko:enter(taso)
 	}
 	
 	muutValinnat:addItem{
+		nimi = "Poweruppien yleisyys:",
+		toiminto = function()
+			if powerupYleisyys >= 5 then 
+				powerupYleisyys = 1
+			else
+				powerupYleisyys = powerupYleisyys + 1
+			end	
+		end
+	}
+	
+	muutValinnat:addItem{
 		
 		nimi = "Aloita",
 		toiminto = function()
@@ -110,7 +121,7 @@ function hahmovalikko:enter(taso)
 				print(hahmo)
 			end
 			
-			Gamestate.switch(tasovalikko, 2, maxElamat, valitutHahmot, bottienMaara)
+			Gamestate.switch(tasovalikko, 2, maxElamat, valitutHahmot, bottienMaara, powerupYleisyys)
 		 			
 		end
 	}
@@ -144,9 +155,10 @@ function hahmovalikko:draw()
 	
 	--Jos molemmat hahmot valittu, nayta lisavalinnat. Muuten nayta tietoja hahmoista
 	if valinta1Valmis and valinta2Valmis then
-		love.graphics.print( "Elamat: "..maxElamat, 460, 350, 0 , 0.7)
-		love.graphics.print( "Botit: "..bottienMaara, 460, 470, 0 , 0.7)
-		muutValinnat:draw( 200, 350, 60, 0.7 )
+		love.graphics.print( "Elamat: "..maxElamat, 460, 300, 0 , 0.7)
+		love.graphics.print( powerupYleisyys, 620, 480, 0 , 0.7)
+		love.graphics.print( "Botit: "..bottienMaara, 460, 420, 0 , 0.7)
+		muutValinnat:draw( 200, 300, 60, 0.7 )
 	else
 		--hahmo 1
 		love.graphics.print("Kestavyys: ".._G[valittuHahmo1].kestavyys, 50, 320, 0, 0.5, 0.5) 
