@@ -21,6 +21,7 @@ KIRJASTO_POLKU = "src/kirjastot/"
 LUOKKA_POLKU = "src/luokat/"
 TILA_POLKU = "src/tilat/"
 HAHMO_POLKU = LUOKKA_POLKU .. "hahmot/"
+POWERUP_POLKU = LUOKKA_POLKU .. "powerupit/"
 
 print("Ladataan valmiit kirjastot")
 
@@ -52,6 +53,7 @@ print("Ladataan omat tilat, yms.")
 --luokat
 require( LUOKKA_POLKU .. "botti" )
 require( LUOKKA_POLKU .. "pelaaja" )
+require( LUOKKA_POLKU .. "powerup" )
 
 --Tilat
 for _, tila in ipairs( love.filesystem.getDirectoryItems( TILA_POLKU ) ) do --Hakee kaikki tilat tilapolusta
@@ -79,6 +81,7 @@ for _, kuva in ipairs( love.filesystem.getDirectoryItems( KUVA_POLKU.."/muut/" )
 	print( "Ladataan " .. kuva )
 end
 
+powerup:lataa() --Ladataan kaikki powerupit
 
 hahmot = {}
 --Ladataan kaikki hahmot

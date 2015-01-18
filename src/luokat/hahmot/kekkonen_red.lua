@@ -13,9 +13,9 @@ kekkonen_red = {
 	lyontiVahinko = 15, --Vahingon maara
 	heittoVoima = 1.3, --Heittovoiman kerroin
 	
-	juoksuNopeus = 125,
+	juoksuNopeus = 135,
 	
-	hyppyNopeus = -620,
+	hyppyNopeus = -625,
 
 	-- isku, torjunta, heitto, potku, heittoase
 	

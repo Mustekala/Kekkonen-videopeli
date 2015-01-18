@@ -58,7 +58,7 @@ function tunarit:keypressed( nappain )
 	elseif nappain == "return" then
 		TEsound.play("media/aanet/tehosteet/menuclick.ogg")
 		print( "Uusi peli,"..self.taso)
-		Gamestate.switch( peli, self.taso, 2, self.elamat, self.hahmot)
+		Gamestate.switch( peli, self.taso, 2, self.elamat, self.hahmot, 0)
 	end
 
 end

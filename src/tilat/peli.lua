@@ -12,7 +12,7 @@ function peli:init()
 	y = 300
 	r = 1
 
-	painovoima = 200
+	painovoima = 20
 
 	onkoPaussi = false
 
@@ -33,7 +33,7 @@ function peli:enter( aiempi, tasonNimi, pelaajaMaara, elamienMaara, hahmot, bott
      
 	--TODO valinta tälle 
 	liikkuvaTausta=true
-
+	
    if not peliAlkanut then
 	
 	nykyinenTaso = loader.load(tasonNimi..".tmx")
@@ -54,7 +54,7 @@ function peli:enter( aiempi, tasonNimi, pelaajaMaara, elamienMaara, hahmot, bott
 	--]]
 
 	peli:luoPelaajat(hahmot, bottienMaara)
-	
+
 	peliAlkanut=true
 		
    end
@@ -72,7 +72,12 @@ end
 function peli:update( dt )
     
   if peliAlkanut then
-  
+	
+	--Paivitetaan powerupit
+	powerup:update(dt)
+	--Lisataan random powerup random aikoihin TODO lisaa valinta yleisyydelle
+	if math.random(0,100) == 0 then powerup:lisaaRandom() end
+	
 	if sataako then
 		sade:update(dt)
 	end
@@ -162,7 +167,6 @@ function peli:liikutaPelaajat()
 	elseif love.keyboard.isDown(pelaajienKontrollit[i].HEITTOASE) then
 	 
         pelaaja:heitto()
-			
 	 else
 		pelaaja:pysahdy()
 		
@@ -194,11 +198,16 @@ function peli:draw()
 	end
 	
 	nykyinenTaso:draw()
-
+	
 	for _, pelaaja in pairs( pelaajat ) do
 		pelaaja:draw()	
+		if debugMode then
+			love.graphics.circle("fill", pelaaja.x, pelaaja.y, 10)
+		end
 	end
-		
+	
+	powerup:draw()
+	
 	camera:unset() --Ei enaa liikkuva kamera	
 		
 	if debugMode==true then
@@ -238,19 +247,17 @@ end
 
 
 function peli:luoPelaajat(hahmot, bottienMaara)
-	
+
 	-- print( nykyinenTaso.layers["Syntykohdat"].objects[1].x )
 	
 	botit = {} --Tyhjennetaan mahdolliset botit aiemmasta pelista
 	
 	for i = 1, pelaajienMaara do
 		--Botit
-		if bottienMaara == 1 and i == 2 then 
-			onkoBotti = true
-		elseif bottienMaara == 2 then
-			onkoBotti = true
+		if i <= bottienMaara then 
+		 onkoBotti = true
 		else 
-			onkoBotti = false	
+		 onkoBotti = false	
 		end		
 		
 		pelaajat[ i ] = pelaaja:luo( hahmot[i], pelaajienKontrollit[ i ], "Pelaaja " .. i,i,

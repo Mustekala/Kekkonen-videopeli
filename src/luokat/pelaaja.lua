@@ -28,6 +28,9 @@ function pelaaja:luo( pelaajanHahmo, pelaajanKontrollit, pelaajanNimi, pelaajanN
 		animVoiVaihtua=true, --Voiko animaatio vaihtua
 		animSuunta = 1,
 		
+		--Juoksunopeus on hahmon maarittama
+		juoksuNopeus = _G[pelaajanHahmo].juoksuNopeus,
+	
 		hahmo = pelaajanHahmo,
 		
 		kontrollit = pelaajanKontrollit,
@@ -66,7 +69,7 @@ function pelaaja:luo( pelaajanHahmo, pelaajanKontrollit, pelaajanNimi, pelaajanN
 	
 end
 
---Lukitsee nykyisen animaation parametrin ajaksi
+--Lukitsee nykyisen animaation parametrin "aika" ajaksi
 function pelaaja:lukitseAnimaatio(aika)
 	self.animVoiVaihtua = false
 	self.animAjastin = aika
@@ -89,7 +92,7 @@ function pelaaja:update( dt, painovoima )
     local halfY = 32
     
     -- painovoima
-    self.yNopeus = self.yNopeus + (painovoima * 0.1)
+    self.yNopeus = self.yNopeus + painovoima
 
 	--Suomennus vähän kesken *köh*
     -- calculate vertical position and adjust if needed
@@ -144,7 +147,7 @@ function pelaaja:update( dt, painovoima )
     end
 		
 	--Paivita animaatiot
-if self.animVoiVaihtua then	
+  if self.animVoiVaihtua then	
 	if self.yNopeus>0 then
 		--Laskeutuminen
 	    if self:tarkistaTormays(map, self.x, self.y+60) then
@@ -200,7 +203,7 @@ if self.animVoiVaihtua then
 		
 	end
 
-end
+  end
 			
     --Pelaajan katsomissuunta
 	if self.suunta == "oikea" and self.animVoiVaihtua then
@@ -238,7 +241,7 @@ function pelaaja:draw()
 
  --Paikallaan-animaatio hieman eri y-kohdassa TODO korjaa animaatio
  if self.tila=="paikallaan" then 
-	self.nykAnim:draw(self.x, self.y-13,0,self.animSuunta*1.5,1.5,16,30)	
+	self.nykAnim:draw(self.x, self.y-13,0,self.animSuunta*1.5,1.5,20,30)	
  else
 	self.nykAnim:draw(self.x, self.y-10,0,self.animSuunta*1.5,1.5,16,30)
  end
@@ -377,7 +380,7 @@ function pelaaja:liikuOikealle(  )
 
 	if self.voiLiikkua then
 	
-		if self.xNopeus < _G[self.hahmo].juoksuNopeus  then
+		if self.xNopeus < self.juoksuNopeus  then
 			self.xNopeus = self.xNopeus + 20
 		end	
 	
@@ -395,7 +398,7 @@ function pelaaja:liikuVasemmalle(  )
 	if self.voiLiikkua then
 
 		self.tila="liikuVasemmalle"
-		if self.xNopeus > _G[self.hahmo].juoksuNopeus * -1 then
+		if self.xNopeus > self.juoksuNopeus * -1 then
 			self.xNopeus = self.xNopeus - 20
 		end	
 		self.suunta = "vasen"
@@ -405,17 +408,13 @@ function pelaaja:liikuVasemmalle(  )
 end
 
 function pelaaja:lyonti()
-
 	self.xNopeus=0
 	self.tila="lyonti"
-
 end
 
 function pelaaja:torjunta()
-
 	self.xNopeus=0
 	self.tila="torjunta"
-
 end
 
 function pelaaja:heitto() --Pitaa parannella
