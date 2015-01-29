@@ -147,8 +147,13 @@ end
 	--Liikkuminen, pitaisi siirtaa varmaankin pelaaja-luokkaan
 function peli:liikutaPelaajat()		
   for i, pelaaja in pairs ( pelaajat ) do	
+   --Ei botti, pelaaja ohjaa nappaimistolla
    if not pelaaja.onBotti then
-	if love.keyboard.isDown(pelaajienKontrollit[i].OIKEALLE) and not love.keyboard.isDown(pelaajienKontrollit[i].VASEMMALLE) then
+    if love.keyboard.isDown(pelaajienKontrollit[i].YLOS) then
+	
+        pelaaja:hyppaa()
+		
+	elseif love.keyboard.isDown(pelaajienKontrollit[i].OIKEALLE) and not love.keyboard.isDown(pelaajienKontrollit[i].VASEMMALLE) then
 	
         pelaaja:liikuOikealle()
 	
@@ -167,14 +172,12 @@ function peli:liikutaPelaajat()
 	elseif love.keyboard.isDown(pelaajienKontrollit[i].HEITTOASE) then
 	 
         pelaaja:heitto()
-	 else
+	else
 		pelaaja:pysahdy()
 		
-	 end
-	 	
-	if love.keyboard.isDown(pelaajienKontrollit[i].YLOS) then
-        pelaaja:hyppaa()
-	end	
+	end
+
+  --Botti ohjaa
   else 
 	botti:update()
   end

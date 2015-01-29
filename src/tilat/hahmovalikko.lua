@@ -76,16 +76,14 @@ function hahmovalikko:enter(taso)
     muutValinnat:addItem{
 		nimi = "Lisaa elama",
 		toiminto = function()
-			maxElamat=maxElamat+1
-			print(maxElamat)			
+			maxElamat=maxElamat+1			
 		end
 	}
 	
 	muutValinnat:addItem{
 		nimi = "Vahenna elama",
 		toiminto = function()
-			maxElamat=maxElamat-1
-			print(maxElamat)			
+			maxElamat=maxElamat-1		
 		end
 	}
 	
@@ -97,7 +95,6 @@ function hahmovalikko:enter(taso)
 			else
 				bottienMaara = 0
 			end
-			print(bottienMaara)
 		end
 	}
 	

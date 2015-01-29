@@ -1,6 +1,10 @@
 sade={}
---Tama kirjasto tekee sadetta. Pisarat pomppivat kartan pinnoilta. Taustalla satunnaisia salamia 
---Parametrit: kartta, x=aloitus x-aste, y=aloitus y-aste, leveys=sateen leveys, maara=kerroin pisaroiden maarälle
+
+--[[
+Tama "kirjasto" tekee sadetta. Pisarat pomppivat kartan pinnoilta. Taustalla satunnaisia salamia 
+Lainausmerkit siksi, etta tama tarvitsee toimiakseen ATL-kartan, jossa on layer "seinat". Taman voisi korvata parametrilla. 
+Parametrit: kartta, x = aloitus x-aste, y = aloitus y-aste, leveys = sateen leveys, maara = kerroin pisaroiden maarälle
+--]]
 function sade:uusi(kartta, x, y, leveys, maara)
 	math.randomseed( os.time() * math.random() )
 	sade.kartta = kartta

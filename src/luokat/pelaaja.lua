@@ -90,10 +90,10 @@ function pelaaja:update( dt, painovoima )
 	local map = nykyinenTaso
 	local halfX = 32
     local halfY = 32
-    
+
     -- painovoima
     self.yNopeus = self.yNopeus + painovoima
-
+		
 	--Suomennus vähän kesken *köh*
     -- calculate vertical position and adjust if needed
     local seuraavaY = math.floor(self.y + (self.yNopeus * dt))
@@ -238,7 +238,6 @@ end
 
 
 function pelaaja:draw()
-
  --Paikallaan-animaatio hieman eri y-kohdassa TODO korjaa animaatio
  if self.tila=="paikallaan" then 
 	self.nykAnim:draw(self.x, self.y-13,0,self.animSuunta*1.5,1.5,20,30)	
@@ -361,7 +360,8 @@ function pelaaja:kontakti( hyokkaaja )
 		end
 	
 end
-	
+
+
 end
 
 function pelaaja:hyppaa(  )
@@ -372,6 +372,7 @@ function pelaaja:hyppaa(  )
 		
 		self.yNopeus = _G[self.hahmo].hyppyNopeus
 		
+		self.voiHypata = false
 	end
 
 end
@@ -428,24 +429,19 @@ function pelaaja:pysahdy( heti )
 	heti = heti or false --Pysahdytaanko seinaan
 	if heti then 
 		self.xNopeus = 0
-	else --Pysahtyy hitaammin	
-		--Jos maassa nopeasti
-		if self.yNopeus == 0 then
+	elseif self.voiLiikkua then --Pysahtyy hitaammin	
+	
+		--Jos ilmassa hitaasti
+		if math.abs(self.yNopeus) > 1 then
+			self.xNopeus=self.xNopeus*0.95
+		--Jos maassa nopeasti	
+		else
 			self.xNopeus=self.xNopeus*0.9
 		end
-		--Jos ilmassa hitaasti
-		if math.abs(self.yNopeus) > 0 then
-			self.xNopeus=self.xNopeus*0.95
-		end
-		if self.xNopeus == 0 then
-			self.xNopeus=0
-		end	
-	
-		if self.yNopeus<0.1 and self.yNopeus>-0.1 then
-	
+		--Jos about pysahtynyt, tilaksi paikallaan
+		if math.isAbout(self.xNopeus, 0, 50) then
 			self.tila="paikallaan"
-	
-		end
+		end	
 	end
 end
 
@@ -483,9 +479,7 @@ function pelaaja:kuolema() --Kuolee pelissa mutta ei valttamatta havia viela
 		nykKamera="kuolema"
 	
 		self.terveys = _G[self.hahmo].kestavyys
-		
-		print("Kamera:"..nykKamera)
-	
+
 		self.y=self.yLuomispiste
 		self.x=self.xLuomispiste
 	end
