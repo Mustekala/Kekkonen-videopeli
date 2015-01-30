@@ -22,7 +22,7 @@ function botti:update(dt)
 		end
 		local haluttuEtaisyys
 		if bot.tila == "hyokkaava" then 
-			haluttuEtaisyys = 40
+			haluttuEtaisyys = 50
 		else
 			haluttuEtaisyys = 200
 		end
@@ -38,12 +38,12 @@ function botti:update(dt)
 		end
 			
 		--Hyppää kuilujen yli
-		if not pelaajat[bot.numero]:tarkistaTormays(nykyinenTaso, pelaajat[bot.numero].x + 32 *liikkumisSuunta, pelaajat[bot.numero].y+60) then
+		if not pelaajat[bot.numero]:tarkistaTormays(nykyinenTaso, pelaajat[bot.numero].x + 10 *liikkumisSuunta, pelaajat[bot.numero].y+60) then
 			--Mutta vain jos toisella puolella on taso
 			if pelaajat[bot.numero]:tarkistaTormays(nykyinenTaso, pelaajat[bot.numero].x+250*liikkumisSuunta, pelaajat[bot.numero].y+60) then 
 				pelaajat[bot.numero]:hyppaa()			
 			--Muuten pysahdy, paitsi jos ilmassa	
-			elseif not pelaajat[bot.numero].tila == "hyppy" or not pelaajat[bot.numero].tila == "putoaminen" then
+			elseif pelaajat[bot.numero].tila ~= "hyppy" and pelaajat[bot.numero].tila ~=  "putoaminen" then
 				pelaajat[bot.numero]:pysahdy()
 			end	
 		end
@@ -58,17 +58,18 @@ function botti:update(dt)
 		bot.laskuri = bot.laskuri + math.random(1,2)
 		
 		--Botti kaantyy toisen pelaajan suuntaan, mutta ei heti (liian op)
-		if bot.laskuri > 149 then 
+		if bot.laskuri > 60 then 
 			if pelaajat[bot.numero].x - pelaajat[bot.numero2].x < 0 then 
 				pelaajat[bot.numero].suunta = "oikea"
 			else	
 				pelaajat[bot.numero].suunta = "vasen"
 			end	
 		end
+		
+		--Pikkuisen satunnaisuutta botin toimiin
+		if bot.laskuri > 120 then bot.laskuri = 0 end	
 	
-		if bot.laskuri > 150 then bot.laskuri = 0 end	
-	
-		if math.dist(pelaajat[bot.numero].x,pelaajat[bot.numero2].x ) < 40 then
+		if math.dist(pelaajat[bot.numero].x,pelaajat[bot.numero2].x ) < 50 then
 
 			if bot.laskuri<60 then
 				pelaajat[bot.numero]:lyonti() 

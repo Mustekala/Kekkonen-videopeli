@@ -102,7 +102,7 @@ function peli:update( dt )
 	end 
 	
 	--Huono vahikotunnistus
-	if math.isAbout(pelaajat[1].x,pelaajat[2].x, 45) and math.isAbout(pelaajat[2].y, pelaajat[1].y, 32) then 
+	if math.isAbout(pelaajat[1].x,pelaajat[2].x, 60) and math.isAbout(pelaajat[2].y, pelaajat[1].y, 32) then 
 		for _, pelaaja in pairs( pelaajat ) do		    
 			local toinen = pelaaja.numero%2+1	
 			pelaaja:kontakti(pelaajat[toinen])
