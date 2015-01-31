@@ -151,9 +151,10 @@ function peli:liikutaPelaajat()
    if not pelaaja.onBotti then
     if love.keyboard.isDown(pelaajienKontrollit[i].YLOS) then
 	
-        pelaaja:hyppaa()
+        pelaaja:hyppaa()	
 		
-	elseif love.keyboard.isDown(pelaajienKontrollit[i].OIKEALLE) and not love.keyboard.isDown(pelaajienKontrollit[i].VASEMMALLE) then
+	end
+	if love.keyboard.isDown(pelaajienKontrollit[i].OIKEALLE) and not love.keyboard.isDown(pelaajienKontrollit[i].VASEMMALLE) then
 	
         pelaaja:liikuOikealle()
 	

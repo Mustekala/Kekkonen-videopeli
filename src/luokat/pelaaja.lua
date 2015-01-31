@@ -382,7 +382,7 @@ function pelaaja:liikuOikealle(  )
 	if self.voiLiikkua then
 	
 		if self.xNopeus < self.juoksuNopeus  then
-			self.xNopeus = self.xNopeus + 20
+			self.xNopeus = self.xNopeus + 30
 		end	
 	
 		self.suunta = "oikea"
@@ -400,7 +400,7 @@ function pelaaja:liikuVasemmalle(  )
 
 		self.tila="liikuVasemmalle"
 		if self.xNopeus > self.juoksuNopeus * -1 then
-			self.xNopeus = self.xNopeus - 20
+			self.xNopeus = self.xNopeus - 30
 		end	
 		self.suunta = "vasen"
 	
