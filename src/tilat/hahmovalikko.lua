@@ -12,13 +12,15 @@ function hahmovalikko:enter(taso)
 	hahmoValinta2 = Menu.new()
 	valitutHahmot = {}
 	
+	--Muut valinnat(elamat, botit yms.)
 	muutValinnat = Menu.new()
 	maxElamat = 0
 	
 	bottienMaara = 0
 	
-	local pelaajaMaara = 2 --TODO valinta talle (vaatii muokkauksia muualla)
+	local pelaajaMaara = 2 --TODO valinta talle (vaatii aika paljon muokkauksia muualla)
 	
+	--HAHMO 1
 	valittuHahmo1 = hahmot[1]
 	local hahmoLaskuri1 = 1
 	valinta1Valmis = false
@@ -45,7 +47,7 @@ function hahmovalikko:enter(taso)
 		end
 	}
 	
-	
+	--HAHMO 2
 	valittuHahmo2 = hahmot[2]
 	local hahmoLaskuri2 = 2
 	valinta2Valmis = false
@@ -72,7 +74,7 @@ function hahmovalikko:enter(taso)
 		end
 	}
 	
-	
+	--MUUT
     muutValinnat:addItem{
 		nimi = "Lisaa elama",
 		toiminto = function()

@@ -12,7 +12,7 @@ function love.load()
 	Gamestate.registerEvents()
 
 	-- Asetetaan pelin tila avausruuduksi
-	Gamestate.switch( avausRuutu )
+	Gamestate.switch( alkuAnimaatio )
 
 end
 
@@ -23,5 +23,5 @@ function love.update( dt )
 end
 
 function love.draw()
-	
+
 end

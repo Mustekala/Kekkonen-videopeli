@@ -21,9 +21,9 @@ end
 function camera:move(dx, dy)
 if self._x<dx then
   self._x = self._x + 0.1
-  end
+end
 if self._x>dx then 
-  self._x = self._x - 0.001
+  self._x = self._x - 0.01
 end
 
 end
@@ -86,7 +86,7 @@ end
 
 function camera:kuolemaKamera(px,py,p2x,p2y) --Liikkuu tasaisesti, seuraa huonosti
 
-Etaisyys = math.realDist(px,py, p2x, p2y) /600
+	Etaisyys = math.realDist(px,py, p2x, p2y) /600
 
 	if Scale>1.5 then
 	
@@ -99,13 +99,9 @@ Etaisyys = math.realDist(px,py, p2x, p2y) /600
 	  Scale=0.5
 	
 	 else
-	
-		if Scale>Etaisyys then
-	 
-			Scale=Scale-0.01
-		end
-		if Scale<Etaisyys then
-	 
+		if Scale>Etaisyys then	 
+			Scale=Scale-0.01	
+		elseif Scale<Etaisyys then
 			Scale=Scale+0.01
 		end
 	 end
@@ -113,23 +109,23 @@ Etaisyys = math.realDist(px,py, p2x, p2y) /600
 	
 	camera:setScale(Scale,Scale)
 	
-local width= love.graphics.getWidth()
-local height= love.graphics.getHeight()
+	local width = love.graphics.getWidth()
+	local height = love.graphics.getHeight()
 
-local cameraKohdeX
-local cameraKohdeY
+	cameraKohdeX = 0
+	cameraKohdeY = 0
 
-if px>p2x then
+	if px>p2x then
 
-	cameraKohdeX=math.floor(px - math.dist(px,p2x)/2 - width / 2*Scale)
+		cameraKohdeX=math.floor(px - math.dist(px,p2x)/2 - width / 2*Scale)
 
-end
-if p2x>px then
+	end
+	if p2x>px then
 
-	cameraKohdeX=math.floor(p2x - math.dist(px,p2x)/2 - width / 2*Scale)
-		
-end	
- if py>p2y then 
+		cameraKohdeX=math.floor(p2x - math.dist(px,p2x)/2 - width / 2*Scale)
+			
+	end	
+	if py>p2y then 
 	 
 	  cameraKohdeY=math.floor(py - math.dist(py,p2y)/2 - height / 2*Scale)
 	 
@@ -139,25 +135,20 @@ end
 	 
     end
 	
-	if cameraKohdeX<camera:getX() then
-	 if cameraKohdeX<camera:getX()-100 then
-	  camera:setX(camera:getX()-4)
-
-	  else
-	  camera:setX(camera:getX()-2)
-	  	  
-	 end
+	if cameraKohdeX <camera:getX() then
+		if cameraKohdeX<camera:getX()-100 then
+		 camera:setX(camera:getX()-4)
+		else
+		 camera:setX(camera:getX()-2)	  	  
+		end
 	end
 	
-	if cameraKohdeX>camera:getX() then
-	 
-	 if cameraKohdeX>camera:getX()+100 then
-	  camera:setX(camera:getX()+4)
-	 
-	 else
-	  camera:setX(camera:getX()+2)
-	  
-	 end
+	if cameraKohdeX>camera:getX() then 
+		if cameraKohdeX>camera:getX()+100 then
+		 camera:setX(camera:getX()+4)	 
+		else
+		 camera:setX(camera:getX()+2)  
+		end
 	end
 	
 	if cameraKohdeY<camera:getY() then
@@ -173,7 +164,7 @@ end
 	end
 	
 	--Jos kamera on liikkunut about oikeaan kohtaan, palauta true (joka vaihtaa takaisin tavalliseen kameraan)
-	if math.isAbout(camera:getX(), cameraKohdeX, 3) and math.isAbout(camera:getY(), cameraKohdeY, 3) then
+	if math.isAbout(camera:getX(), cameraKohdeX, 5) and math.isAbout(camera:getY(), cameraKohdeY, 5) then
 		return true	
 	end
 		

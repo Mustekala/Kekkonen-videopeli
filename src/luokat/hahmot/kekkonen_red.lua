@@ -40,7 +40,7 @@ function kekkonen_red:lataaAnimaatiot()
 	self.laskeutuminen_anim = newAnimation(kuvat["kekkonen_laskeutuminen_red.png"],42,65,0.05,6)
     self.laskeutuminen_anim:setMode("once")
 
-	self.hyppy_anim = newAnimation(kuvat["kekkonen_hyppy_red.png"],42,65,0.05,6)
+	self.hyppy_anim = newAnimation(kuvat["kekkonen_hyppy_red.png"],34,65,0.05,6)
 	self.hyppy_anim:setMode("once")
 
 	self.vahinko_anim = newAnimation(kuvat["kekkonen_taintunut_red.png"],32,62,0.1,7)

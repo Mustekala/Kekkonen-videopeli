@@ -13,9 +13,11 @@ end
 
 function botti:update(dt)
 	for i, bot in ipairs(botit) do
-
+		local tamaBotti = pelaajat[bot.numero] --Taman botin ohjaama pelaaja
+		local pelaaja = pelaajat[bot.numero2]  --toinen pelaaja
+		
 		--Jos oma terveys on alle toisen pelaajan terveys/1.5, puolustava
-		if pelaajat[bot.numero].terveys < pelaajat[bot.numero2].terveys / 1.5 then 
+		if tamaBotti.terveys < pelaaja.terveys / 1.5 then 
 			bot.tila = "puolustava" --Puolustava pitaa etaisyytta
 		else	
 			bot.tila = "hyokkaava"  --Hyokkaava pyrkii lahelle
@@ -26,32 +28,34 @@ function botti:update(dt)
 		else
 			haluttuEtaisyys = 200
 		end
-
+		local liikkumisSuunta = 1
 		--Jos toinen pelaaja ei ole halutulla etaisyydella tai putoamassa, seuraa sitä
-		if pelaajat[bot.numero].x < pelaajat[bot.numero2].x -haluttuEtaisyys and pelaajat[bot.numero2].yNopeus < 400 then
-			pelaajat[bot.numero]:liikuOikealle()
+		if tamaBotti.x < pelaaja.x -haluttuEtaisyys and pelaaja.yNopeus < 400 then
+			tamaBotti:liikuOikealle()
 			liikkumisSuunta = 1	
-		elseif	pelaajat[bot.numero].x > pelaajat[bot.numero2].x +haluttuEtaisyys and pelaajat[bot.numero2].yNopeus < 400 then
-			pelaajat[bot.numero]:liikuVasemmalle()
+		elseif	tamaBotti.x > pelaaja.x +haluttuEtaisyys and pelaaja.yNopeus < 400 then
+			tamaBotti:liikuVasemmalle()
 			liikkumisSuunta = -1
-		else pelaajat[bot.numero]:pysahdy()	
+		elseif not math.isAbout(tamaBotti.y, pelaaja.y, 50) then
+		    haluttuEtaisyys = 0
+		else tamaBotti:pysahdy()	
 		end
-			
+
 		--Hyppää kuilujen yli
-		if not pelaajat[bot.numero]:tarkistaTormays(nykyinenTaso, pelaajat[bot.numero].x + 10 *liikkumisSuunta, pelaajat[bot.numero].y+60) then
+		if not tamaBotti:tarkistaTormays(nykyinenTaso, tamaBotti.x + 10 *liikkumisSuunta, tamaBotti.y+60) then
 			--Mutta vain jos toisella puolella on taso
-			if pelaajat[bot.numero]:tarkistaTormays(nykyinenTaso, pelaajat[bot.numero].x+250*liikkumisSuunta, pelaajat[bot.numero].y+60) then 
-				pelaajat[bot.numero]:hyppaa()			
+			if tamaBotti:tarkistaTormays(nykyinenTaso, tamaBotti.x+250*liikkumisSuunta, tamaBotti.y+60) then 
+				tamaBotti:hyppaa()			
 			--Muuten pysahdy, paitsi jos ilmassa	
-			elseif pelaajat[bot.numero].tila ~= "hyppy" and pelaajat[bot.numero].tila ~=  "putoaminen" then
-				pelaajat[bot.numero]:pysahdy()
+			elseif tamaBotti.tila ~= "hyppy" and tamaBotti.tila ~=  "putoaminen" then
+				tamaBotti:pysahdy()
 			end	
 		end
 	
 		--Jos edessa seina, hyppaa
-		if pelaajat[bot.numero]:tarkistaTormays(nykyinenTaso, pelaajat[bot.numero].x+33*liikkumisSuunta, pelaajat[bot.numero].y) then
-			if pelaajat[bot.numero].tila == "liikuOikealle" or pelaajat[bot.numero].tila == "liikuVasemmalle" then
-				pelaajat[bot.numero]:hyppaa()	
+		if tamaBotti:tarkistaTormays(nykyinenTaso, tamaBotti.x+33*liikkumisSuunta, tamaBotti.y) then
+			if tamaBotti.tila == "liikuOikealle" or tamaBotti.tila == "liikuVasemmalle" then
+				tamaBotti:hyppaa()	
 			end	
 		end
 	
@@ -59,26 +63,26 @@ function botti:update(dt)
 		
 		--Botti kaantyy toisen pelaajan suuntaan, mutta ei heti (liian op)
 		if bot.laskuri > 60 then 
-			if pelaajat[bot.numero].x - pelaajat[bot.numero2].x < 0 then 
-				pelaajat[bot.numero].suunta = "oikea"
+			if tamaBotti.x - pelaaja.x < 0 then 
+				tamaBotti.suunta = "oikea"
 			else	
-				pelaajat[bot.numero].suunta = "vasen"
+				tamaBotti.suunta = "vasen"
 			end	
 		end
 		
 		--Pikkuisen satunnaisuutta botin toimiin
 		if bot.laskuri > 120 then bot.laskuri = 0 end	
 	
-		if math.dist(pelaajat[bot.numero].x,pelaajat[bot.numero2].x ) < 50 then
+		if math.dist(tamaBotti.x, pelaaja.x) < 50 then
 
 			if bot.laskuri<60 then
-				pelaajat[bot.numero]:lyonti() 
+				tamaBotti:lyonti() 
 			else if bot.laskuri<120 then
-				pelaajat[bot.numero]:torjunta() 
+				tamaBotti:torjunta() 
 			else if bot.laskuri==120 then	
-				pelaajat[bot.numero]:heitto()
+				tamaBotti:heitto()
 			else 
-				pelaajat[bot.numero]:pysahdy()
+				tamaBotti:pysahdy()
 			end
 		
 		end

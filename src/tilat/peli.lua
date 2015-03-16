@@ -23,18 +23,22 @@ end
 function peli:enter( aiempi, tasonNimi, pelaajaMaara, elamienMaara, hahmot, bottienMaara)
 
 	print("Aiempi state:"..aiempi.nimi) 
-
+	
+	intro = false
+	if aiempi.nimi == "intro" then
+		intro = true
+	end
+	
 	--Sade. Alle voi lisata ifin kaikille sadetta kayttaville kartoille
 	sataako = false					 --Kekkonen on vihainen: pakota sade
 	if tasonNimi == "Pilvenpiirtaja" or aiempi.nimi == "tunarit" then sataako=true end
 
 	TEsound.stop("musiikki")
 	tasoNimi = tasonNimi
-     
-	--TODO valinta tälle 
-	liikkuvaTausta=true
-	
+
    if not peliAlkanut then
+	
+	kulunutAika = 0 --Ajastin pelin kulumiselle
 	
 	nykyinenTaso = loader.load(tasonNimi..".tmx")
 	nykyinenTaso:setDrawRange(0, 0, 2000, 960)
@@ -72,10 +76,12 @@ end
 function peli:update( dt )
     
   if peliAlkanut then
+			
+	kulunutAika = kulunutAika + dt --Ajastin pelin kulumiselle
 	
 	--Paivitetaan powerupit
 	powerup:update(dt)
-	--Lisataan random powerup random aikoihin TODO lisaa valinta yleisyydelle
+	--Lisataan random powerup random aikoihin, valittu yleisyys vaikuttaa 
 	if math.random(0, 2000 / powerupYleisyys) == 0 then powerup:lisaaRandom() end
 	
 	if sataako then
@@ -87,7 +93,7 @@ function peli:update( dt )
 		for _, pelaaja in pairs( pelaajat ) do
 			pelaaja:pysahdy( true )
 		end
-	else
+	else --Muuten voi liikkua
 		self:liikutaPelaajat()
 	end
 	
@@ -101,7 +107,7 @@ function peli:update( dt )
 	 Gamestate.push(paussivalikko)
 	end 
 	
-	--Huono vahikotunnistus
+	--Huono vahikotunnistus: jos pelaajat lahekkain, kontakti. Tarkempi maaritys pelaaja-luokassa
 	if math.isAbout(pelaajat[1].x,pelaajat[2].x, 60) and math.isAbout(pelaajat[2].y, pelaajat[1].y, 32) then 
 		for _, pelaaja in pairs( pelaajat ) do		    
 			local toinen = pelaaja.numero%2+1	
@@ -115,15 +121,14 @@ function peli:update( dt )
 
 	end
 	
+	--Kamerat
 	if nykKamera=="tavallinen" then
 		camera:liikkuvaKamera(pelaajat[1].x,pelaajat[1].y,pelaajat[2].x,pelaajat[2].y)
-	end
 	
-	if nykKamera=="Shake" then
+	elseif nykKamera=="Shake" then
 		camera:shake(pelaajat[1].x,pelaajat[1].y,pelaajat[2].x,pelaajat[2].y)
-	end
 	
-	if nykKamera=="kuolema" then
+	elseif nykKamera=="kuolema" then
 	  camera:kuolemaKamera(pelaajat[1].x,pelaajat[1].y,pelaajat[2].x,pelaajat[2].y)
 	  
 	  if camera:kuolemaKamera(pelaajat[1].x,pelaajat[1].y,pelaajat[2].x,pelaajat[2].y)==true then
@@ -188,15 +193,18 @@ end
 function peli:draw()
 
     --local taso = _G[tasoNimi].attribute
-	--Dynaaminen tausta
-	if liikkuvaTausta then
-		local taustaX = camera._x *-1 /5  -100 --Taustat liikkuvat kameran mukana, mutta maltillisemmin
-		local taustaY = camera._y *-1 /10 -100
-		local taustaZoom = camera.scaleX/10 --Ei jarkeva kayttaa
-		love.graphics.draw(kuvat[tasoNimi.."_tausta.png"], taustaX, taustaY, 0, 2, 2) --Tason tausta piirtyy erikseen
-	end
-	camera:set() --Liikkuva kamera	
 	
+	--Dynaaminen tausta
+	local taustaZoom = 2 + 0.1/camera.scaleX 
+	local taustaX = camera._x *-1 /5 -100 --Taustat liikkuvat kameran mukana, mutta maltillisemmin
+	local taustaY = camera._y *-1 /10 -100
+	--Takaosa
+	love.graphics.draw(kuvat[tasoNimi.."_tausta_2.png"], taustaX / 2, taustaY / 2, 0, taustaZoom, taustaZoom, 50, 25) --Tason tausta piirtyy erikseen		
+	--Etuosa
+	love.graphics.draw(kuvat[tasoNimi.."_tausta.png"], taustaX, taustaY, 0, taustaZoom, taustaZoom, 50, 25) --Tason tausta piirtyy erikseen	
+	
+	camera:set() --Liikkuva kamera	
+
 	if sataako then
 		sade:draw()
 	end
@@ -211,9 +219,9 @@ function peli:draw()
 	end
 	
 	powerup:draw()
-	
+
 	camera:unset() --Ei enaa liikkuva kamera	
-		
+	
 	if debugMode==true then
 
 		love.graphics.print(pelaajat[1].tila, 0,0,0,0.5,0.5)
@@ -224,6 +232,13 @@ function peli:draw()
 		
 	end
 
+	if intro then --Jos osa introa, lopeta peli viidessa sekunnissa
+		if kulunutAika > 5 then
+			print("Intro loppu")
+			Gamestate.switch( avausRuutu )
+		end
+	end
+	
 end
 
 
@@ -236,16 +251,17 @@ function peli:keypressed( nappain )
 		print("Paussivalikko")
 		
 	end
-	--Debug:numlock pakottaa sateen  
+	
+	--Debug:numlock pakottaa sateen (aika turha)  
   if nappain == "numlock" and debugMode then
-	sataako = not sataako
-    if sataako then  sade:uusi(nykyinenTaso, -500, -500, 1500, 5) end
-	print("pakotetaan sade:"..tostring(sataako))
+	 sataako = not sataako
+     if sataako then  sade:uusi(nykyinenTaso, -500, -500, 1500, 5) end
+	 print("pakotetaan sade:"..tostring(sataako))
   end
   
 end
 
-function peli:asetaPaussille()
+function peli:asetaPaussille() 
 
 end
 

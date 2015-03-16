@@ -1,5 +1,5 @@
 --[[
-	Powerupit muuttavat jotain sen poimivan pelaajan ominaisuuksista. Aika pahasti viela vaiheessa
+	Powerupit muuttavat jotain sen poimivan pelaajan ominaisuuksista. Aika pahasti viela vaiheessa.
 ]]--
 
 powerup = {} 
@@ -37,20 +37,24 @@ end
 
 --TODO korjaa kahden saman powerupin ongelmat, tai poista mahdollisuus siihen
 --Lisaa random powerupin kaikkiPowerupit-listalta
-function powerup:lisaaRandom()
-	if not nakyvaPowerup.onNakyva then		
+function powerup:lisaaRandom()	
+	if not nakyvaPowerup.onNakyva then	
+		randomPowerup = kaikkiPowerupit[1]
+		while nakyvaPowerup.nimi == randomPowerup do --Ei kahta samaa poweruppia perakkain
+			randomPowerup = kaikkiPowerupit[math.random(1, table.getn(kaikkiPowerupit))]
+		end	
+		nakyvaPowerup.nimi = randomPowerup
 		nakyvaPowerup.y = -100	
 		nakyvaPowerup.yNopeus = 0	
 		nakyvaPowerup.x =  math.random(10, 600)
 		nakyvaPowerup.xNopeus =  math.random(-2,2)
-		nakyvaPowerup.nimi = kaikkiPowerupit[math.random(1, table.getn(kaikkiPowerupit))]
 		nakyvaPowerup.onNakyva = true
 	end
 end
 
 function powerup:update( dt )
 
-	--Paivittaa kaikki powerupit
+	--Paivittaa kaikki powerupit 
 	for _, nyk in ipairs (kaikkiPowerupit) do
 		_G[nyk]:update(dt)
 	end

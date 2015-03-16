@@ -6,12 +6,13 @@
 -- Asetetaan hiiren osoitin nakymattomaksi
 love.mouse.setVisible( false )
 
-love.graphics.setDefaultFilter( "nearest", "nearest", 1 ) --Poistetaan filter skaalatessa = pikselit näkyvät
+love.graphics.setDefaultFilter( "nearest", "nearest", 1 ) --Poistetaan filter = pikselit näkyvät
 
 print( "Asetetaan tiedostopolut" )
 
 -- Luodaan latausta helpottavat polut ja asetetaan ne muuttujiin
 AANI_POLKU = "media/aanet/"
+MUSIIKKI_POLKU = AANI_POLKU.."musiikki/"
 TEHOSTE_POLKU = AANI_POLKU.."tehosteet/"
 FONTTI_POLKU = "media/fontit/"
 KUVA_POLKU = "media/kuvat_jne/"
@@ -79,6 +80,11 @@ kuvat = {}
 for _, kuva in ipairs( love.filesystem.getDirectoryItems( KUVA_POLKU.."/muut/" ) ) do
 	kuvat[kuva] = love.graphics.newImage( KUVA_POLKU .."/muut/".. kuva )
 	print( "Ladataan " .. kuva )
+end
+--Ladataan kaikki taustat
+for _, tausta in ipairs( love.filesystem.getDirectoryItems( KUVA_POLKU.."/taustat/" ) ) do
+	kuvat[tausta] = love.graphics.newImage( KUVA_POLKU .."/taustat/".. tausta )
+	print( "Ladataan tausta: " .. tausta )
 end
 
 powerup:lataa() --Ladataan kaikki powerupit

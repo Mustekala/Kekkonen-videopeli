@@ -154,7 +154,7 @@ function pelaaja:update( dt, painovoima )
 		 self.nykAnim=_G[self.hahmo].paikallaan_anim	
 	     self.nykAnim = _G[self.hahmo].laskeutuminen_anim
 		 
-		 self:lukitseAnimaatio( 0.35 )
+		 self:lukitseAnimaatio( 0.3 )
 		 TEsound.play(kavelyAanet)
 		 --Putoaminen
 	    else	
@@ -229,22 +229,24 @@ function pelaaja:update( dt, painovoima )
 		if self.tila ~= "torjunta" then 	
 			_G[self.hahmo].torjunta_anim:reset() 	
 		end	
-		--Jos pelaaja putoaa, resetoi laskeutumisanimaatio
+		--Jos pelaaja putoaa, resetoi laskeutumis- ja hyppyanimaatiot
 		if self.tila=="putoaminen" then 	
-			_G[self.hahmo].laskeutuminen_anim:reset() 		
+			_G[self.hahmo].laskeutuminen_anim:reset()
+			_G[self.hahmo].hyppy_anim:reset() 			
 		end	
 	end	
 end
 
 
 function pelaaja:draw()
+
  --Paikallaan-animaatio hieman eri y-kohdassa TODO korjaa animaatio
  if self.tila=="paikallaan" then 
 	self.nykAnim:draw(self.x, self.y-13,0,self.animSuunta*1.5,1.5,20,30)	
  else
 	self.nykAnim:draw(self.x, self.y-10,0,self.animSuunta*1.5,1.5,16,30)
  end
- 
+	
  --Kameran liikkuminen ei vaikuta hudiin
  camera:unset()
  
@@ -383,6 +385,8 @@ function pelaaja:liikuOikealle(  )
 	
 		if self.xNopeus < self.juoksuNopeus  then
 			self.xNopeus = self.xNopeus + 30
+		else
+			self:pysahdy()
 		end	
 	
 		self.suunta = "oikea"
@@ -401,6 +405,8 @@ function pelaaja:liikuVasemmalle(  )
 		self.tila="liikuVasemmalle"
 		if self.xNopeus > self.juoksuNopeus * -1 then
 			self.xNopeus = self.xNopeus - 30
+		else
+			self:pysahdy()	
 		end	
 		self.suunta = "vasen"
 	

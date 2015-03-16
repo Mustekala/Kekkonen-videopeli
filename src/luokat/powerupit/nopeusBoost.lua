@@ -30,6 +30,6 @@ end
 
 function nopeusBoost:draw()
 	if self.kaytossa then
-		love.graphics.circle("fill", pelaajat[numero].x, pelaajat[numero].y, 30)
+    --Animaatio
 	end
 end
