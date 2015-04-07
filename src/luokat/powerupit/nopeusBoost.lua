@@ -7,7 +7,7 @@ function nopeusBoost:kayta( pelaajaNumero )
 	self.kaytossa = true
 	numero = pelaajaNumero
 
-	self.kesto = 5
+	self.kesto = 10
 	self.vanhaArvo = pelaajat[numero].juoksuNopeus
 	pelaajat[numero].juoksuNopeus = pelaajat[numero].juoksuNopeus + 100
 	print("Nopeutta boostattu")

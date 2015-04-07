@@ -12,7 +12,14 @@ function valikko:init()
 	paavalikko = Menu.new()
 
 	paavalikko:addItem{
-		nimi = "Aloita peli",
+		nimi = "Aloita tarina",
+		toiminto = function()
+			print("Kesken")
+		end
+	}
+	
+	paavalikko:addItem{
+		nimi = "Vapaa peli",
 		toiminto = function()
 			Gamestate.push( hahmovalikko )
 			print("Tasovalikko")
@@ -70,7 +77,7 @@ function valikko:draw()
 
 	love.graphics.draw( kuvat[ "testi_tausta.png" ], 0, 0 )
 
-	paavalikko:draw( 100, 200 )
+	paavalikko:draw( 100, 100 )
 
 end
 

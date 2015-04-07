@@ -7,6 +7,7 @@ kaikkiPowerupit = {}	--Lista kaikista powerupeista
 nakyvaPowerup = {nimi = "" , x = 0, y = 0, xNopeus = 1, yNopeus = 1, onNakyva = false} --Talla hetkella nakyva powerup
 
 function powerup:lataa()
+	
 	--Ladataan kaikki powerupit
 	for _, nykyinen in ipairs( love.filesystem.getDirectoryItems( POWERUP_POLKU )) do
 		local nykyinenPowerup = string.gsub(nykyinen,".lua","")
@@ -21,6 +22,7 @@ end
 
 --Kayta powerup pelaajalle	
 function powerup:kayta( nimi, pelaajaNumero )
+	TEsound.play(TEHOSTE_POLKU.."/Powerup1.ogg")
 	print("Pelaaja "..pelaajaNumero.." sai powerupin "..nimi)
 	_G[nimi]:kayta(pelaajaNumero)
 end
@@ -98,7 +100,8 @@ function powerup:draw()
 	end
 end
 
---Tarkistaa poweruppien tormauksen seiniin
+--Tarkistaa poweruppien tormauksen seiniin 
+--TODO korjaa sivuttaisen seinan sisaan lagaaminen
 function powerup:tarkistaTormays(x, y)
 
     local kerros = nykyinenTaso.layers["seinat"]

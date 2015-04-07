@@ -35,6 +35,7 @@ kameranKayttokerrat=0
 nykKamera="tavallinen"
 print("Kamera:"..nykKamera)
 
+require( KIRJASTO_POLKU .. "layersOfLove" ) --layersOfLove
 require( KIRJASTO_POLKU .. "animations" ) --AnimationsAndLove
 Menu = require( KIRJASTO_POLKU .. "menu" )--SimpleMenuLibrary
 Gamestate = require( KIRJASTO_POLKU .. "gamestate" ) --Hump-gamestate
@@ -107,7 +108,6 @@ for _, hahmo in ipairs( love.filesystem.getDirectoryItems( HAHMO_POLKU )) do
 end
 
 tasoVarasto = {
-	"Testitaso",
 	"Aavikko",
 	"Pilvenpiirtaja",
 	"Eduskunta"
@@ -169,8 +169,11 @@ vahinkoAanet = {TEHOSTE_POLKU.."Hurt2.ogg", TEHOSTE_POLKU.."Hurt3.ogg", TEHOSTE_
 kavelyAanet = {TEHOSTE_POLKU.."footstep.ogg", TEHOSTE_POLKU.."footstep2.ogg"}
 kavelyAanetAjastin = 0
 hyppyAanet = {TEHOSTE_POLKU.."Jump1.ogg", TEHOSTE_POLKU.."Jump2.ogg", TEHOSTE_POLKU.."Jump3.ogg", TEHOSTE_POLKU.."Jump4.ogg"}
-	
 onkoAani=true
+
+print("Ladataan musiikki")
+--TODO mappikohtaiset musiikkikirjastot
+
 peliAlkanut=false
 
 	--(Vielä) turha

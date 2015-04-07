@@ -50,6 +50,7 @@ end
 function paussivalikko:enter( mista )
 	--Musiikki & taustaaanet pysahtyvat
 	TEsound.pause("tausta")
+	TEsound.pause("musiikki")
 	self.mista = mista
 
 end
@@ -74,6 +75,8 @@ end
 function paussivalikko:keypressed( nappain )
 	if nappain == "escape" then
 		TEsound.resume("tausta")
+		TEsound.resume("musiikki")
+
 		Gamestate.pop()
 		print("Takaisin peliin")
 	end

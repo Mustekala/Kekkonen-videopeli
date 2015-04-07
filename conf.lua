@@ -7,7 +7,7 @@ function love.conf( t )
     t.console = true
 
 	-- Peli-ikkunan nimi (merkkijono)
-    t.title = "VIDEOPELI"
+    t.title = "KEKKONEN-VIDEOPELI"
 
 	-- Asetetaan fulscreen-tila pois (boolean)
     t.window.fullscreen = false

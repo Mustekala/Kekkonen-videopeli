@@ -18,6 +18,8 @@ function pelaaja:luo( pelaajanHahmo, pelaajanKontrollit, pelaajanNimi, pelaajanN
 		--Pari ajastinta
 		vahinkoAjastin=0,
 		animAjastin=0,
+		kuollut = false, --Kuolema-ajastin lisatty 
+		
 		terveys = _G[pelaajanHahmo].kestavyys,
 		elamat = elamienMaara,
 		
@@ -83,7 +85,7 @@ function pelaaja:update( dt, painovoima )
 	self.xNopeus = math.clamp(self.xNopeus, -self.xNopeusMax, self.xNopeusMax)
     self.yNopeus = math.clamp(self.yNopeus, -self.yNopeusMax, self.yNopeusMax)
 
-	if self.y> 700 then --Kuolema pudotessa
+	if self.y > 700 then --Kuolema pudotessa
 		self:kuolema()
 	end	
 	
@@ -148,6 +150,7 @@ function pelaaja:update( dt, painovoima )
 		
 	--Paivita animaatiot
   if self.animVoiVaihtua then	
+
 	if self.yNopeus>0 then
 		--Laskeutuminen
 	    if self:tarkistaTormays(map, self.x, self.y+60) then
@@ -166,24 +169,28 @@ function pelaaja:update( dt, painovoima )
 	elseif self.yNopeus<0 then
 	
 		self.tila="hyppy"
-	
 		self.nykAnim = _G[self.hahmo].hyppy_anim
 	--Lyonti
-	elseif self.tila=="lyonti" then
+	elseif self.tila=="lyonti" then	
 	
 		self.nykAnim = _G[self.hahmo].lyonti_anim
+		self:lukitseAnimaatio(0.1) 
+		
 	--Torjunta
 	elseif self.tila=="torjunta" then
+	
 		self.nykAnim = _G[self.hahmo].torjunta_anim
-		self:lukitseAnimaatio(0.4)
+		self:lukitseAnimaatio(0.3)
+		
 	--Heitto	
-	elseif self.tila=="heitto" then
+	elseif self.tila=="heitto" then	
 	
 		self.nykAnim = _G[self.hahmo].heitto_anim
-		self:lukitseAnimaatio(0.4)
-		
+		self:lukitseAnimaatio(0.4)		
+
 	--Kaantyminen			
 	elseif self.xNopeus > 0 and self.tila=="liikuVasemmalle" or self.xNopeus < 0 and self.tila=="liikuOikealle" then
+	    
 		self.nykAnim = _G[self.hahmo].kaantyminen_anim
 		self:lukitseAnimaatio(0.2)
 		
@@ -194,7 +201,7 @@ function pelaaja:update( dt, painovoima )
 		end 
 		self.nykAnim = _G[self.hahmo].kavely_anim
 		_G[self.hahmo].kaantyminen_anim:reset()
-		
+
     --Paikallaan
 	else
 	
@@ -202,13 +209,13 @@ function pelaaja:update( dt, painovoima )
 		self.voiLiikkua=true
 		
 	end
-
+	
   end
 			
     --Pelaajan katsomissuunta
-	if self.suunta == "oikea" and self.animVoiVaihtua then
+	if self.suunta == "oikea" and self.nykAnim ~= _G[self.hahmo].kaantyminen_anim then --Kaantymisanimaatio lagaa suunnan kanssa
 		self.animSuunta = 1 
-	elseif self.suunta == "vasen" and self.animVoiVaihtua then
+	elseif self.suunta == "vasen" and self.nykAnim ~= _G[self.hahmo].kaantyminen_anim then
 		self.animSuunta = -1 
 	end
 	
@@ -307,6 +314,8 @@ function pelaaja:kontakti( hyokkaaja )
 	if  hyokkays=="lyonti" and vastustajaOn==suunta and not (self.tila=="torjunta" and suunta~=self.suunta) then
 
 	   if self.vahinkoAjastin <= 0 then
+		
+		self.tila="vahinko"
 		
 		self.voiLiikkua = true
 		
@@ -472,27 +481,54 @@ end
 
 function pelaaja:kuolema() --Kuolee pelissa mutta ei valttamatta havia viela
 	
-	self.elamat = self.elamat-1
+	self.nykAnim=_G[self.hahmo].kuolema_anim	
+	self:lukitseAnimaatio(1)
+	
 	self:pysahdy(true)
 	self.yNopeus = 0
-	
-	if self.elamat == 0 then
-		self:havio()
-	else
-	
+				
+	if not self.kuollut then	
+		
+		_G[self.hahmo].respawn_anim:reset() --Resetoidaan respawn-animaatio valmiiksi
+		
 		TEsound.play(TEHOSTE_POLKU.."Kuolema.ogg")
+		self.elamat = self.elamat-1
 	
-		nykKamera="kuolema"
-	
-		self.terveys = _G[self.hahmo].kestavyys
+		self.kuollut = true
+		
+		--Pelaaja respawnaa sekunnin kuluttua, tai peli loppuu
+		Timer.add(1, 
+		function() 
+			self.kuollut = false
+			self.terveys = _G[self.hahmo].kestavyys
+			self.nykAnim=_G[self.hahmo].respawn_anim
+			self:lukitseAnimaatio(1.7)	
+			TEsound.play(TEHOSTE_POLKU.."Respawn.ogg")
+			
+			_G[self.hahmo].kuolema_anim:reset()
+					
+			if self.elamat == 0 then
 
-		self.y=self.yLuomispiste
-		self.x=self.xLuomispiste
+				self:havio()
+				
+			elseif self.elamat > 0 then
+				
+				self.y=self.yLuomispiste
+				self.x=self.xLuomispiste 
+							
+				nykKamera="kuolema"
+			end	
+		end) 
+		
 	end
+		
 end
 
 function pelaaja:havio() --Pelaaja haviaa pelin
 	
-	TEsound.play(TEHOSTE_POLKU.."Kuolema.ogg")
-	Gamestate.switch(voittoRuutu, self.numero % 2 + 1) --Voitto toiselle pelaajalle
+	function vaihdaState()
+		Gamestate.switch(voittoRuutu, self.numero % 2 + 1) --Voitto toiselle pelaajalle
+	end
+	TEsound.play(TEHOSTE_POLKU.."Kuolema.ogg", "", 1, 1, vaihdaState)
+	
 end

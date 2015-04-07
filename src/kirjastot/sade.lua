@@ -33,9 +33,7 @@ function sade:update(dt)
 		table.insert(pisarat, {x =math.random(self.x, self.leveys), y = self.y, yNopeus = 5, yNopeusMax = 10, xNopeus = 1, kimmonnut = 0})
 		laskuri = laskuri+1 
 	until laskuri == self.maara
-	local nykyinenPisara = 0
 	for i,pisara in ipairs(pisarat) do
-		nykyinenPisara = nykyinenPisara + 1
 		if pisara.yNopeus < pisara.yNopeusMax then pisara.yNopeus = pisara.yNopeus + 1 end 
 		pisara.y = pisara.y + pisara.yNopeus
 		pisara.x = pisara.x + pisara.xNopeus
@@ -43,7 +41,7 @@ function sade:update(dt)
 			self:kimpoa(pisara)
 		end
 		if pisara.kimmonnut > 5 or pisara.y > 2000 then --Jos pisara on kimmonnut jo yli 5 kertaa tai pudonnut, poista se
-			table.remove(pisarat, nykyinenPisara)
+			table.remove(pisarat, i)
 		end
 		
     end

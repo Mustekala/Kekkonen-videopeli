@@ -29,11 +29,21 @@ function peli:enter( aiempi, tasonNimi, pelaajaMaara, elamienMaara, hahmot, bott
 		intro = true
 	end
 	
-	--Sade. Alle voi lisata ifin kaikille sadetta kayttaville kartoille
-	sataako = false					 --Kekkonen on vihainen: pakota sade
-	if tasonNimi == "Pilvenpiirtaja" or aiempi.nimi == "tunarit" then sataako=true end
-
 	TEsound.stop("musiikki")
+	
+	--Sade. Alle voi lisata ifin kaikille sadetta kayttaville kartoille
+	sataako = false					 
+	if tasonNimi == "Pilvenpiirtaja" then sataako=true end
+	
+	--Sumu. Alle voi lisata ifin kaikille sumua kayttaville kartoille
+	sumu = {tila = false}
+	if aiempi.nimi == "tunarit" then --Kekkonen on vihainen: punainen sumu, sade, musiikki
+		sumu.kuva = kuvat["red_layer.png"]
+		sumu.tila = true
+		sataako = true
+		TEsound.playLooping(MUSIIKKI_POLKU.."/kekkonenOnVihainen.ogg", "musiikki")
+	end	
+	
 	tasoNimi = tasonNimi
 
    if not peliAlkanut then
@@ -75,119 +85,133 @@ end
 
 function peli:update( dt )
     
-  if peliAlkanut then
+	Timer.update(dt) --Paivitetaan mahdolliset ajastimet
+	
+	if peliAlkanut then
 			
-	kulunutAika = kulunutAika + dt --Ajastin pelin kulumiselle
-	
-	--Paivitetaan powerupit
-	powerup:update(dt)
-	--Lisataan random powerup random aikoihin, valittu yleisyys vaikuttaa 
-	if math.random(0, 2000 / powerupYleisyys) == 0 then powerup:lisaaRandom() end
-	
-	if sataako then
-		sade:update(dt)
-	end
-	
-	--Jos kameran tila on kuolema, pelaajat eivat voi liikkua
-	if nykKamera=="kuolema" then
+		kulunutAika = kulunutAika + dt --Ajastin pelin kulumiselle
+		
+		if kulunutAika < 3 then --Alkulaskenta (peli:draw)
+			
+			for _, pelaaja in pairs( pelaajat ) do --Pelaajat eivat voi liikkua pelin alussa
+				pelaaja.voiLiikkua = false
+			end
+			
+		end
+		
+		--Paivitetaan powerupit
+		powerup:update(dt)
+		--Lisataan random powerup random aikoihin, valittu yleisyys vaikuttaa 
+		if math.random(0, 2000 / powerupYleisyys) == 0 then powerup:lisaaRandom() end
+		
+		if sataako then
+			sade:update(dt)
+		end
+		
+		--Jos kameran tila on kuolema, pelaajat eivat voi liikkua
+		if nykKamera=="kuolema" then
+			for _, pelaaja in pairs( pelaajat ) do
+				pelaaja:pysahdy( )
+			end
+		else --Muuten voi liikkua
+			self:liikutaPelaajat()
+		end
+		
+		--Tunarit-ruutu jos molemmat ovat kuolemassa pudotukseen
+		if pelaajat[1].y > 500 and pelaajat[2].y > 500 and pelaajat[1].elamat == 1 and pelaajat[2].elamat == 1 then 
+			Gamestate.switch(tunarit, tasoNimi, maxElamat, {pelaajat[1].hahmo, pelaajat[2].hahmo})
+		end	
+		
+		--Paussi jos ikkuna taustalla
+		if not love.window.hasFocus( ) then
+		 Gamestate.push(paussivalikko)
+		end 
+		
+		--Huono vahikotunnistus: jos pelaajat lahekkain, kontakti. Tarkempi maaritys pelaaja-luokassa
+		if math.isAbout(pelaajat[1].x,pelaajat[2].x, 60) and math.isAbout(pelaajat[2].y, pelaajat[1].y, 32) then 
+			for _, pelaaja in pairs( pelaajat ) do		    
+				local toinen = pelaaja.numero%2+1	
+				pelaaja:kontakti(pelaajat[toinen])
+			end
+		end
+			
 		for _, pelaaja in pairs( pelaajat ) do
-			pelaaja:pysahdy( true )
+
+			pelaaja:update( dt, painovoima )
+
 		end
-	else --Muuten voi liikkua
-		self:liikutaPelaajat()
-	end
-	
-	--Tunarit-ruutu jos molemmat ovat kuolemassa pudotukseen
-	if pelaajat[1].y > 500 and pelaajat[2].y > 500 and pelaajat[1].elamat == 1 and pelaajat[2].elamat == 1 then 
-		Gamestate.switch(tunarit, tasoNimi, maxElamat, {pelaajat[1].hahmo, pelaajat[2].hahmo})
-	end	
-	
-	--Paussi jos ikkuna taustalla
-	if not love.window.hasFocus( ) then
-	 Gamestate.push(paussivalikko)
-	end 
-	
-	--Huono vahikotunnistus: jos pelaajat lahekkain, kontakti. Tarkempi maaritys pelaaja-luokassa
-	if math.isAbout(pelaajat[1].x,pelaajat[2].x, 60) and math.isAbout(pelaajat[2].y, pelaajat[1].y, 32) then 
-		for _, pelaaja in pairs( pelaajat ) do		    
-			local toinen = pelaaja.numero%2+1	
-			pelaaja:kontakti(pelaajat[toinen])
+		
+		--Kamerat
+		if nykKamera=="tavallinen" then
+			camera:liikkuvaKamera(pelaajat[1].x,pelaajat[1].y,pelaajat[2].x,pelaajat[2].y)
+		
+		elseif nykKamera=="Shake" then
+			camera:shake(pelaajat[1].x,pelaajat[1].y,pelaajat[2].x,pelaajat[2].y)
+		
+		elseif nykKamera=="kuolema" then
+		  camera:kuolemaKamera(pelaajat[1].x,pelaajat[1].y,pelaajat[2].x,pelaajat[2].y)
+		  
+		  if camera:kuolemaKamera(pelaajat[1].x,pelaajat[1].y,pelaajat[2].x,pelaajat[2].y)==true then
+		  
+			nykKamera="tavallinen"
+			print("Kamera:"..nykKamera)
+
+		  end
 		end
-	end
 		
-	for _, pelaaja in pairs( pelaajat ) do
-
-		pelaaja:update( dt, painovoima )
-
-	end
-	
-	--Kamerat
-	if nykKamera=="tavallinen" then
-		camera:liikkuvaKamera(pelaajat[1].x,pelaajat[1].y,pelaajat[2].x,pelaajat[2].y)
-	
-	elseif nykKamera=="Shake" then
-		camera:shake(pelaajat[1].x,pelaajat[1].y,pelaajat[2].x,pelaajat[2].y)
-	
-	elseif nykKamera=="kuolema" then
-	  camera:kuolemaKamera(pelaajat[1].x,pelaajat[1].y,pelaajat[2].x,pelaajat[2].y)
-	  
-	  if camera:kuolemaKamera(pelaajat[1].x,pelaajat[1].y,pelaajat[2].x,pelaajat[2].y)==true then
-	  
-		nykKamera="tavallinen"
-	   	print("Kamera:"..nykKamera)
-
-	  end
-	end
-	
-	--Paivitetaan animaatiot
+		--Paivitetaan animaatiot
+			
+		for i, pelaaja in pairs ( pelaajat ) do	
+			pelaaja.nykAnim:update(dt)
+		end	
 		
-	for i, pelaaja in pairs ( pelaajat ) do	
-		pelaaja.nykAnim:update(dt)
-	end
-	
-   end
+    end
 end
 
 
 	--Liikkuminen, pitaisi siirtaa varmaankin pelaaja-luokkaan
 function peli:liikutaPelaajat()		
-  for i, pelaaja in pairs ( pelaajat ) do	
-   --Ei botti, pelaaja ohjaa nappaimistolla
-   if not pelaaja.onBotti then
-    if love.keyboard.isDown(pelaajienKontrollit[i].YLOS) then
-	
-        pelaaja:hyppaa()	
+	for i, pelaaja in pairs ( pelaajat ) do	
+		--Ei botti, pelaaja ohjaa nappaimistolla
+		if not pelaaja.onBotti then
 		
-	end
-	if love.keyboard.isDown(pelaajienKontrollit[i].OIKEALLE) and not love.keyboard.isDown(pelaajienKontrollit[i].VASEMMALLE) then
+			if love.keyboard.isDown(pelaajienKontrollit[i].YLOS) then
 	
-        pelaaja:liikuOikealle()
-	
-    elseif love.keyboard.isDown(pelaajienKontrollit[i].VASEMMALLE) and not love.keyboard.isDown(pelaajienKontrollit[i].OIKEALLE)  then
-	
-        pelaaja:liikuVasemmalle()
-	
-	 elseif love.keyboard.isDown(pelaajienKontrollit[i].LYONTI) then
-	    
-        pelaaja:lyonti()
-	
-	 elseif love.keyboard.isDown(pelaajienKontrollit[i].TORJUNTA) then
-	 
-        pelaaja:torjunta()
+			pelaaja:hyppaa()	
 		
-	elseif love.keyboard.isDown(pelaajienKontrollit[i].HEITTOASE) then
-	 
-        pelaaja:heitto()
-	else
-		pelaaja:pysahdy()
-		
-	end
-
-  --Botti ohjaa
-  else 
-	botti:update()
-  end
- end 
+			end
+			
+			if love.keyboard.isDown(pelaajienKontrollit[i].OIKEALLE) and not love.keyboard.isDown(pelaajienKontrollit[i].VASEMMALLE) then
+			
+				pelaaja:liikuOikealle()
+			
+			elseif love.keyboard.isDown(pelaajienKontrollit[i].VASEMMALLE) and not love.keyboard.isDown(pelaajienKontrollit[i].OIKEALLE)  then
+			
+				pelaaja:liikuVasemmalle()
+			
+			elseif love.keyboard.isDown(pelaajienKontrollit[i].LYONTI) then
+				
+				pelaaja:lyonti()
+			
+		    elseif love.keyboard.isDown(pelaajienKontrollit[i].TORJUNTA) then
+			 
+				pelaaja:torjunta()
+				
+			elseif love.keyboard.isDown(pelaajienKontrollit[i].HEITTOASE) then
+			 
+				pelaaja:heitto()
+				
+			else
+			
+				pelaaja:pysahdy()
+				
+			end
+			
+	    --Botti ohjaa
+	    else 
+			botti:update()
+		end
+	end 
 end
 
 function peli:draw()
@@ -209,25 +233,41 @@ function peli:draw()
 		sade:draw()
 	end
 	
-	nykyinenTaso:draw()
+	nykyinenTaso:draw() --Piirtaa tason (ATL)
 	
 	for _, pelaaja in pairs( pelaajat ) do
 		pelaaja:draw()	
 		if debugMode then
-			love.graphics.circle("fill", pelaaja.x, pelaaja.y, 10)
+			love.graphics.circle("fill", pelaaja.x, pelaaja.y, 10) --Piirtaa ympyran pelaajan kordinaatteihin
 		end
 	end
 	
 	powerup:draw()
-
+	
+	if sumu.tila==true then
+		love.graphics.draw(sumu.kuva, -500, -500, 0, 4, 4)
+	end
+	
 	camera:unset() --Ei enaa liikkuva kamera	
+	
+	if kulunutAika < 4 then --Alkulaskenta
+		if kulunutAika < 1 then
+			love.graphics.print(3, 350, 200, 0, 2)
+		elseif kulunutAika < 2 then
+			love.graphics.print(2, 350, 200, 0, 2)
+		elseif kulunutAika < 3 then
+			love.graphics.print(1, 350, 200, 0, 2)
+		else
+			love.graphics.print("GO!", 350, 200, 0, 2)
+		end	
+	end
 	
 	if debugMode==true then
 
 		love.graphics.print(pelaajat[1].tila, 0,0,0,0.5,0.5)
-		love.graphics.print(pelaajat[2].tila,500,0,0,0.5,0.5)
-		love.graphics.print(tostring(pelaajat[1].nykAnim), 0,100,0,0.5,0.5)
-		love.graphics.print(tostring(pelaajat[2].nykAnim),500,100,0,0.5,0.5)
+		love.graphics.print(pelaajat[2].tila, 600,0,0,0.5,0.5)
+		love.graphics.print("x: "..math.ceil(pelaajat[1].x) .. " y: "..math.ceil(pelaajat[1].y), 0,50,0,0.5,0.5)
+		love.graphics.print("x: "..math.ceil(pelaajat[2].x) .. " y: "..math.ceil(pelaajat[2].y), 600,50,0,0.5,0.5)
 		love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 300, 10)
 		
 	end

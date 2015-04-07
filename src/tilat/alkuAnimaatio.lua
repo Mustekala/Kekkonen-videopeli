@@ -17,7 +17,7 @@ function alkuAnimaatio:update(dt)
 			self.tila = "teksti3" 
 		end
 	elseif self.tila == "teksti3"  then
-		self.teksti="Mutta harva tietää"
+		self.teksti="Mutta harva tietaa"
 		if self.kulunutAika > 12.8 then
 			self.tila = "teksti4" 
 		end

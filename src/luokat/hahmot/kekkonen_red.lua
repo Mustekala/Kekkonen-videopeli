@@ -49,6 +49,12 @@ function kekkonen_red:lataaAnimaatiot()
 	self.kaantyminen_anim = newAnimation(kuvat["kekkonen_kaantyy_red.png"],34,61,0.05,3)
 	self.kaantyminen_anim:setMode("once")
 	
+	self.kuolema_anim = newAnimation(kuvat["kekkonen_kuolema_red.png"],32,62,0.15,6)
+	self.kuolema_anim:setMode("once")
+	
+	self.respawn_anim = newAnimation(kuvat["kekkonen_respawn_red.png"],32,61,0.1,18)
+	self.respawn_anim:setMode("once")
+	
 	print("Animaatiot ladattu: kekkonen")
 end
 
