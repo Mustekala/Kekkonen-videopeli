@@ -4,6 +4,9 @@ numero = 0
 --Otetaan nopeusboost kayttoon pelaajalle
 function nopeusBoost:kayta( pelaajaNumero )
   if not self.kaytossa then
+	
+	TEsound.play(TEHOSTE_POLKU.."nopeusBoost.ogg")
+	
 	self.kaytossa = true
 	numero = pelaajaNumero
 

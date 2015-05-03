@@ -24,11 +24,15 @@ kekkonen_green = {
 
 function kekkonen_green:lataaAnimaatiot()
 
-	self.kavely_anim = newAnimation(kuvat["kekkonen_kavely_green.png"],32,61,0.07,7)
+	self.kavely_anim = newAnimation(kuvat["kekkonen_kavely_green.png"],32,61,0.06,7)
 
-	self.lyonti_anim = newAnimation(kuvat["kekkonen_lyonti_green.png"],42,64,0.045,10)
+	self.lyonti_anim = newAnimation(kuvat["kekkonen_lyo_oikea_green.png"],42,64,0.045,7)
+	self.lyonti_anim:setMode("once")
 
-	self.heitto_anim = newAnimation(kuvat["kekkonen_heitto_green.png"],40,65,0.04,7)
+	self.critLyonti_anim = newAnimation(kuvat["kekkonen_lyo_vasen_green.png"],42,64,0.045,7)
+	self.critLyonti_anim:setMode("once")
+
+	self.heitto_anim = newAnimation(kuvat["kekkonen_heitto_green.png"],40,65,0.05,10)
 	self.heitto_anim:setMode("once")
 
 	self.paikallaan_anim = newAnimation(kuvat["kekkonen_paikallaan_green.png"],42,64,0.5,2)
@@ -56,7 +60,7 @@ function kekkonen_green:lataaAnimaatiot()
 	self.respawn_anim = newAnimation(kuvat["kekkonen_respawn_green.png"],32,61,0.1,18)
 	self.respawn_anim:setMode("once")
 	
-	print("Animaatiot ladattu: kekkonen")
+	print("Animaatiot ladattu: kekkonen green")
 end
 
 function kekkonen_green:enter()

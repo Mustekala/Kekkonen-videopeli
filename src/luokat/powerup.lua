@@ -22,7 +22,6 @@ end
 
 --Kayta powerup pelaajalle	
 function powerup:kayta( nimi, pelaajaNumero )
-	TEsound.play(TEHOSTE_POLKU.."/Powerup1.ogg")
 	print("Pelaaja "..pelaajaNumero.." sai powerupin "..nimi)
 	_G[nimi]:kayta(pelaajaNumero)
 end

@@ -165,6 +165,9 @@ end
 
 print("Ladataan aanet")
 
+critTod = 20 --Todennakoisyys criteille(%)
+
+critAanet = {TEHOSTE_POLKU.."Hurt1.ogg"}
 vahinkoAanet = {TEHOSTE_POLKU.."Hurt2.ogg", TEHOSTE_POLKU.."Hurt3.ogg", TEHOSTE_POLKU.."Hurt4.ogg"}
 kavelyAanet = {TEHOSTE_POLKU.."footstep.ogg", TEHOSTE_POLKU.."footstep2.ogg"}
 kavelyAanetAjastin = 0
@@ -173,6 +176,8 @@ onkoAani=true
 
 print("Ladataan musiikki")
 --TODO mappikohtaiset musiikkikirjastot
+onkoMusiikki=true
+
 
 peliAlkanut=false
 

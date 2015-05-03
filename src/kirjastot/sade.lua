@@ -1,7 +1,7 @@
 sade={}
 
 --[[
-Tama "kirjasto" tekee sadetta. Pisarat pomppivat kartan pinnoilta. Taustalla satunnaisia salamia 
+Tama "kirjasto" tekee sadetta. Pisarat pomppivat kartan pinnoilta. Taustalla satunnaisia salamia. 
 Lainausmerkit siksi, etta tama tarvitsee toimiakseen ATL-kartan, jossa on layer "seinat". Taman voisi korvata parametrilla. 
 Parametrit: kartta, x = aloitus x-aste, y = aloitus y-aste, leveys = sateen leveys, maara = kerroin pisaroiden maarälle
 --]]
@@ -40,7 +40,8 @@ function sade:update(dt)
 		if self:tarkistaTormays(self.kartta, pisara.x, pisara.y) then
 			self:kimpoa(pisara)
 		end
-		if pisara.kimmonnut > 5 or pisara.y > 2000 then --Jos pisara on kimmonnut jo yli 5 kertaa tai pudonnut, poista se
+		--Jos pisara on kimmonnut jo yli 5 kertaa tai pudonnut, poista se
+		if pisara.kimmonnut > 5 or pisara.y > 2000 then 
 			table.remove(pisarat, i)
 		end
 		

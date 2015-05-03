@@ -72,7 +72,7 @@ function alkuAnimaatio:draw()
 		love.graphics.print(self.teksti, 100, 200)
 	else
 		camera:set()
-		love.graphics.draw(kuvat["eduskuntaAloitus.png"], 0, 300, 0, 0.835,0.8)
+		love.graphics.draw(kuvat["eduskunta_aloitus.png"], 0, 300, 0, 0.835,0.8)
 		love.graphics.draw(kuvat["kekkonen_blu.png"], 200, 245, 0, 1, 1)
 		love.graphics.draw(kuvat["kekkonen_red.png"], 600, 245, 0, -1, 1)
 		love.graphics.print("KEKKONEN\n VIDEOPELI", 950, 240, 0 ,0.5, 0.5)

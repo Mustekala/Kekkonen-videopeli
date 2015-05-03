@@ -5,7 +5,7 @@
 
 
 -- Luodaan itse avausruutu-tila pelille
-avausRuutu = {}
+avausRuutu = {nimi="avausRuutu"}
 
 
 function avausRuutu:init()
@@ -58,7 +58,9 @@ function avausRuutu:keypressed( nappain )
 		TEsound.play("media/aanet/tehosteet/menuclick.ogg")
 		print( "Paavalikko ")
 		Gamestate.switch( valikko, self )
-
+	
+	elseif nappain == "backspace" then
+		Gamestate.switch( peli, "Pilvenpiirtaja", 2 ,5, {"kekkonen_blu", "kekkonen_red"}, 0)
+	
 	end
-
 end

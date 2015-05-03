@@ -4,6 +4,7 @@ numero = 0
 --Annetaan lisaterveytta pelaajalle
 function lisaTerveys:kayta( pelaajaNumero )
 	if not self.kaytossa then
+		TEsound.play(TEHOSTE_POLKU.."lisaTerveys.ogg")
 		self.kaytossa = true
 		self.kesto = 0.8
 		numero = pelaajaNumero

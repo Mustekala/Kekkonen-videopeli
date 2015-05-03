@@ -1,3 +1,5 @@
+bump -Collision-juttu, ei käytössä tällä hetkellä
+
 camera - kamerajuttuja - hump
 
 class - olio-ohjemointijuttuja - hump
@@ -8,8 +10,6 @@ menu - valikkojuttuja - https://love2d.org/forums/viewtopic.php?f=5&t=3636 (sais
 
 signal - joku signaalirekisterjuttu, selvitetään myöhemmin - hump - ehka turha?
 
-SoundManager - aani - en edes tieda mista tama on
-
 STI - Simple Tiled Implementation, taman implementointi on viela vaiheessa
 
 timer - ajastinjuttuja ja tweenausjotain - hump
@@ -17,3 +17,5 @@ timer - ajastinjuttuja ja tweenausjotain - hump
 vector - 2D-vektorilaskentajuttuja - hump - turha?
 
 vector-light - kevyempi vector - hump - turha?
+
+TEsound -soundmanager

@@ -176,6 +176,13 @@ function hahmovalikko:keypressed( nappain )
 	if nappain=="escape" then
 		print( "Paavalikko" )
 		Gamestate.pop()
+			
+	elseif nappain == "f1" then
+		if valinta1Valmis and valinta2Valmis then
+			Gamestate.push( apuva , "hahmovalikko", "muutValinnat")
+		else
+			Gamestate.push( apuva , "hahmovalikko")
+		end	
 	end
 	
 	if not valinta2Valmis then	

@@ -5,9 +5,11 @@
 asetukset = {}
 
 function asetukset:init()
-	onkoMusiikki=true
+
 	debugMode=false 
+	
 	volyymi=1
+	
 	asetusvalikko= Menu.new()
 
 	asetusvalikko:addItem{

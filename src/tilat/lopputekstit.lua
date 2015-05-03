@@ -76,14 +76,18 @@ end
 
 function lopputekstit:enter( taso )
     rotation=0	
+	
 	TEsound.pause("musiikki")
-	TEsound.play("media/aanet/musiikki/StockSounds.ogg","lopputekstit")
-
+	if onkoMusiikki then
+		TEsound.play("media/aanet/musiikki/StockSounds.ogg","lopputekstit")
+	end
+	
 	tekstinY=650
 	x=0
 	y=1
 	kekkoset = {}
 	ajastin=0
+	
 end
 
 

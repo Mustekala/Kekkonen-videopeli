@@ -84,30 +84,36 @@ function camera:newLayer(scale, func)
   table.sort(self.layers, function(a, b) return a.scale < b.scale end)
 end
 
-function camera:kuolemaKamera(px,py,p2x,p2y) --Liikkuu tasaisesti, seuraa huonosti
-
-	Etaisyys = math.realDist(px,py, p2x, p2y) /600
-
-	if Scale>1.5 then
+--Liikkuu tasaisesti, seuraa huonosti
+function camera:kuolemaKamera(px,py,p2x,p2y, voittajaKamera) 
 	
-	 Scale=1.5
-	 
-	else
+	voittajaKamera = voittajaKamera or false
 	
-	 if Scale<0.5 then
+	Etaisyys = math.realDist(px,py, p2x, p2y) / 600
+	
+	if not voittajaKamera then
 		
-	  Scale=0.5
-	
-	 else
-		if Scale>Etaisyys then	 
-			Scale=Scale-0.01	
-		elseif Scale<Etaisyys then
-			Scale=Scale+0.01
+		if Scale>1.5 then	
+			Scale=1.5
+		else		
+			if Scale<0.5 then			
+				Scale=0.5
+			else
+				if Scale>Etaisyys then	 
+					Scale=Scale-0.01	
+				elseif Scale<Etaisyys then
+					Scale=Scale+0.01
+				end
+			end
 		end
-	 end
-	end
+		
+		camera:setScale(Scale,Scale)
+		
+	else 
 	
-	camera:setScale(Scale,Scale)
+		Scale = self.scaleX	
+		
+	end
 	
 	local width = love.graphics.getWidth()
 	local height = love.graphics.getHeight()
@@ -119,48 +125,44 @@ function camera:kuolemaKamera(px,py,p2x,p2y) --Liikkuu tasaisesti, seuraa huonos
 
 		cameraKohdeX=math.floor(px - math.dist(px,p2x)/2 - width / 2*Scale)
 
-	end
-	if p2x>px then
-
+	else
+	
 		cameraKohdeX=math.floor(p2x - math.dist(px,p2x)/2 - width / 2*Scale)
 			
 	end	
+	
 	if py>p2y then 
 	 
-	  cameraKohdeY=math.floor(py - math.dist(py,p2y)/2 - height / 2*Scale)
+		cameraKohdeY=math.floor(py - math.dist(py,p2y)/2 - height / 2*Scale)
 	 
-	 else
+	else
 	 
-	  cameraKohdeY=math.floor(py + math.dist(py,p2y)/2 - height / 2*Scale)
+		cameraKohdeY=math.floor(py + math.dist(py,p2y)/2 - height / 2*Scale)
 	 
     end
 	
-	if cameraKohdeX <camera:getX() then
+	if cameraKohdeX < camera:getX() then
 		if cameraKohdeX<camera:getX()-100 then
-		 camera:setX(camera:getX()-4)
+			camera:setX(camera:getX()-4)		
 		else
-		 camera:setX(camera:getX()-2)	  	  
+			camera:setX(camera:getX()-1)	  	  
 		end
 	end
 	
-	if cameraKohdeX>camera:getX() then 
+	if cameraKohdeX>camera:getX() then
 		if cameraKohdeX>camera:getX()+100 then
-		 camera:setX(camera:getX()+4)	 
+			camera:setX(camera:getX()+4)		
 		else
-		 camera:setX(camera:getX()+2)  
+			camera:setX(camera:getX()+1)  
 		end
 	end
 	
-	if cameraKohdeY<camera:getY() then
-	
-	 camera:setY(camera:getY()-2)
-	
+	if cameraKohdeY<camera:getY() then	
+		camera:setY(camera:getY()-2)	
 	end
 	
 	if cameraKohdeY>camera:getY() then
-	
-	 camera:setY(camera:getY()+2)
-	
+		camera:setY(camera:getY()+2)
 	end
 	
 	--Jos kamera on liikkunut about oikeaan kohtaan, palauta true (joka vaihtaa takaisin tavalliseen kameraan)
@@ -168,6 +170,15 @@ function camera:kuolemaKamera(px,py,p2x,p2y) --Liikkuu tasaisesti, seuraa huonos
 		return true	
 	end
 		
+end
+
+function camera:voittajaKamera(x, y)
+	
+	camera:scale(0.99)
+	if not self:kuolemaKamera(x, y, x + 10, y + 10, true)==true then
+		self:kuolemaKamera(x, y, x + 10, y + 10, true)
+	end	
+	
 end
 
 function camera:draw()
@@ -184,7 +195,7 @@ end
 
 function camera:shake(px,py,p2x,p2y)
 	
-	self:kuolemaKamera(px+math.random(-1,1),py+math.random(-1,1),p2x+math.random(-1,1),p2y+math.random(-1,1))
+	self:liikkuvaKamera(px+math.random(-5,5),py+math.random(-5,5),p2x+math.random(-5,5),p2y+math.random(-5,5))
 	
 	kameranKayttokerrat=kameranKayttokerrat+1
 

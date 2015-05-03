@@ -39,7 +39,7 @@ function tunarit:update( dt )
 		ajastin = ajastin + dt
 		lumisade_anim:update(dt)
 	end	
-	if ajastin > 1.5 then
+	if ajastin > 3.5 then
 		print( "Uusi peli,"..self.taso)
 		Gamestate.switch( peli, self.taso, 2, self.elamat, self.hahmot, 0)
 	end	
@@ -71,7 +71,7 @@ function tunarit:keypressed( nappain )
 		
 	-- Vaihdetaan lumisade-modi
 	elseif nappain == "return" then
-		TEsound.play("media/aanet/tehosteet/white_noise.ogg")
+		TEsound.play("media/aanet/tehosteet/radio_noise.ogg")
 		lumisade = true
 	end
 

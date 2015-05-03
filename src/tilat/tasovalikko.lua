@@ -18,7 +18,7 @@ function tasovalikko:enter(aiempi , pelaajaMaara, elamienMaara, hahmot, bottiVal
 			toiminto = function()
 
 				print( "Peli, tasona " .. tasonNimi )
-				Gamestate.switch( peli, tasonNimi, pelaajaMaara ,elamienMaara, hahmot, bottienMaara)
+				Gamestate.switch( peli, tasonNimi, pelaajaMaara, elamienMaara, hahmot, bottienMaara)
 			end
 		}
 
@@ -52,6 +52,9 @@ function tasovalikko:keypressed( nappain )
 	if nappain=="escape" then
 		print( "Paavalikko" )
 		Gamestate.switch(valikko)
+	
+	elseif nappain == "f1" then
+		Gamestate.push(apuva, "tasovalikko")
 	end
 
 	tasojenValikko:keypressed( nappain )

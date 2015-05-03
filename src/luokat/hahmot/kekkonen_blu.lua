@@ -26,10 +26,14 @@ function kekkonen_blu:lataaAnimaatiot()
 
 	self.kavely_anim = newAnimation(kuvat["kekkonen_kavely_blu.png"],33,61,0.07,7)
 
-	self.lyonti_anim = newAnimation(kuvat["kekkonen_lyonti_blu.png"],42,64,0.045,10)
+	self.lyonti_anim = newAnimation(kuvat["kekkonen_lyo_oikea_blu.png"],42,64,0.05,7)
+	self.lyonti_anim:setMode("once")
 
-	self.heitto_anim = newAnimation(kuvat["kekkonen_heitto_blu.png"],40,65,0.04,7)
-	self.heitto_anim:setMode("bounce")
+	self.critLyonti_anim = newAnimation(kuvat["kekkonen_lyo_vasen_blu.png"],42,64,0.05,7)
+	self.critLyonti_anim:setMode("once")
+	
+	self.heitto_anim = newAnimation(kuvat["kekkonen_heitto_blu.png"],40,65,0.05,10)
+	self.heitto_anim:setMode("once")
 
 	self.paikallaan_anim = newAnimation(kuvat["kekkonen_paikallaan_blu.png"],42,64,0.5,2)
 
@@ -56,7 +60,7 @@ function kekkonen_blu:lataaAnimaatiot()
 	self.respawn_anim = newAnimation(kuvat["kekkonen_respawn_blu.png"],32,61,0.1,18)
 	self.respawn_anim:setMode("once")
 	
-	print("Animaatiot ladattu: kekkonen")
+	print("Animaatiot ladattu: kekkonen blu")
 end
 
 function kekkonen_blu:enter()

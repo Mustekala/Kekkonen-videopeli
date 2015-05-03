@@ -43,7 +43,6 @@ function TEsound.playLooping(sound, tags, n, volume, pitch)
 	)
 end
 
-
 -- Functions for modifying sounds that are playing (passing these a tag instead of a string is generally preferable)
 
 --- Sets the volume of channel or tag and its loops (if any).

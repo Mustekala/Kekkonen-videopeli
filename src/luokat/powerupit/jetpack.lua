@@ -9,7 +9,8 @@ numero = 0
 --Otetaan jetpack kayttoon pelaajalle
 function jetpack:kayta( pelaajaNumero )
   if not self.kaytossa then
-  
+	
+	TEsound.play(TEHOSTE_POLKU.."jetpack.ogg")
     self.nykAnim = self.anim_idle --Animaatio
 	self.kaytossa = true		  --Onko kaytossa
 	numero = pelaajaNumero		  --Kayttava pelaaja

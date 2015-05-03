@@ -16,12 +16,12 @@ function peli:init()
 
 	onkoPaussi = false
 
-	pelaajat = {}
-	
 end
 
 function peli:enter( aiempi, tasonNimi, pelaajaMaara, elamienMaara, hahmot, bottienMaara)
-
+	
+	pelaajat = {}
+	
 	print("Aiempi state:"..aiempi.nimi) 
 	
 	intro = false
@@ -47,6 +47,8 @@ function peli:enter( aiempi, tasonNimi, pelaajaMaara, elamienMaara, hahmot, bott
 	tasoNimi = tasonNimi
 
    if not peliAlkanut then
+	
+	nykKamera = "tavallinen"
 	
 	kulunutAika = 0 --Ajastin pelin kulumiselle
 	
@@ -117,14 +119,9 @@ function peli:update( dt )
 			self:liikutaPelaajat()
 		end
 		
-		--Tunarit-ruutu jos molemmat ovat kuolemassa pudotukseen
-		if pelaajat[1].y > 500 and pelaajat[2].y > 500 and pelaajat[1].elamat == 1 and pelaajat[2].elamat == 1 then 
-			Gamestate.switch(tunarit, tasoNimi, maxElamat, {pelaajat[1].hahmo, pelaajat[2].hahmo})
-		end	
-		
 		--Paussi jos ikkuna taustalla
 		if not love.window.hasFocus( ) then
-		 Gamestate.push(paussivalikko)
+			Gamestate.push(paussivalikko)
 		end 
 		
 		--Huono vahikotunnistus: jos pelaajat lahekkain, kontakti. Tarkempi maaritys pelaaja-luokassa
@@ -142,21 +139,24 @@ function peli:update( dt )
 		end
 		
 		--Kamerat
-		if nykKamera=="tavallinen" then
+		if nykKamera == "tavallinen" then
 			camera:liikkuvaKamera(pelaajat[1].x,pelaajat[1].y,pelaajat[2].x,pelaajat[2].y)
 		
-		elseif nykKamera=="Shake" then
+		elseif nykKamera == "Shake" then
 			camera:shake(pelaajat[1].x,pelaajat[1].y,pelaajat[2].x,pelaajat[2].y)
 		
-		elseif nykKamera=="kuolema" then
-		  camera:kuolemaKamera(pelaajat[1].x,pelaajat[1].y,pelaajat[2].x,pelaajat[2].y)
-		  
-		  if camera:kuolemaKamera(pelaajat[1].x,pelaajat[1].y,pelaajat[2].x,pelaajat[2].y)==true then
-		  
-			nykKamera="tavallinen"
-			print("Kamera:"..nykKamera)
-
-		  end
+		elseif nykKamera == "kuolema" then
+			camera:kuolemaKamera(pelaajat[1].x,pelaajat[1].y,pelaajat[2].x,pelaajat[2].y)
+			  
+			if camera:kuolemaKamera(pelaajat[1].x,pelaajat[1].y,pelaajat[2].x,pelaajat[2].y)==true then		  
+				nykKamera="tavallinen"
+				print("Kamera:"..nykKamera)
+			end
+			
+		--Mahdollinen voittajakamera
+		elseif nykKamera == "voittajaKamera" then			
+			camera:voittajaKamera(voittaja.x, voittaja.y)				
+		
 		end
 		
 		--Paivitetaan animaatiot
@@ -173,11 +173,11 @@ end
 function peli:liikutaPelaajat()		
 	for i, pelaaja in pairs ( pelaajat ) do	
 		--Ei botti, pelaaja ohjaa nappaimistolla
-		if not pelaaja.onBotti then
+		if not pelaaja.onBotti and not pelaaja.kuollut then
 		
 			if love.keyboard.isDown(pelaajienKontrollit[i].YLOS) then
 	
-			pelaaja:hyppaa()	
+				pelaaja:hyppaa()	
 		
 			end
 			
@@ -189,7 +189,7 @@ function peli:liikutaPelaajat()
 			
 				pelaaja:liikuVasemmalle()
 			
-			elseif love.keyboard.isDown(pelaajienKontrollit[i].LYONTI) then
+			elseif love.keyboard.isDown(pelaajienKontrollit[i].LYONTI) and pelaaja.voiLyoda then
 				
 				pelaaja:lyonti()
 			
@@ -197,7 +197,7 @@ function peli:liikutaPelaajat()
 			 
 				pelaaja:torjunta()
 				
-			elseif love.keyboard.isDown(pelaajienKontrollit[i].HEITTOASE) then
+			elseif love.keyboard.isDown(pelaajienKontrollit[i].HEITTOASE) and pelaaja.voiHeittaa then
 			 
 				pelaaja:heitto()
 				
@@ -259,6 +259,10 @@ function peli:draw()
 			love.graphics.print(1, 350, 200, 0, 2)
 		else
 			love.graphics.print("GO!", 350, 200, 0, 2)
+			if estaSoitto ~= true then --Soita vain kerran
+				TEsound.play(TEHOSTE_POLKU.."Go!.ogg", "Go")
+				estaSoitto = true
+			end	
 		end	
 	end
 	
@@ -289,6 +293,10 @@ function peli:keypressed( nappain )
 		Gamestate.push(paussivalikko,"peli")
 		
 		print("Paussivalikko")
+	
+	elseif nappain == "f1" then
+		
+		Gamestate.push(apuva, "peli")
 		
 	end
 	
@@ -311,6 +319,8 @@ function peli:luoPelaajat(hahmot, bottienMaara)
 	-- print( nykyinenTaso.layers["Syntykohdat"].objects[1].x )
 	
 	botit = {} --Tyhjennetaan mahdolliset botit aiemmasta pelista
+	
+	voittaja = nil --Voittaja viela maarittamaton
 	
 	for i = 1, pelaajienMaara do
 		--Botit
