@@ -51,7 +51,7 @@ helpFunctions = require ( KIRJASTO_POLKU .. "helpFunctions") --Hyodyllisia funkt
 
 require ( KIRJASTO_POLKU .. "sade") --Yksinkertainen sade-kirjasto
 
-print("Ladataan omat tilat, yms.")
+print("Ladataan omat luokat")
 --luokat
 require( LUOKKA_POLKU .. "botti" )
 require( LUOKKA_POLKU .. "pelaaja" )
@@ -59,6 +59,7 @@ require( LUOKKA_POLKU .. "powerup" )
 
 --Tilat
 for _, tila in ipairs( love.filesystem.getDirectoryItems( TILA_POLKU ) ) do --Hakee kaikki tilat tilapolusta
+	print("Ladataan tila: "..tila)
 	require(TILA_POLKU..string.gsub(tila,".lua","")) --Leikkaa tiedostonimista .lua-paatteen, require ei halua sita
 end	
 hudTila = "sydan" --Hudin ulkonako

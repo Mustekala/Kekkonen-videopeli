@@ -207,36 +207,39 @@ end
 
 function camera:liikkuvaKamera(px,py,p2x,p2y) --Seuraa tasaisesti pelaajia
 
-Scale= math.realDist(px,py, p2x, p2y) /600
-	
-	if Scale>1.5 then
-	Scale=1.5
-	
+	Scale= math.realDist(px,py, p2x, p2y) /600
+		
+	if Scale > 1.5 then
+		
+		Scale = 1.5
+		
 	end
-	if Scale<0.5 then
 	
-	Scale=0.5
-	
+	if Scale<0.45 then
+		
+		Scale=0.45
+		
 	end
 
-	camera:setScale(Scale,Scale)
+		camera:setScale(Scale,Scale)
 
-local width= love.graphics.getWidth()
-local height= love.graphics.getHeight()
+	local width= love.graphics.getWidth()
+	local height= love.graphics.getHeight()
 
-if px>p2x then
-	 if py>p2y then 
-	 self:setPosition(math.floor(px - math.dist(px,p2x)/2 - width / 2*Scale),math.floor(py - math.dist(py,p2y)/2 - height / 2*Scale))
-	 else
-	 self:setPosition(math.floor(px - math.dist(px,p2x)/2 - width / 2*Scale),math.floor(py + math.dist(py,p2y)/2 - height / 2*Scale))
-	 end
-	 
-	 else
-	 if py>p2y then 
-	 self:setPosition(math.floor(px + math.dist(px,p2x)/2 - width / 2*Scale),math.floor(py - math.dist(py,p2y)/2 - height / 2*Scale))
-	 else
-	 self:setPosition(math.floor(px + math.dist(px,p2x)/2 - width / 2*Scale),math.floor(py + math.dist(py,p2y)/2 - height / 2*Scale))
-    end
-end
+	if px>p2x then
+		 if py>p2y then 
+		 self:setPosition(math.floor(px - math.dist(px,p2x)/2 - width / 2*Scale),math.floor(py - math.dist(py,p2y)/2 - height / 2*Scale))
+		 else
+		 self:setPosition(math.floor(px - math.dist(px,p2x)/2 - width / 2*Scale),math.floor(py + math.dist(py,p2y)/2 - height / 2*Scale))
+		 end
+		 
+		 else
+		 if py>p2y then 
+		 self:setPosition(math.floor(px + math.dist(px,p2x)/2 - width / 2*Scale),math.floor(py - math.dist(py,p2y)/2 - height / 2*Scale))
+		 else
+		 self:setPosition(math.floor(px + math.dist(px,p2x)/2 - width / 2*Scale),math.floor(py + math.dist(py,p2y)/2 - height / 2*Scale))
+		end
+	end
+	
 end
 

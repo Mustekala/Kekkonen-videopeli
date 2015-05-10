@@ -11,7 +11,12 @@ function love.conf( t )
 
 	-- Asetetaan fulscreen-tila pois (boolean)
     t.window.fullscreen = false
-
+	--Fullscreen-tila normaaliksi, eli resoluutio sailyy fullscreenissa
+	t.window.fullscreentype = "normal" 
+	
+	--Ikoni ikkunalle
+	t.window.icon = "/media/kuvat_jne/muut/Kekkonen_ikoni.png" 
+	
 	-- Asetetaan vsync-tila paalle (boolean)
     t.window.vsync = true
 

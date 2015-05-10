@@ -34,7 +34,7 @@ function apuva:init( )
 	
 	UP & DOWN (liiku)
 	ENTER     (valitse)
-	Elamien maara (min 1)
+	Elamien maara (<0 = loputon peli)
 	Bottien maara (max 2)
 	Poweruppien yleisyys (1-5)
 	]]

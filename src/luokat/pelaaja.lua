@@ -30,9 +30,9 @@ function pelaaja:luo( pelaajanHahmo, pelaajanKontrollit, pelaajanNimi, pelaajanN
 		animVoiVaihtua=true, --Voiko animaatio vaihtua
 		animSuunta = 1,
 		
-		voiLyoda=true, --Voiko pelaaja lyoda
+		voiLyoda = true, --Voiko pelaaja lyoda
 		
-		voiHeittaa=true, --Voiko pelaaja heittaa
+		voiHeittaa = true, --Voiko pelaaja heittaa
 		
 		--Juoksunopeus on hahmon maarittama
 		juoksuNopeus = _G[pelaajanHahmo].juoksuNopeus,
@@ -315,7 +315,9 @@ function pelaaja:tormays(kohde)
 end 
 
 function pelaaja:kontakti( hyokkaaja )
+	
 	vastustaja = hyokkaaja 
+
 	--vHahmo = vastustajan hahmo
 	local vHahmo = _G[vastustaja.hahmo]
 	--hyokkays = vastustajan state
@@ -328,7 +330,7 @@ function pelaaja:kontakti( hyokkaaja )
 	local vastustajaOn --vastustajaOn = vastustajan sijainti(oikea/vasen)
 	if xEro > 0 then  vastustajaOn="oikea" else vastustajaOn="vasen" end
 	
-	if  hyokkays=="lyonti" or hyokkays=="critLyonti" and vastustajaOn==suunta and not (self.tila=="torjunta" and suunta~=self.suunta) then
+	if (hyokkays=="lyonti" or hyokkays=="critLyonti") and vastustajaOn==suunta and not (self.tila=="torjunta" and suunta~=self.suunta) then
 
 	   if self.vahinkoAjastin <= 0 then
 		
@@ -540,15 +542,14 @@ function pelaaja:kuolema() --Kuolee pelissa mutta ei valttamatta havia viela
 		Timer.add(1, 
 		function() 
 			self.kuollut = false
-			self.terveys = _G[self.hahmo].kestavyys
-			self:lukitseAnimaatio(1.7)	
+			self.terveys = _G[self.hahmo].kestavyys	
 			TEsound.play(TEHOSTE_POLKU.."Respawn.ogg")
 								
 			if self.elamat == 0 then
 
 				self:havio()
 							
-			elseif self.elamat > 0 then
+			else
 				
 				self.nykAnim=_G[self.hahmo].respawn_anim
 				_G[self.hahmo].kuolema_anim:reset()
@@ -558,6 +559,9 @@ function pelaaja:kuolema() --Kuolee pelissa mutta ei valttamatta havia viela
 							
 				nykKamera="kuolema"
 			end	
+			--Lukitaan respawn-animaatio
+			self:lukitseAnimaatio(1.7) 
+			
 		end) 
 		
 	end

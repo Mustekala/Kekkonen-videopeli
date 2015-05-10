@@ -144,6 +144,10 @@ function hahmovalikko:draw()
 
 	hahmoValinta1:draw( 50, 100, 60, 0.6 )
 	love.graphics.draw( kuvat[valittuHahmo1..".png" ], 175, 130 ,0,3,3)
+	--Jos hahmo on botti
+	if bottienMaara >= 1 then
+		love.graphics.print("Botti", 150, 210, 0, 0.5, 0.5)
+	end
 	
 	if valittuHahmo1 == valittuHahmo2 then
 		love.graphics.print("Samat hahmot lagaavat", 190, 130, 0, 0.5)
@@ -151,6 +155,10 @@ function hahmovalikko:draw()
 	
 	hahmoValinta2:draw( 500, 100, 60, 0.6 )
 	love.graphics.draw( kuvat[valittuHahmo2..".png" ], 625, 130 ,0,3,3)
+	--Jos hahmo on botti
+	if bottienMaara == 2 then
+		love.graphics.print("Botti", 625, 210, 0, 0.5, 0.5)
+	end
 	
 	--Jos molemmat hahmot valittu, nayta lisavalinnat. Muuten nayta tietoja hahmoista
 	if valinta1Valmis and valinta2Valmis then

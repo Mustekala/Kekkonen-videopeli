@@ -88,7 +88,7 @@ function powerup:update( dt )
 end
 
 function powerup:draw()
-	--Piirra poweruppien efektit, maaritellaan powerpin omassa luokassa 
+	--Piirra poweruppien efektit, maaritellaan powerpin omassa koodissa 
 	for _, nyk in ipairs (kaikkiPowerupit) do
 		_G[nyk]:draw() 
 	end

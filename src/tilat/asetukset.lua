@@ -18,7 +18,7 @@ function asetukset:init()
 			
 			kokoruutu=not kokoruutu
 			print("Kokoruutu:"..tostring(kokoruutu))
-			love.window.setFullscreen(kokoruutu,"normal")
+			love.window.setFullscreen(kokoruutu)
 
 		end
 	}
