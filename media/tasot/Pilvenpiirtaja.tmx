@@ -1935,7 +1935,15 @@
   </data>
  </layer>
  <objectgroup name="Syntykohdat" width="32" height="30" visible="0">
-  <object x="127" y="286"/>
-  <object x="859" y="114"/>
+  <object x="127" y="286">
+   <properties>
+    <property name="suunta" value="oikea"/>
+   </properties>
+  </object>
+  <object x="859" y="114">
+   <properties>
+    <property name="suunta" value="vasen"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

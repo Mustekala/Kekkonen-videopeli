@@ -332,9 +332,9 @@ function peli:luoPelaajat(hahmot, bottienMaara)
 		
 		pelaajat[ i ] = pelaaja:luo( hahmot[i], pelaajienKontrollit[ i ], "Pelaaja " .. i,i,
 		nykyinenTaso.layers["Syntykohdat"].objects[i].x,
-		nykyinenTaso.layers["Syntykohdat"].objects[i].y, nykyinenTaso.layers["Syntykohdat"].objects[i].suunta, onkoBotti, maxElamat)
+		nykyinenTaso.layers["Syntykohdat"].objects[i].y, nykyinenTaso.layers["Syntykohdat"].objects[i].properties.suunta, onkoBotti, maxElamat)
 		
-		print("Luotiin pelaaja "..i..", suunta "..nykyinenTaso.layers["Syntykohdat"].objects[i].suunta)
+		print("Luotiin pelaaja "..i..", suunta "..nykyinenTaso.layers["Syntykohdat"].objects[i].properties.suunta)
 		
 	end
 

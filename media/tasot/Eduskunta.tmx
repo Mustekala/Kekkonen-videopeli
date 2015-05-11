@@ -1820,7 +1820,7 @@
    <tile gid="401"/>
   </data>
  </layer>
- <objectgroup name="Syntykohdat" width="30" height="30">
+ <objectgroup name="Syntykohdat" width="30" height="30" visible="0">
   <object x="128" y="160">
    <properties>
     <property name="suunta" value="oikea"/>
