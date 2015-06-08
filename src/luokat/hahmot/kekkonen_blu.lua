@@ -37,7 +37,7 @@ function kekkonen_blu:lataaAnimaatiot()
 
 	self.paikallaan_anim = newAnimation(kuvat["kekkonen_paikallaan_blu.png"],42,64,0.5,2)
 
-	self.torjunta_anim = newAnimation(kuvat["kekkonen_torjunta_blu.png"],32,61,0.04,6)
+	self.torjunta_anim = newAnimation(kuvat["kekkonen_torjunta_blu.png"],32,61,0.025,6)
 	self.torjunta_anim:setMode("once")
 
 	self.putoaminen_anim = newAnimation(kuvat["kekkonen_putoaminen_blu.png"],35,62,0.2,2)

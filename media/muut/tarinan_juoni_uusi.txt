@@ -1,0 +1,12 @@
+Kekkonen videopeli
+
+Kohtaus 1: Alku
+
+	Kekkonen on matkalla pitämään puhetta.
+
+	Pelaaja kävelee eduskuntatalolle, mutta toinen Kekkonen onkin jo pitänyt puheen.
+
+	Taistelu eduskunnan katolla.
+
+
+

@@ -22,23 +22,28 @@ function botti:update(dt)
 		else	
 			bot.tila = "hyokkaava"  --Hyokkaava pyrkii lahelle
 		end
-		local haluttuEtaisyys
+
+		local haluttuEtaisyys 
+		
 		if bot.tila == "hyokkaava" then 
 			haluttuEtaisyys = 50
 		else
 			haluttuEtaisyys = 200
 		end
+		
 		local liikkumisSuunta = 1
+		
 		--Jos toinen pelaaja ei ole halutulla etaisyydella tai putoamassa/kuollut, seuraa sitä
-		if tamaBotti.x < pelaaja.x -haluttuEtaisyys and pelaaja.yNopeus < 400 and not pelaaja.kuollut then
+		if tamaBotti.x < pelaaja.x - haluttuEtaisyys and pelaaja.yNopeus < 400 and pelaaja.kuollut == false then
 			tamaBotti:liikuOikealle()
 			liikkumisSuunta = 1	
-		elseif	tamaBotti.x > pelaaja.x + haluttuEtaisyys and pelaaja.yNopeus < 400 and not pelaaja.kuollut then
+		elseif	tamaBotti.x > pelaaja.x + haluttuEtaisyys and pelaaja.yNopeus < 400 and pelaaja.kuollut == false then
 			tamaBotti:liikuVasemmalle()
 			liikkumisSuunta = -1
 		elseif not math.isAbout(tamaBotti.y, pelaaja.y, 50) then
 		    haluttuEtaisyys = 0
-		else tamaBotti:torjunta()	
+		else 
+		
 		end
 
 		--Hyppää kuilujen yli

@@ -1214,16 +1214,16 @@
    <tile gid="2"/>
    <tile gid="2"/>
    <tile gid="2"/>
-   <tile gid="2"/>
-   <tile gid="2"/>
-   <tile gid="2"/>
-   <tile gid="2"/>
-   <tile gid="2"/>
-   <tile gid="2"/>
-   <tile gid="2"/>
-   <tile gid="2"/>
-   <tile gid="2"/>
-   <tile gid="2"/>
+   <tile gid="6"/>
+   <tile gid="12"/>
+   <tile gid="12"/>
+   <tile gid="12"/>
+   <tile gid="12"/>
+   <tile gid="8"/>
+   <tile gid="11"/>
+   <tile gid="10"/>
+   <tile gid="10"/>
+   <tile gid="10"/>
    <tile gid="12"/>
    <tile gid="13"/>
    <tile gid="0"/>
@@ -1945,5 +1945,8 @@
     <property name="suunta" value="vasen"/>
    </properties>
   </object>
+ </objectgroup>
+ <objectgroup name="Sade" width="32" height="30" visible="0">
+  <object x="448" y="0" width="32" height="32"/>
  </objectgroup>
 </map>

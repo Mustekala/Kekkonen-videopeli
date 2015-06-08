@@ -21,6 +21,7 @@ TASO_POLKU = "media/tasot/"
 KIRJASTO_POLKU = "src/kirjastot/"
 LUOKKA_POLKU = "src/luokat/"
 TILA_POLKU = "src/tilat/"
+TARINA_POLKU = "src/tarina/"
 HAHMO_POLKU = LUOKKA_POLKU .. "hahmot/"
 POWERUP_POLKU = LUOKKA_POLKU .. "powerupit/"
 
@@ -29,6 +30,7 @@ print("Ladataan valmiit kirjastot")
 -- Ladataan valmiit kirjastot
 require( KIRJASTO_POLKU .. "TEsound" ) --Aanikirjasto
 
+--KAMERA
 require( KIRJASTO_POLKU .. "camera" )  --Kamerakirjasto (muokattu) + pari siihen liittyvaa muuttujaa
 Scale=0
 kameranKayttokerrat=0
@@ -64,6 +66,12 @@ for _, tila in ipairs( love.filesystem.getDirectoryItems( TILA_POLKU ) ) do --Ha
 end	
 hudTila = "sydan" --Hudin ulkonako
 
+--Tarinan tilat
+for _, tila in ipairs( love.filesystem.getDirectoryItems( TARINA_POLKU ) ) do --Hakee kaikki tilat tarinapolusta
+	print("Ladataan tarina: "..tila)
+	require(TARINA_POLKU..string.gsub(tila,".lua","")) --Leikkaa tiedostonimista .lua-paatteen, require ei halua sita
+end	
+
 print("Ladataan fontit")
 
 -- Ladataan fontit
@@ -87,6 +95,11 @@ end
 for _, tausta in ipairs( love.filesystem.getDirectoryItems( KUVA_POLKU.."/taustat/" ) ) do
 	kuvat[tausta] = love.graphics.newImage( KUVA_POLKU .."/taustat/".. tausta )
 	print( "Ladataan tausta: " .. tausta )
+end
+--Ladataan kaikki tarinan kuvat
+for _, kuva in ipairs( love.filesystem.getDirectoryItems( KUVA_POLKU.."/tarina/" ) ) do
+	kuvat[kuva] = love.graphics.newImage( KUVA_POLKU .."/tarina/".. kuva )
+	print( "Ladataan kuva: " .. kuva )
 end
 
 powerup:lataa() --Ladataan kaikki powerupit

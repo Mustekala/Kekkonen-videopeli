@@ -2,8 +2,13 @@
 Jetpackin avulla pelaaja voi lentaa. Tama toteutetaan ottamalla hypyn rajoitus ilmassa pois.
 ]]
 
-jetpack = { kesto = 5, vanhaArvo, kaytossa = false , anim_idle = newAnimation(kuvat["jetpack_idle.png"], 32, 32, 0.2, 2), 
-anim_kiihdytys = newAnimation(kuvat["jetpack_kiihdytys.png"], 32, 32, 0.2, 2)}
+jetpack = { 
+	kesto = 5,
+	vanhaArvo,
+	kaytossa = false, 
+	anim_idle = newAnimation(kuvat["jetpack_idle.png"], 32, 32, 0.2, 2), 
+	anim_kiihdytys = newAnimation(kuvat["jetpack_kiihdytys.png"], 32, 32, 0.2, 2)
+}
 numero = 0
 
 --Otetaan jetpack kayttoon pelaajalle

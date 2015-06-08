@@ -86,7 +86,7 @@ end
 
 --Liikkuu tasaisesti, seuraa huonosti
 function camera:kuolemaKamera(px,py,p2x,p2y, voittajaKamera) 
-	
+
 	voittajaKamera = voittajaKamera or false
 	
 	Etaisyys = math.realDist(px,py, p2x, p2y) / 600
@@ -117,27 +117,30 @@ function camera:kuolemaKamera(px,py,p2x,p2y, voittajaKamera)
 	
 	local width = love.graphics.getWidth()
 	local height = love.graphics.getHeight()
-
+	
+	--Kameran rajoitukset hetkeksi pois
+	camera:setBounds(-5000, -5000, 5000, 5000)
+	
 	cameraKohdeX = 0
 	cameraKohdeY = 0
 
 	if px>p2x then
 
-		cameraKohdeX=math.floor(px - math.dist(px,p2x)/2 - width / 2*Scale)
+		cameraKohdeX=math.floor(px - math.dist(px,p2x)/2 - width / 2 * Scale)
 
 	else
 	
-		cameraKohdeX=math.floor(p2x - math.dist(px,p2x)/2 - width / 2*Scale)
+		cameraKohdeX=math.floor(p2x - math.dist(px,p2x)/2 - width / 2 * Scale)
 			
 	end	
 	
 	if py>p2y then 
 	 
-		cameraKohdeY=math.floor(py - math.dist(py,p2y)/2 - height / 2*Scale)
+		cameraKohdeY=math.floor(py - math.dist(py,p2y)/2 - height / 2 * Scale)
 	 
 	else
 	 
-		cameraKohdeY=math.floor(py + math.dist(py,p2y)/2 - height / 2*Scale)
+		cameraKohdeY=math.floor(py + math.dist(py,p2y)/2 - height / 2 * Scale)
 	 
     end
 	
@@ -206,8 +209,8 @@ function camera:shake(px,py,p2x,p2y)
 end
 
 function camera:liikkuvaKamera(px,py,p2x,p2y) --Seuraa tasaisesti pelaajia
-
-	Scale= math.realDist(px,py, p2x, p2y) /600
+	
+	Scale = math.realDist(px,py, p2x, p2y) /600
 		
 	if Scale > 1.5 then
 		
@@ -221,8 +224,11 @@ function camera:liikkuvaKamera(px,py,p2x,p2y) --Seuraa tasaisesti pelaajia
 		
 	end
 
-		camera:setScale(Scale,Scale)
+	camera:setScale(Scale,Scale)
 
+	--Kameran rajoitukset Scalen mukaan 
+	camera:setBounds(-500 / Scale, -500 / Scale, 1000 / Scale, 100 / Scale)
+	
 	local width= love.graphics.getWidth()
 	local height= love.graphics.getHeight()
 

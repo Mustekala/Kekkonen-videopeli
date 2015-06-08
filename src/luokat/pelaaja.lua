@@ -20,6 +20,9 @@ function pelaaja:luo( pelaajanHahmo, pelaajanKontrollit, pelaajanNimi, pelaajanN
 		animAjastin=0,
 		kuollut = false, --Kuolema-ajastin lisatty 
 		
+		voiLyoda = false, --Voiko pelaaja lyoda
+		voiHeittaa = false, --Voiko pelaaja heittaa
+		
 		terveys = _G[pelaajanHahmo].kestavyys,
 		elamat = elamienMaara,
 		
@@ -29,10 +32,6 @@ function pelaaja:luo( pelaajanHahmo, pelaajanKontrollit, pelaajanNimi, pelaajanN
 		
 		animVoiVaihtua=true, --Voiko animaatio vaihtua
 		animSuunta = 1,
-		
-		voiLyoda = true, --Voiko pelaaja lyoda
-		
-		voiHeittaa = true, --Voiko pelaaja heittaa
 		
 		--Juoksunopeus on hahmon maarittama
 		juoksuNopeus = _G[pelaajanHahmo].juoksuNopeus,
@@ -70,6 +69,12 @@ function pelaaja:luo( pelaajanHahmo, pelaajanKontrollit, pelaajanNimi, pelaajanN
 		print("Uusi botti")
 		botti:luo(pelaajanNumero)
 	end
+	
+	--Ennen alkua ei voi lyoda
+	Timer.add(3, function()	
+		olio.voiLyoda = true --Voiko pelaaja lyoda
+		olio.voiHeittaa = true --Voiko pelaaja heittaa
+	end)
 	
 	return olio
 	
@@ -519,8 +524,7 @@ function pelaaja:kuolema() --Kuolee pelissa mutta ei valttamatta havia viela
 	self:lukitseAnimaatio(1)
 	
 	self:pysahdy(true)
-	self.yNopeus = 0
-				
+
 	if not self.kuollut then	
 		
 		_G[self.hahmo].respawn_anim:reset() --Resetoidaan respawn-animaatio valmiiksi
@@ -541,6 +545,9 @@ function pelaaja:kuolema() --Kuolee pelissa mutta ei valttamatta havia viela
 		--Pelaaja respawnaa sekunnin kuluttua, tai peli loppuu
 		Timer.add(1, 
 		function() 
+		
+			self:pysahdy(true)
+			
 			self.kuollut = false
 			self.terveys = _G[self.hahmo].kestavyys	
 			TEsound.play(TEHOSTE_POLKU.."Respawn.ogg")
@@ -558,6 +565,7 @@ function pelaaja:kuolema() --Kuolee pelissa mutta ei valttamatta havia viela
 				self.x=self.xLuomispiste 
 							
 				nykKamera="kuolema"
+				
 			end	
 			--Lukitaan respawn-animaatio
 			self:lukitseAnimaatio(1.7) 

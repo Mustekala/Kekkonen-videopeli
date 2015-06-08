@@ -4,7 +4,8 @@
 
 powerup = {} 
 kaikkiPowerupit = {}	--Lista kaikista powerupeista
-nakyvaPowerup = {nimi = "" , x = 0, y = 0, xNopeus = 1, yNopeus = 1, onNakyva = false} --Talla hetkella nakyva powerup
+kaytetytPowerupit = {}
+nakyvaPowerup = {nimi = "jetpack" , x = 0, y = 0, xNopeus = 1, yNopeus = 1, onNakyva = false} --Talla hetkella nakyva powerup
 
 function powerup:lataa()
 	
@@ -24,6 +25,8 @@ end
 function powerup:kayta( nimi, pelaajaNumero )
 	print("Pelaaja "..pelaajaNumero.." sai powerupin "..nimi)
 	_G[nimi]:kayta(pelaajaNumero)
+	table.insert(kaytetytPowerupit, _G[nimi])
+	print("Poweruppeja kaytetty yhteensa: "..table.getn(kaytetytPowerupit))
 end
 
 --Lisaa powerup nakyviin
@@ -36,14 +39,10 @@ function powerup:lisaa(nimi)
 	end
 end
 
---TODO korjaa kahden saman powerupin ongelmat, tai poista mahdollisuus siihen
 --Lisaa random powerupin kaikkiPowerupit-listalta
 function powerup:lisaaRandom()	
-	if not nakyvaPowerup.onNakyva then	
-		randomPowerup = kaikkiPowerupit[1]
-		while nakyvaPowerup.nimi == randomPowerup do --Ei kahta samaa poweruppia perakkain
-			randomPowerup = kaikkiPowerupit[math.random(1, table.getn(kaikkiPowerupit))]
-		end	
+	if not nakyvaPowerup.onNakyva and not _G[nakyvaPowerup.nimi].kaytossa then	
+		randomPowerup = kaikkiPowerupit[math.random(1, table.getn(kaikkiPowerupit))]
 		nakyvaPowerup.nimi = randomPowerup
 		nakyvaPowerup.y = -100	
 		nakyvaPowerup.yNopeus = 0	

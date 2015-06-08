@@ -30,11 +30,7 @@ function peli:enter( aiempi, tasonNimi, pelaajaMaara, elamienMaara, hahmot, bott
 	end
 	
 	TEsound.stop("musiikki")
-	
-	--Sade. Alle voi lisata ifin kaikille sadetta kayttaville kartoille
-	sataako = false					 
-	if tasonNimi == "Pilvenpiirtaja" then sataako=true end
-	
+
 	--Sumu. Alle voi lisata ifin kaikille sumua kayttaville kartoille
 	sumu = {tila = false}
 	if aiempi.nimi == "tunarit" then --Kekkonen on vihainen: punainen sumu, sade, musiikki
@@ -54,7 +50,7 @@ function peli:enter( aiempi, tasonNimi, pelaajaMaara, elamienMaara, hahmot, bott
 	
 	nykyinenTaso = loader.load(tasonNimi..".tmx")
 	nykyinenTaso:setDrawRange(0, 0, 2000, 960)
-		
+	
 	pelaajienMaara = pelaajaMaara
 		
 	maxElamat = elamienMaara
@@ -77,7 +73,15 @@ function peli:enter( aiempi, tasonNimi, pelaajaMaara, elamienMaara, hahmot, bott
 	testiajastin=0
 	  
 	--Taustaaanet, musiikki
-		
+	
+			
+	--Sade. Karttaan voi lisata layerin sateelle
+	if nykyinenTaso.layers["Sade"] == nil then
+		sataako = false
+	else		
+		sataako = true
+	end
+	
 	if sataako then
 		sade:uusi(nykyinenTaso, -500, -500, 1500, 5)
 		TEsound.playLooping(AANI_POLKU.."/ymparisto/sade.ogg", "tausta")
@@ -228,7 +232,7 @@ function peli:draw()
 	love.graphics.draw(kuvat[tasoNimi.."_tausta.png"], taustaX, taustaY, 0, taustaZoom, taustaZoom, 50, 25) --Tason tausta piirtyy erikseen	
 	
 	camera:set() --Liikkuva kamera	
-
+		
 	if sataako then
 		sade:draw()
 	end
@@ -257,12 +261,14 @@ function peli:draw()
 			love.graphics.print(2, 350, 200, 0, 2)
 		elseif kulunutAika < 3 then
 			love.graphics.print(1, 350, 200, 0, 2)
-		else
+		elseif kulunutAika < 3.9 then
 			love.graphics.print("GO!", 350, 200, 0, 2)
 			if estaSoitto ~= true then --Soita vain kerran
 				TEsound.play(TEHOSTE_POLKU.."Go!.ogg", "Go")
 				estaSoitto = true
-			end	
+			end
+		else
+			estaSoitto = false
 		end	
 	end
 	
@@ -300,12 +306,12 @@ function peli:keypressed( nappain )
 		
 	end
 	
-	--Debug:numlock pakottaa sateen (aika turha)  
-  if nappain == "numlock" and debugMode then
-	 sataako = not sataako
-     if sataako then  sade:uusi(nykyinenTaso, -500, -500, 1500, 5) end
-	 print("pakotetaan sade:"..tostring(sataako))
-  end
+		--Debug:numlock pakottaa sateen (aika turha)  
+    if nappain == "numlock" and debugMode then
+		sataako = not sataako
+		if sataako then  sade:uusi(nykyinenTaso, -500, -500, 1500, 5) end
+		print("pakotetaan sade:"..tostring(sataako))
+	end
   
 end
 
@@ -332,9 +338,9 @@ function peli:luoPelaajat(hahmot, bottienMaara)
 		
 		pelaajat[ i ] = pelaaja:luo( hahmot[i], pelaajienKontrollit[ i ], "Pelaaja " .. i,i,
 		nykyinenTaso.layers["Syntykohdat"].objects[i].x,
-		nykyinenTaso.layers["Syntykohdat"].objects[i].y, nykyinenTaso.layers["Syntykohdat"].objects[i].properties.suunta, onkoBotti, maxElamat)
+		nykyinenTaso.layers["Syntykohdat"].objects[i].y, nykyinenTaso.layers["Syntykohdat"].objects[i].properties.suunta or "vasen", onkoBotti, maxElamat)
 		
-		print("Luotiin pelaaja "..i..", suunta "..nykyinenTaso.layers["Syntykohdat"].objects[i].properties.suunta)
+		print("Luotiin pelaaja "..i..", suunta "..nykyinenTaso.layers["Syntykohdat"].objects[i].properties.suunta or "vasen")
 		
 	end
 
