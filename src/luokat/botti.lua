@@ -34,18 +34,19 @@ function botti:update(dt)
 		local liikkumisSuunta = 1
 		
 		--Jos toinen pelaaja ei ole halutulla etaisyydella tai putoamassa/kuollut, seuraa sitä
-		if tamaBotti.x < pelaaja.x - haluttuEtaisyys and pelaaja.yNopeus < 400 and pelaaja.kuollut == false then
-			tamaBotti:liikuOikealle()
-			liikkumisSuunta = 1	
-		elseif	tamaBotti.x > pelaaja.x + haluttuEtaisyys and pelaaja.yNopeus < 400 and pelaaja.kuollut == false then
-			tamaBotti:liikuVasemmalle()
-			liikkumisSuunta = -1
-		elseif not math.isAbout(tamaBotti.y, pelaaja.y, 50) then
-		    haluttuEtaisyys = 0
+		if pelaaja.yNopeus < 200 and not pelaaja.kuollut then
+			if tamaBotti.x < pelaaja.x - haluttuEtaisyys and pelaaja.yNopeus < 400 then
+				tamaBotti:liikuOikealle()
+				liikkumisSuunta = 1	
+			elseif	tamaBotti.x > pelaaja.x + haluttuEtaisyys and pelaaja.yNopeus < 400 then
+				tamaBotti:liikuVasemmalle()
+				liikkumisSuunta = -1
+			elseif not math.isAbout(tamaBotti.y, pelaaja.y, 50) then
+				haluttuEtaisyys = 0
+			end
 		else 
-		
+			tamaBotti:pysahdy()			
 		end
-
 		--Hyppää kuilujen yli
 		if not tamaBotti:tarkistaTormays(nykyinenTaso, tamaBotti.x + 10 *liikkumisSuunta, tamaBotti.y+60) then
 			--Mutta vain jos toisella puolella on taso

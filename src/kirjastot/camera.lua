@@ -118,8 +118,8 @@ function camera:kuolemaKamera(px,py,p2x,p2y, voittajaKamera)
 	local width = love.graphics.getWidth()
 	local height = love.graphics.getHeight()
 	
-	--Kameran rajoitukset hetkeksi pois
-	camera:setBounds(-5000, -5000, 5000, 5000)
+	--Kameran rajoitukset hetkeksi pois (paitsi pohja)
+	camera:setBounds(-5000, -5000, 5000, 100)
 	
 	cameraKohdeX = 0
 	cameraKohdeY = 0

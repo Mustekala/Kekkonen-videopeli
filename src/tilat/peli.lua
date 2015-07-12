@@ -236,7 +236,7 @@ function peli:draw()
 	if sataako then
 		sade:draw()
 	end
-	
+		
 	nykyinenTaso:draw() --Piirtaa tason (ATL)
 	
 	for _, pelaaja in pairs( pelaajat ) do

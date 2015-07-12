@@ -5,7 +5,8 @@
 powerup = {} 
 kaikkiPowerupit = {}	--Lista kaikista powerupeista
 kaytetytPowerupit = {}
-nakyvaPowerup = {nimi = "jetpack" , x = 0, y = 0, xNopeus = 1, yNopeus = 1, onNakyva = false} --Talla hetkella nakyva powerup
+nakyvaPowerup = {nimi = "jetpack" , x = 0, y = 0, xNopeus = 1, yNopeus = 1, onNakyva = false, onKaytetty = false} --Talla hetkella nakyva powerup
+
 
 function powerup:lataa()
 	
@@ -23,6 +24,7 @@ end
 
 --Kayta powerup pelaajalle	
 function powerup:kayta( nimi, pelaajaNumero )
+	nakyvaPowerup.onKaytetty = true
 	print("Pelaaja "..pelaajaNumero.." sai powerupin "..nimi)
 	_G[nimi]:kayta(pelaajaNumero)
 	table.insert(kaytetytPowerupit, _G[nimi])
@@ -31,7 +33,8 @@ end
 
 --Lisaa powerup nakyviin
 function powerup:lisaa(nimi)
-	if not nakyvaPowerup.onNakyva then		
+	if not nakyvaPowerup.onNakyva then	
+		nakyvaPowerup.onKaytetty = false
 		nakyvaPowerup.y = -200
 		nakyvaPowerup.x =  math.random(10, 600)
 		nakyvaPowerup.nimi = nimi
@@ -42,12 +45,12 @@ end
 --Lisaa random powerupin kaikkiPowerupit-listalta
 function powerup:lisaaRandom()	
 	if not nakyvaPowerup.onNakyva and not _G[nakyvaPowerup.nimi].kaytossa then	
-		randomPowerup = kaikkiPowerupit[math.random(1, table.getn(kaikkiPowerupit))]
+		randomPowerup = kaikkiPowerupit[math.random(1,table.getn(kaikkiPowerupit))]
 		nakyvaPowerup.nimi = randomPowerup
-		nakyvaPowerup.y = -100	
+		nakyvaPowerup.y = -200	
 		nakyvaPowerup.yNopeus = 0	
-		nakyvaPowerup.x =  math.random(10, 600)
-		nakyvaPowerup.xNopeus =  math.random(-2,2)
+		nakyvaPowerup.x =  math.random(0, 900)
+		nakyvaPowerup.xNopeus =  math.random(-2, 2)
 		nakyvaPowerup.onNakyva = true
 	end
 end
@@ -63,10 +66,12 @@ function powerup:update( dt )
 		powerup_anim:update(dt)
 		nakyvaPowerup.y = nakyvaPowerup.y + nakyvaPowerup.yNopeus
 		nakyvaPowerup.x = nakyvaPowerup.x + nakyvaPowerup.xNopeus
-		if not self:tarkistaTormays(nakyvaPowerup.x, nakyvaPowerup.y+20) then		
-			nakyvaPowerup.yNopeus = nakyvaPowerup.yNopeus + 0.1		
+		if self:tarkistaTormays(nakyvaPowerup.x, nakyvaPowerup.y + 20) == "lattia" then	
+			nakyvaPowerup.yNopeus = nakyvaPowerup.yNopeus * -0.7	
+		elseif self:tarkistaTormays(nakyvaPowerup.x, nakyvaPowerup.y + 20) == "seina" then
+			nakyvaPowerup.xNopeus = nakyvaPowerup.xNopeus * -0.7
 		else
-			nakyvaPowerup.yNopeus = nakyvaPowerup.yNopeus * -0.7
+			nakyvaPowerup.yNopeus = nakyvaPowerup.yNopeus + 0.02	
 		end
 		--Poistetaan pudonneet
 		if nakyvaPowerup.y > 1000 then
@@ -92,6 +97,14 @@ function powerup:draw()
 		_G[nyk]:draw() 
 	end
 	
+	--Nayta teksti powerupista
+	if nakyvaPowerup.onKaytetty then
+		Timer.add(2, function() nakyvaPowerup.onKaytetty = false end)
+		love.graphics.pop()
+			love.graphics.printf("POWERUP: "..nakyvaPowerup.nimi, 100, 150, 600, "center")
+		love.graphics.push()
+	end
+	
 	--Piirra nakyva(poimattava) powerup
 	if nakyvaPowerup.onNakyva then
 		powerup_anim:draw(nakyvaPowerup.x, nakyvaPowerup.y, 0, 0.3, 0.3, 100, 100)
@@ -101,13 +114,23 @@ end
 --Tarkistaa poweruppien tormauksen seiniin 
 --TODO korjaa sivuttaisen seinan sisaan lagaaminen
 function powerup:tarkistaTormays(x, y)
-
     local kerros = nykyinenTaso.layers["seinat"]
 
 	local laattaX, laattaY = math.floor(x / 32), math.floor(y / 32)
    
     local laatta = nykyinenTaso("Seinat")(laattaX, laattaY)
 
-    return not(laatta == nil)
+	local laatta2 = nykyinenTaso("Seinat")(laattaX, laattaY - 1)
+	
+    if not (laatta == nil) then
+		print("OSUMA")
+		if not (laatta2 == nil) then --Jos viereinen laatta on olemassa, seina
+			print("seina")
+			return "seina"			
+		else 
+			print("lattia")
+			return "lattia" --Muuten lattia
+		end	
+	end
 	
 end

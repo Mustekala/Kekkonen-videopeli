@@ -118,13 +118,13 @@ end
 
 
 function lopputekstit:draw()
-    love.graphics.draw( kuvat[ "ukk_tausta.png" ], 600, 300 , rotation, 2,2, 400, 300)
+    love.graphics.draw( kuvat[ "ukk_tausta.png" ], 600, 300 , rotation, 2, 2, 400, 300)
 	
 	for _, nykyinen in pairs(kekkoset) do	      
-		nykyinen.anim:draw(nykyinen.x, nykyinen.y, 0, 0.5*nykyinen.nopeus, 0.5*nykyinen.nopeus) --Nopeus on myos skaalaus: mita nopeampi, sita suurempi kuva
+		nykyinen.anim:draw(nykyinen.x, nykyinen.y, 0, 0.5 * nykyinen.nopeus, 0.5 * nykyinen.nopeus) --Nopeus on myos skaalaus: mita nopeampi, sita suurempi kuva
 	end
 	
-	love.graphics.printf(teksti,150,tekstinY,500, "center")
+	love.graphics.printf(teksti, 150, tekstinY, 500, "center")
 end
 
 
