@@ -194,7 +194,7 @@ function pelaaja:update( dt, painovoima )
 	elseif self.tila=="torjunta" then
 	
 		self.nykAnim = _G[self.hahmo].torjunta_anim
-		self:lukitseAnimaatio(0.3)
+		self:lukitseAnimaatio(0.4)
 		
 	--Heitto	
 	elseif self.tila=="heitto" then	
@@ -296,13 +296,12 @@ function pelaaja:draw()
 	else
 		love.graphics.print(self.elamat,x,510)
 	end
-	love.graphics.print(self.terveys..'%',x,550)
+	love.graphics.print(math.ceil(self.terveys)..'%',x,550)
     camera:set()
 end
 
 
 function pelaaja:keypressed( nappain )
-
 
 end
 
@@ -335,7 +334,7 @@ function pelaaja:kontakti( hyokkaaja )
 	local vastustajaOn --vastustajaOn = vastustajan sijainti(oikea/vasen)
 	if xEro > 0 then  vastustajaOn="oikea" else vastustajaOn="vasen" end
 	
-	if (hyokkays=="lyonti" or hyokkays=="critLyonti") and vastustajaOn==suunta and not (self.tila=="torjunta" and suunta~=self.suunta) then
+	if (hyokkays=="lyonti" or hyokkays=="critLyonti") and vastustajaOn==suunta and not (self.nykAnim == _G[self.hahmo].torjunta_anim and suunta~=self.suunta) then
 
 	   if self.vahinkoAjastin <= 0 then
 		
@@ -461,13 +460,15 @@ function pelaaja:lyonti()
 		else
 			self.tila="lyonti"
 		end	
-		Timer.add(0.5, function() self.voiLyoda = true end)
 	end	
 end
 
 function pelaaja:torjunta()
-	self.xNopeus=0
-	self.tila="torjunta"
+	if self.voiTorjua then
+		self.voiTorjua = false
+		self.xNopeus=0
+		self.tila="torjunta"
+	end	
 end
 
 function pelaaja:heitto() --Pitaa parannella
@@ -475,7 +476,6 @@ function pelaaja:heitto() --Pitaa parannella
 		self.voiHeittaa = false
 		self.xNopeus=0
 		self.tila="heitto"
-		Timer.add(1, function() self.voiHeittaa = true end)
 	end	
 end
 
@@ -522,6 +522,8 @@ function pelaaja:kuolema() --Kuolee pelissa mutta ei valttamatta havia viela
 	
 	self.nykAnim=_G[self.hahmo].kuolema_anim	
 	self:lukitseAnimaatio(1)
+	
+	pelaajat[self.numero % 2 + 1].terveys = pelaajat[self.numero % 2 + 1].terveys + 0.25
 	
 	self:pysahdy(true)
 

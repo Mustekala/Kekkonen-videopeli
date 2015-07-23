@@ -17,7 +17,7 @@ function tasovalikko:enter(aiempi , pelaajaMaara, elamienMaara, hahmot, bottiVal
 			nimi = tasonNimi,
 			toiminto = function()
 
-				print( "Peli, tasona " .. tasonNimi )
+				print( "Tasona " .. tasonNimi )
 				Gamestate.switch( peli, tasonNimi, pelaajaMaara, elamienMaara, hahmot, bottienMaara)
 			end
 		}

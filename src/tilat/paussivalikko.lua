@@ -15,6 +15,7 @@ function paussivalikko:init()
 		nimi = "Jatka pelia",
 		toiminto = function()
 			TEsound.resume("tausta")
+			TEsound.resume("musiikki")
 			Gamestate.pop()
 			print("Takaisin peliin")
 		end

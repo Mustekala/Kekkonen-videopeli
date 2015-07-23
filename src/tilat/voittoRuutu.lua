@@ -19,9 +19,9 @@ function voittoRuutu:enter(wanhaState , numero)
 
 	torvi_anim:reset() --resetoidaan animaatio
 	torviAjastin = 0 --Ajastin animaatiolle
-	--Pysaytetaan kaikki aanet 
-	TEsound.stop("musiikki")
+	--Pysaytetaan  taustaaanet 
 	TEsound.stop("tausta")
+	TEsound.stop("musiikki", true )
 	
 	TEsound.play("media/aanet/tehosteet/party_horn.ogg") 
 	

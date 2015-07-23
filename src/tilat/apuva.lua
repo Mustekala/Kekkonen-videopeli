@@ -37,8 +37,14 @@ function apuva:init( )
 	Elamien maara (<0 = loputon peli)
 	Bottien maara (max 2)
 	Poweruppien yleisyys (1-5)
+	
+	
+	OK! (ENTER)
 	]]
-	muutValinnat2 = [[  ]]
+	muutValinnat2 = 
+	[[
+	
+	]]
 	
 	tasovalikko1 = 
 	[[
@@ -74,6 +80,9 @@ function apuva:init( )
 	Torjunta: 2
 	Lyonti: 1 
 	Heitto: 4 
+	
+	
+	OK! (ENTER)
 	]]
 end
 
@@ -104,12 +113,7 @@ end
 
 function apuva:keypressed( nappain )
 
-	-- Tarkistetaan mita nappainta on painettu, ja toimitaan sen mukaisesti
-	if nappain == "escape" then
-		love.event.quit()
-		-- Vaihdetaan paussivalikko
-
-	elseif nappain == "return" then
+	if nappain == "return" or nappain == "f1" then
 		Gamestate.pop()
 	end
 

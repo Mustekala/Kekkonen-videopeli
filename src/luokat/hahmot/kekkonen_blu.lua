@@ -32,13 +32,13 @@ function kekkonen_blu:lataaAnimaatiot()
 	self.critLyonti_anim = newAnimation(kuvat["kekkonen_lyo_vasen_blu.png"],42,64,0.05,7)
 	self.critLyonti_anim:setMode("once")
 	
-	self.heitto_anim = newAnimation(kuvat["kekkonen_heitto_blu.png"],40,65,0.05,10)
+	self.heitto_anim = newAnimation(kuvat["kekkonen_heitto_blu.png"],40,65,0.04,10)
 	self.heitto_anim:setMode("once")
 
 	self.paikallaan_anim = newAnimation(kuvat["kekkonen_paikallaan_blu.png"],42,64,0.5,2)
 
-	self.torjunta_anim = newAnimation(kuvat["kekkonen_torjunta_blu.png"],32,61,0.025,6)
-	self.torjunta_anim:setMode("once")
+	self.torjunta_anim = newAnimation(kuvat["kekkonen_torjunta_blu.png"],32,61,0.05,6)
+	self.torjunta_anim:setMode("bounce")
 
 	self.putoaminen_anim = newAnimation(kuvat["kekkonen_putoaminen_blu.png"],35,62,0.2,2)
 

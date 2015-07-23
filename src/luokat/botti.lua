@@ -64,11 +64,13 @@ function botti:update(dt)
 				tamaBotti:hyppaa()	
 			end	
 		end
-	
+		
+		--Botti toimii laskurin mukaan, ja toistaa liikkeita n. 2 sekunnin sarjoissa
+		--Math.random lisaa pikkuisen satunnaisuutta botin toimiin
 		bot.laskuri = bot.laskuri + math.random(1,2)
 		
 		--Botti kaantyy toisen pelaajan suuntaan, mutta ei heti (liian op)
-		if bot.laskuri > 60 then 
+		if bot.laskuri < 10 then 
 			if tamaBotti.x - pelaaja.x < 0 then 
 				tamaBotti.suunta = "oikea"
 			else	
@@ -76,7 +78,7 @@ function botti:update(dt)
 			end	
 		end
 		
-		--Pikkuisen satunnaisuutta botin toimiin
+		
 		if bot.laskuri > 120 then bot.laskuri = 0 end	
 	
 		if math.dist(tamaBotti.x, pelaaja.x) < 50 then
@@ -90,7 +92,12 @@ function botti:update(dt)
 			else 
 				tamaBotti:pysahdy()
 			end
-		
+			
+			--Korvaa keyreleased-komennot 
+			tamaBotti.voiLyoda = true
+			tamaBotti.voiHeittaa = true
+			tamaBotti.voiTorjua = true
+			
 		end
 
 	  end	

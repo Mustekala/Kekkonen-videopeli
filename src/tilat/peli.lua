@@ -68,12 +68,15 @@ function peli:enter( aiempi, tasonNimi, pelaajaMaara, elamienMaara, hahmot, bott
 	peli:luoPelaajat(hahmot, bottienMaara)
 
 	peliAlkanut=true
-		
+	
+	print("\nPeli alkoi, tasona "..tasoNimi)
+	
    end
 	testiajastin=0
 	  
 	--Taustaaanet, musiikki
-	
+				
+	--TEsound.playLooping(MUSIIKKI_POLKU.."/Battle dirty.ogg", "musiikki")
 			
 	--Sade. Karttaan voi lisata layerin sateelle
 	if nykyinenTaso.layers["Sade"] == nil then
@@ -86,6 +89,7 @@ function peli:enter( aiempi, tasonNimi, pelaajaMaara, elamienMaara, hahmot, bott
 		sade:uusi(nykyinenTaso, -500, -500, 1500, 5)
 		TEsound.playLooping(AANI_POLKU.."/ymparisto/sade.ogg", "tausta")
 	end	
+	
 end
 
 
@@ -197,11 +201,11 @@ function peli:liikutaPelaajat()
 				
 				pelaaja:lyonti()
 			
-		    elseif love.keyboard.isDown(pelaajienKontrollit[i].TORJUNTA) then
+		    elseif love.keyboard.isDown(pelaajienKontrollit[i].TORJUNTA) and pelaaja.voiTorjua  then
 			 
 				pelaaja:torjunta()
 				
-			elseif love.keyboard.isDown(pelaajienKontrollit[i].HEITTOASE) and pelaaja.voiHeittaa then
+			elseif love.keyboard.isDown(pelaajienKontrollit[i].HEITTO) and pelaaja.voiHeittaa then
 			 
 				pelaaja:heitto()
 				
@@ -314,6 +318,22 @@ function peli:keypressed( nappain )
 	end
   
 end
+
+
+function peli:keyreleased( nappain )
+	for i, pelaaja in ipairs(pelaajat) do
+	
+		if nappain == pelaajienKontrollit[i].LYONTI then
+			pelaaja.voiLyoda = true
+		elseif nappain == pelaajienKontrollit[i].HEITTO then
+			pelaaja.voiHeittaa = true
+		elseif nappain == pelaajienKontrollit[i].TORJUNTA then
+			pelaaja.voiTorjua = true	
+		end
+		
+	end	
+end
+
 
 function peli:asetaPaussille() 
 

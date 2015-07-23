@@ -101,7 +101,7 @@ function hahmovalikko:enter(taso)
 	}
 	
 	muutValinnat:addItem{
-		nimi = "Poweruppien yleisyys:",
+		nimi = "Poweruppien yleisyys: ",
 		toiminto = function()
 			if powerupYleisyys >= 5 then 
 				powerupYleisyys = 1
@@ -144,6 +144,7 @@ function hahmovalikko:draw()
 
 	hahmoValinta1:draw( 50, 100, 60, 0.6 )
 	love.graphics.draw( kuvat[valittuHahmo1..".png" ], 175, 130 ,0,3,3)
+	
 	--Jos hahmo on botti
 	if bottienMaara >= 1 then
 		love.graphics.print("Botti", 150, 210, 0, 0.5, 0.5)
@@ -155,6 +156,7 @@ function hahmovalikko:draw()
 	
 	hahmoValinta2:draw( 500, 100, 60, 0.6 )
 	love.graphics.draw( kuvat[valittuHahmo2..".png" ], 625, 130 ,0,3,3)
+	
 	--Jos hahmo on botti
 	if bottienMaara == 2 then
 		love.graphics.print("Botti", 625, 210, 0, 0.5, 0.5)
@@ -163,7 +165,7 @@ function hahmovalikko:draw()
 	--Jos molemmat hahmot valittu, nayta lisavalinnat. Muuten nayta tietoja hahmoista
 	if valinta1Valmis and valinta2Valmis then
 		love.graphics.print( "Elamat: "..maxElamat, 460, 300, 0 , 0.7)
-		love.graphics.print( powerupYleisyys, 620, 480, 0 , 0.7)
+		love.graphics.print( " " .. powerupYleisyys, 620, 480, 0 , 0.7)
 		love.graphics.print( "Botit: "..bottienMaara, 460, 420, 0 , 0.7)
 		muutValinnat:draw( 200, 300, 60, 0.7 )
 	else

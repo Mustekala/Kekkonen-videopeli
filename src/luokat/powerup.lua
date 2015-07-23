@@ -123,12 +123,9 @@ function powerup:tarkistaTormays(x, y)
 	local laatta2 = nykyinenTaso("Seinat")(laattaX, laattaY - 1)
 	
     if not (laatta == nil) then
-		print("OSUMA")
 		if not (laatta2 == nil) then --Jos viereinen laatta on olemassa, seina
-			print("seina")
 			return "seina"			
 		else 
-			print("lattia")
 			return "lattia" --Muuten lattia
 		end	
 	end
