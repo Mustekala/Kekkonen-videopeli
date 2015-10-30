@@ -32,17 +32,17 @@ function kekkonen_green:lataaAnimaatiot()
 	self.critLyonti_anim = newAnimation(kuvat["kekkonen_lyo_vasen_green.png"],42,64,0.045,7)
 	self.critLyonti_anim:setMode("once")
 
-	self.heitto_anim = newAnimation(kuvat["kekkonen_heitto_green.png"],40,65,0.05,10)
+	self.heitto_anim = newAnimation(kuvat["kekkonen_heitto_green.png"],40,61,0.05,10)
 	self.heitto_anim:setMode("once")
 
-	self.paikallaan_anim = newAnimation(kuvat["kekkonen_paikallaan_green.png"],42,64,0.5,2)
+	self.paikallaan_anim = newAnimation(kuvat["kekkonen_paikallaan_green.png"],35,61,0.5,2)
 
 	self.torjunta_anim = newAnimation(kuvat["kekkonen_torjunta_green.png"],32,61,0.04,6)
 	self.torjunta_anim:setMode("bounce")
 
 	self.putoaminen_anim = newAnimation(kuvat["kekkonen_putoaminen_green.png"],35,62,0.2,2)
 
-	self.laskeutuminen_anim = newAnimation(kuvat["kekkonen_laskeutuminen_green.png"],42,65,0.05,6)
+	self.laskeutuminen_anim = newAnimation(kuvat["kekkonen_laskeutuminen_green.png"],33,62,0.05,6)
     self.laskeutuminen_anim:setMode("once")
 
 	self.hyppy_anim = newAnimation(kuvat["kekkonen_hyppy_green.png"],34,65,0.05,6)

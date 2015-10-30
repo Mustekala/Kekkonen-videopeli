@@ -20,8 +20,10 @@ function pelaaja:luo( pelaajanHahmo, pelaajanKontrollit, pelaajanNimi, pelaajanN
 		animAjastin=0,
 		kuollut = false, --Kuolema-ajastin lisatty 
 		
-		voiLyoda = false, --Voiko pelaaja lyoda
-		voiHeittaa = false, --Voiko pelaaja heittaa
+		--Pelaaja ei voi hyokata ennen pelin alkua
+		voiLyoda = false,
+		voiHeittaa = false, 
+		voiTorjua = false, 
 		
 		terveys = _G[pelaajanHahmo].kestavyys,
 		elamat = elamienMaara,
@@ -74,6 +76,7 @@ function pelaaja:luo( pelaajanHahmo, pelaajanKontrollit, pelaajanNimi, pelaajanN
 	Timer.add(3, function()	
 		olio.voiLyoda = true --Voiko pelaaja lyoda
 		olio.voiHeittaa = true --Voiko pelaaja heittaa
+		olio.voiTorjua = true --Voiko pelaaja torjua
 	end)
 	
 	return olio
@@ -269,20 +272,16 @@ end
 
 function pelaaja:draw()
 
- --Paikallaan-animaatio hieman eri y-kohdassa TODO korjaa animaatio
- if self.tila=="paikallaan" then 
-	self.nykAnim:draw(self.x, self.y-13,0,self.animSuunta*1.5,1.5,20,30)	
- else
 	self.nykAnim:draw(self.x, self.y-10,0,self.animSuunta*1.5,1.5,16,30)
- end
-	
- --Kameran liikkuminen ei vaikuta hudiin
- camera:unset()
- 
- --HUD 
- local x
- if self.numero==2 then x=650 else x=10 end --Pelaajien 1 ja 2 hudit eri paikassa
+
+	--Kameran liikkuminen ei vaikuta hudiin
+	camera:unset()
+	 
+	 --HUD 
+	local x
+	if self.numero==2 then x=650 else x=10 end --Pelaajien 1 ja 2 hudit eri paikassa
 	local elamat = 0
+	
 	if hudTila == "sydan" then
 		if self.elamat > 5 then   --Sydanhudiin mahtuu vain 5
 			love.graphics.print(self.elamat,x,510)

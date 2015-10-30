@@ -14,7 +14,8 @@ function valikko:init()
 	paavalikko:addItem{
 		nimi = "Aloita tarina",
 		toiminto = function()
-			Gamestate.switch(alku)
+			--Gamestate.switch(alku)
+			print("KESKEN")
 		end
 	}
 	

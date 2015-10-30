@@ -72,7 +72,6 @@ function peli:enter( aiempi, tasonNimi, pelaajaMaara, elamienMaara, hahmot, bott
 	print("\nPeli alkoi, tasona "..tasoNimi)
 	
    end
-	testiajastin=0
 	  
 	--Taustaaanet, musiikki
 				
@@ -94,7 +93,10 @@ end
 
 
 function peli:update( dt )
-    
+	
+	--Pelin about kaikki liikkuminen perustuu tähän DT:hen. Parasta asettaa se staattiseksi, korjaa lagaamisen seinan sisaan yms.
+	dt = 0.01667
+	
 	Timer.update(dt) --Paivitetaan mahdolliset ajastimet
 	
 	if peliAlkanut then
@@ -321,16 +323,19 @@ end
 
 
 function peli:keyreleased( nappain )
-	for i, pelaaja in ipairs(pelaajat) do
-	
-		if nappain == pelaajienKontrollit[i].LYONTI then
-			pelaaja.voiLyoda = true
-		elseif nappain == pelaajienKontrollit[i].HEITTO then
-			pelaaja.voiHeittaa = true
-		elseif nappain == pelaajienKontrollit[i].TORJUNTA then
-			pelaaja.voiTorjua = true	
-		end
+	--Pelaajat eivat voi hyokata ennen alkulaskentaa
+	if kulunutAika > 3 then
+		for i, pelaaja in ipairs(pelaajat) do
 		
+			if nappain == pelaajienKontrollit[i].LYONTI then
+				pelaaja.voiLyoda = true
+			elseif nappain == pelaajienKontrollit[i].HEITTO then
+				pelaaja.voiHeittaa = true
+			elseif nappain == pelaajienKontrollit[i].TORJUNTA then
+				pelaaja.voiTorjua = true	
+			end
+			
+		end	
 	end	
 end
 
